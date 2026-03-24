@@ -61,6 +61,40 @@
             cursor: pointer;
         }
 
+        /* Login Form */
+        .login-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .login-form input {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            box-shadow: 0 0 5px #ffd700;
+        }
+
+        .btn-login {
+            background: #ffd700;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #1a1a2e;
+        }
+
+        .btn-login:hover {
+            background: #e6c300;
+        }
+
         /* Container */
         .container {
             display: flex;
@@ -296,6 +330,13 @@
             <p>Admin Panel</p>
         </div>
         <div class="user-info">
+            <!-- 🆕 Form đăng nhập email/password -->
+            <div id="loginForm" class="login-form" style="display: flex;">
+                <input type="email" id="loginEmail" placeholder="Email" style="padding: 8px 12px;">
+                <input type="password" id="loginPassword" placeholder="Mật khẩu" style="padding: 8px 12px;">
+                <button class="btn-login" onclick="loginWithEmail()">Đăng nhập</button>
+                <button class="btn-login" onclick="loginWithGoogle()" style="background: #4285f4; color: white;">Google</button>
+            </div>
             <span id="userEmail">Chưa đăng nhập</span>
             <button class="btn-logout" onclick="logout()">Đăng xuất</button>
         </div>
@@ -695,7 +736,6 @@
     
     <script>
         // ==================== CẤU HÌNH FIREBASE ====================
-        // 🆕 THAY THÔNG TIN FIREBASE CỦA BẠN VÀO ĐÂY
         const firebaseConfig = {
             apiKey: "AIzaSyAJ6kiQEfXZA7wlTKTX3dsKBMQTHidYX3c",
             authDomain: "custom-utility-490109-j1.firebaseapp.com",
@@ -716,19 +756,56 @@
         let currentPlayerId = null;
 
         // ==================== AUTHENTICATION ====================
+        
+        // 🆕 Đăng nhập bằng Email/Password
+        async function loginWithEmail() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showToast('Vui lòng nhập email và mật khẩu', 'error');
+                return;
+            }
+            
+            showLoading();
+            try {
+                const result = await auth.signInWithEmailAndPassword(email, password);
+                currentUser = result.user;
+                document.getElementById('userEmail').innerText = currentUser.email;
+                document.getElementById('loginForm').style.display = 'none';
+                loadDashboard();
+                showToast('Đăng nhập thành công!', 'success');
+            } catch (error) {
+                console.error(error);
+                let errorMsg = 'Đăng nhập thất bại: ';
+                if (error.code === 'auth/user-not-found') {
+                    errorMsg += 'Email không tồn tại';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMsg += 'Sai mật khẩu';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg += 'Email không hợp lệ';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMsg += 'Quá nhiều lần thử, vui lòng thử lại sau';
+                } else {
+                    errorMsg += error.message;
+                }
+                showToast(errorMsg, 'error');
+            }
+            hideLoading();
+        }
+        
         async function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             try {
                 const result = await auth.signInWithPopup(provider);
                 currentUser = result.user;
                 document.getElementById('userEmail').innerText = currentUser.email;
-                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'none';
                 loadDashboard();
                 showToast('Đăng nhập thành công!', 'success');
             } catch (error) {
                 console.error(error);
                 showToast('Đăng nhập thất bại: ' + error.message, 'error');
-                document.getElementById('loading').style.display = 'none';
             }
         }
 
@@ -736,6 +813,7 @@
             auth.signOut();
             currentUser = null;
             document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
+            document.getElementById('loginForm').style.display = 'flex';
             showToast('Đã đăng xuất', 'success');
         }
 
@@ -776,9 +854,9 @@
 
         // ==================== DASHBOARD ====================
         async function loadDashboard() {
+            if (!currentUser) return;
             showLoading();
             try {
-                // Lấy tổng số người chơi
                 const usersSnapshot = await db.ref('users').once('value');
                 const users = usersSnapshot.val();
                 let totalPlayers = 0;
@@ -977,6 +1055,7 @@
         }
         
         async function loadVipList() {
+            if (!currentUser) return;
             showLoading();
             try {
                 const snapshot = await db.ref('users').once('value');
@@ -1067,6 +1146,7 @@
         }
         
         async function loadGiftCodeList() {
+            if (!currentUser) return;
             showLoading();
             try {
                 const snapshot = await db.ref('giftcodes').once('value');
@@ -1207,6 +1287,7 @@
         }
         
         async function loadItemList() {
+            if (!currentUser) return;
             showLoading();
             try {
                 const trangBiSnapshot = await db.ref('items/trangbi').once('value');
@@ -1412,7 +1493,6 @@
         
         // ==================== SIGNATURE ====================
         async function generateSignature(data) {
-            // Giả lập signature - Trong thực tế nên gọi API server
             const encoder = new TextEncoder();
             const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data + 'your-secret-key'));
             const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -1424,10 +1504,11 @@
             if (user) {
                 currentUser = user;
                 document.getElementById('userEmail').innerText = user.email;
+                document.getElementById('loginForm').style.display = 'none';
                 loadDashboard();
             } else {
-                document.getElementById('loading').style.display = 'flex';
-                loginWithGoogle();
+                document.getElementById('loginForm').style.display = 'flex';
+                document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
             }
         });
     </script>
