@@ -19,7 +19,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         .header {
             background: rgba(0, 0, 0, 0.8);
             padding: 15px 30px;
@@ -61,7 +60,6 @@
             cursor: pointer;
         }
 
-        /* Login Form */
         .login-form {
             display: flex;
             gap: 10px;
@@ -76,11 +74,6 @@
             color: #333;
         }
 
-        .login-form input:focus {
-            outline: none;
-            box-shadow: 0 0 5px #ffd700;
-        }
-
         .btn-login {
             background: #ffd700;
             border: none;
@@ -91,17 +84,11 @@
             color: #1a1a2e;
         }
 
-        .btn-login:hover {
-            background: #e6c300;
-        }
-
-        /* Container */
         .container {
             display: flex;
             min-height: calc(100vh - 70px);
         }
 
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background: rgba(0, 0, 0, 0.5);
@@ -132,14 +119,12 @@
             color: #ffd700;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             padding: 30px;
             overflow-y: auto;
         }
 
-        /* Tab Content */
         .tab-content {
             display: none;
         }
@@ -148,7 +133,6 @@
             display: block;
         }
 
-        /* Cards */
         .card {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
@@ -166,7 +150,6 @@
             padding-left: 10px;
         }
 
-        /* Form */
         .form-group {
             margin-bottom: 15px;
         }
@@ -191,7 +174,6 @@
             border-color: #ffd700;
         }
 
-        /* Buttons */
         .btn {
             padding: 10px 20px;
             border: none;
@@ -215,10 +197,6 @@
             color: white;
         }
 
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
         .btn-success {
             background: #28a745;
             color: white;
@@ -229,7 +207,11 @@
             color: #1a1a2e;
         }
 
-        /* Tables */
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -246,7 +228,6 @@
             color: #ffd700;
         }
 
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -273,7 +254,6 @@
             margin-top: 5px;
         }
 
-        /* Loading */
         .loading {
             position: fixed;
             top: 0;
@@ -300,7 +280,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -321,6 +300,13 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        code {
+            background: rgba(0,0,0,0.5);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -330,10 +316,9 @@
             <p>Admin Panel</p>
         </div>
         <div class="user-info">
-            <!-- 🆕 Form đăng nhập email/password -->
             <div id="loginForm" class="login-form" style="display: flex;">
-                <input type="email" id="loginEmail" placeholder="Email" style="padding: 8px 12px;">
-                <input type="password" id="loginPassword" placeholder="Mật khẩu" style="padding: 8px 12px;">
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Mật khẩu">
                 <button class="btn-login" onclick="loginWithEmail()">Đăng nhập</button>
                 <button class="btn-login" onclick="loginWithGoogle()" style="background: #4285f4; color: white;">Google</button>
             </div>
@@ -364,371 +349,170 @@
                 <div class="card">
                     <div class="card-title">📊 Tổng quan hệ thống</div>
                     <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalPlayers">0</div>
-                            <div class="stat-label">Tổng số người chơi</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalVip">0</div>
-                            <div class="stat-label">Người chơi VIP</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalGold">0</div>
-                            <div class="stat-label">Tổng vàng</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalLinhThach">0</div>
-                            <div class="stat-label">Tổng linh thạch</div>
-                        </div>
+                        <div class="stat-card"><div class="stat-value" id="totalPlayers">0</div><div class="stat-label">Tổng số người chơi</div></div>
+                        <div class="stat-card"><div class="stat-value" id="totalVip">0</div><div class="stat-label">Người chơi VIP</div></div>
+                        <div class="stat-card"><div class="stat-value" id="totalGold">0</div><div class="stat-label">Tổng vàng</div></div>
+                        <div class="stat-card"><div class="stat-value" id="totalLinhThach">0</div><div class="stat-label">Tổng linh thạch</div></div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-title">🏆 Bảng xếp hạng Tu Vi</div>
-                    <table class="table" id="leaderboardTuVi">
-                        <thead>
-                            <tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    <table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody></tbody></table>
                 </div>
                 <div class="card">
                     <div class="card-title">💰 Bảng xếp hạng Linh Thạch</div>
-                    <table class="table" id="leaderboardLinhThach">
-                        <thead>
-                            <tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    <table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody></tbody></table>
                 </div>
             </div>
 
-            <!-- Players Tab -->
+            <!-- Players Tab - NÂNG CAO -->
             <div id="players" class="tab-content">
                 <div class="card">
                     <div class="card-title">🔍 Tìm kiếm người chơi</div>
                     <div class="form-group">
-                        <label>User ID</label>
-                        <input type="text" id="searchUserId" class="form-control" placeholder="Nhập User ID">
+                        <label>Tìm theo tên, email hoặc User ID (nhập ít nhất 2 ký tự)</label>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Ví dụ: admin, nguyễn, hoangso..." autocomplete="off">
                     </div>
-                    <button class="btn btn-primary" onclick="searchPlayer()">Tìm kiếm</button>
-                    <button class="btn" onclick="clearSearch()">Xóa</button>
+                    <div id="searchResults" style="margin-top: 15px; max-height: 400px; overflow-y: auto; display: none;">
+                        <table class="table">
+                            <thead><tr><th>User ID</th><th>Tên</th><th>Email</th><th>Cảnh giới</th><th></th></tr></thead>
+                            <tbody id="searchResultsBody"></tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-primary" onclick="searchPlayer()">🔍 Tìm kiếm</button>
+                    <button class="btn" onclick="clearSearch()">🗑️ Xóa</button>
                 </div>
 
                 <div id="playerInfo" style="display: none;">
                     <div class="card">
                         <div class="card-title">👤 Thông tin người chơi</div>
-                        <div class="form-group">
-                            <label>User ID</label>
-                            <input type="text" id="playerUserId" class="form-control" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Tên hiển thị</label>
-                            <input type="text" id="playerName" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Cảnh giới</label>
-                            <input type="number" id="playerStage" class="form-control" min="0" max="9">
-                        </div>
-                        <div class="form-group">
-                            <label>Tầng</label>
-                            <input type="number" id="playerTang" class="form-control" min="1" max="9">
-                        </div>
-                        <div class="form-group">
-                            <label>EXP</label>
-                            <input type="number" id="playerExp" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Vàng</label>
-                            <input type="number" id="playerVang" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Linh thạch</label>
-                            <input type="number" id="playerLinhThach" class="form-control">
-                        </div>
-                        <button class="btn btn-success" onclick="updatePlayer()">Cập nhật</button>
-                        <button class="btn btn-danger" onclick="banPlayer()">Cấm tài khoản</button>
-                        <button class="btn btn-warning" onclick="unbanPlayer()">Mở khóa</button>
+                        <div class="form-group"><label>User ID</label><input type="text" id="playerUserId" class="form-control" readonly></div>
+                        <div class="form-group"><label>Email</label><input type="text" id="playerEmail" class="form-control"></div>
+                        <div class="form-group"><label>Tên hiển thị</label><input type="text" id="playerName" class="form-control"></div>
+                        <div class="form-group"><label>Cảnh giới</label><input type="number" id="playerStage" class="form-control" min="0" max="9"></div>
+                        <div class="form-group"><label>Tầng</label><input type="number" id="playerTang" class="form-control" min="1" max="9"></div>
+                        <div class="form-group"><label>EXP</label><input type="number" id="playerExp" class="form-control"></div>
+                        <div class="form-group"><label>Vàng</label><input type="number" id="playerVang" class="form-control"></div>
+                        <div class="form-group"><label>Linh thạch</label><input type="number" id="playerLinhThach" class="form-control"></div>
+                        <button class="btn btn-success" onclick="updatePlayer()">💾 Cập nhật</button>
+                        <button class="btn btn-danger" onclick="banPlayer()">🚫 Cấm tài khoản</button>
+                        <button class="btn btn-warning" onclick="unbanPlayer()">🔓 Mở khóa</button>
                     </div>
                 </div>
             </div>
 
             <!-- Resources Tab -->
             <div id="resources" class="tab-content">
-                <div class="card">
-                    <div class="card-title">💰 Cài đặt tài nguyên cơ bản</div>
-                    <div class="form-group">
-                        <label>Vàng khởi tạo</label>
-                        <input type="number" id="defaultGold" class="form-control" value="500">
-                    </div>
-                    <div class="form-group">
-                        <label>Linh thạch khởi tạo</label>
-                        <input type="number" id="defaultLinhThach" class="form-control" value="20">
-                    </div>
-                    <div class="form-group">
-                        <label>EXP quái cơ bản</label>
-                        <input type="number" id="defaultExp" class="form-control" value="20">
-                    </div>
+                <div class="card"><div class="card-title">💰 Cài đặt tài nguyên cơ bản</div>
+                    <div class="form-group"><label>Vàng khởi tạo</label><input type="number" id="defaultGold" class="form-control" value="500"></div>
+                    <div class="form-group"><label>Linh thạch khởi tạo</label><input type="number" id="defaultLinhThach" class="form-control" value="20"></div>
+                    <div class="form-group"><label>EXP quái cơ bản</label><input type="number" id="defaultExp" class="form-control" value="20"></div>
                     <button class="btn btn-primary" onclick="saveResourceConfig()">Lưu cấu hình</button>
                 </div>
-
-                <div class="card">
-                    <div class="card-title">💎 Tỷ lệ rơi đồ</div>
-                    <div class="form-group">
-                        <label>Tỷ lệ rơi trang bị (%)</label>
-                        <input type="number" id="dropRateItem" class="form-control" step="0.01" value="20">
-                    </div>
-                    <div class="form-group">
-                        <label>Tỷ lệ rơi linh thạch (%)</label>
-                        <input type="number" id="dropRateLinhThach" class="form-control" step="0.01" value="10">
-                    </div>
+                <div class="card"><div class="card-title">💎 Tỷ lệ rơi đồ</div>
+                    <div class="form-group"><label>Tỷ lệ rơi trang bị (%)</label><input type="number" id="dropRateItem" class="form-control" step="0.01" value="20"></div>
+                    <div class="form-group"><label>Tỷ lệ rơi linh thạch (%)</label><input type="number" id="dropRateLinhThach" class="form-control" step="0.01" value="10"></div>
                     <button class="btn btn-primary" onclick="saveDropConfig()">Lưu cấu hình</button>
                 </div>
             </div>
 
             <!-- Items Tab -->
             <div id="items" class="tab-content">
-                <div class="card">
-                    <div class="card-title">📦 Thêm vật phẩm mới</div>
-                    <div class="form-group">
-                        <label>Loại vật phẩm</label>
-                        <select id="itemType" class="form-control">
-                            <option value="trangbi">Trang bị</option>
-                            <option value="dan">Đan dược</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tên vật phẩm</label>
-                        <input type="text" id="itemName" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Giá (linh thạch)</label>
-                        <input type="number" id="itemPrice" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Mô tả</label>
-                        <textarea id="itemDesc" class="form-control" rows="3"></textarea>
-                    </div>
-                    <button class="btn btn-primary" onclick="addItem()">Thêm vật phẩm</button>
+                <div class="card"><div class="card-title">📦 Thêm vật phẩm mới</div>
+                    <div class="form-group"><label>Loại</label><select id="itemType" class="form-control"><option value="trangbi">Trang bị</option><option value="dan">Đan dược</option></select></div>
+                    <div class="form-group"><label>Tên</label><input type="text" id="itemName" class="form-control"></div>
+                    <div class="form-group"><label>Giá</label><input type="number" id="itemPrice" class="form-control" value="100"></div>
+                    <div class="form-group"><label>Mô tả</label><textarea id="itemDesc" class="form-control" rows="3"></textarea></div>
+                    <button class="btn btn-primary" onclick="addItem()">Thêm</button>
                 </div>
-
-                <div class="card">
-                    <div class="card-title">📋 Danh sách vật phẩm</div>
-                    <table class="table" id="itemList">
-                        <thead>
-                            <tr><th>ID</th><th>Tên</th><th>Loại</th><th>Giá</th><th>Thao tác</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="card"><div class="card-title">📋 Danh sách vật phẩm</div>
+                    <table class="table" id="itemList"><thead><tr><th>ID</th><th>Tên</th><th>Loại</th><th>Giá</th><th></th></tr></thead><tbody></tbody></table>
                 </div>
             </div>
 
             <!-- VIP Tab -->
             <div id="vip" class="tab-content">
-                <div class="card">
-                    <div class="card-title">👑 Cấu hình VIP</div>
-                    <div class="form-group">
-                        <label>Giá VIP (VND)</label>
-                        <input type="number" id="vipPrice" class="form-control" value="39000">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="vipReward" class="form-control" value="2000">
-                    </div>
-                    <div class="form-group">
-                        <label>Thời hạn (ngày)</label>
-                        <input type="number" id="vipDuration" class="form-control" value="30">
-                    </div>
-                    <button class="btn btn-primary" onclick="saveVipConfig()">Lưu cấu hình</button>
+                <div class="card"><div class="card-title">👑 Cấu hình VIP</div>
+                    <div class="form-group"><label>Giá (VND)</label><input type="number" id="vipPrice" class="form-control" value="39000"></div>
+                    <div class="form-group"><label>Thưởng linh thạch</label><input type="number" id="vipReward" class="form-control" value="2000"></div>
+                    <div class="form-group"><label>Thời hạn (ngày)</label><input type="number" id="vipDuration" class="form-control" value="30"></div>
+                    <button class="btn btn-primary" onclick="saveVipConfig()">Lưu</button>
                 </div>
-
-                <div class="card">
-                    <div class="card-title">👥 Danh sách VIP</div>
-                    <table class="table" id="vipList">
-                        <thead>
-                            <tr><th>User ID</th><th>Tên</th><th>Ngày hết hạn</th><th>Thao tác</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="card"><div class="card-title">👥 Danh sách VIP</div>
+                    <table class="table" id="vipList"><thead><tr><th>User ID</th><th>Tên</th><th>Ngày hết hạn</th><th></th></tr></thead><tbody></tbody></table>
                 </div>
             </div>
 
             <!-- Quests Tab -->
             <div id="quests" class="tab-content">
-                <div class="card">
-                    <div class="card-title">📜 Thêm nhiệm vụ mới</div>
-                    <div class="form-group">
-                        <label>ID nhiệm vụ</label>
-                        <input type="text" id="questId" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Tên nhiệm vụ</label>
-                        <input type="text" id="questName" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Loại nhiệm vụ</label>
-                        <select id="questType" class="form-control">
-                            <option value="Kill">Tiêu diệt quái</option>
-                            <option value="Collect">Thu thập vật phẩm</option>
-                            <option value="ReachLevel">Đạt cấp độ</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Mục tiêu</label>
-                        <input type="text" id="questTarget" class="form-control" placeholder="Tên quái / vật phẩm">
-                    </div>
-                    <div class="form-group">
-                        <label>Số lượng yêu cầu</label>
-                        <input type="number" id="questAmount" class="form-control" value="10">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng EXP</label>
-                        <input type="number" id="questRewardExp" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng vàng</label>
-                        <input type="number" id="questRewardGold" class="form-control" value="500">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="questRewardLinhThach" class="form-control" value="50">
-                    </div>
-                    <button class="btn btn-primary" onclick="addQuest()">Thêm nhiệm vụ</button>
+                <div class="card"><div class="card-title">📜 Thêm nhiệm vụ</div>
+                    <div class="form-group"><label>ID</label><input type="text" id="questId" class="form-control"></div>
+                    <div class="form-group"><label>Tên</label><input type="text" id="questName" class="form-control"></div>
+                    <div class="form-group"><label>Loại</label><select id="questType" class="form-control"><option value="Kill">Tiêu diệt quái</option><option value="Collect">Thu thập</option><option value="ReachLevel">Đạt cấp</option></select></div>
+                    <div class="form-group"><label>Mục tiêu</label><input type="text" id="questTarget" class="form-control"></div>
+                    <div class="form-group"><label>Số lượng</label><input type="number" id="questAmount" class="form-control" value="10"></div>
+                    <div class="form-group"><label>Thưởng EXP</label><input type="number" id="questRewardExp" class="form-control" value="100"></div>
+                    <div class="form-group"><label>Thưởng vàng</label><input type="number" id="questRewardGold" class="form-control" value="500"></div>
+                    <div class="form-group"><label>Thưởng linh thạch</label><input type="number" id="questRewardLinhThach" class="form-control" value="50"></div>
+                    <button class="btn btn-primary" onclick="addQuest()">Thêm</button>
                 </div>
             </div>
 
             <!-- Events Tab -->
             <div id="events" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🎉 Tạo sự kiện mới</div>
-                    <div class="form-group">
-                        <label>ID sự kiện</label>
-                        <input type="text" id="eventId" class="form-control" value="sukien_001">
-                    </div>
-                    <div class="form-group">
-                        <label>Tiêu đề</label>
-                        <input type="text" id="eventTitle" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Nội dung</label>
-                        <textarea id="eventContent" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Ngày bắt đầu</label>
-                        <input type="date" id="eventStartDate" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Ngày kết thúc</label>
-                        <input type="date" id="eventEndDate" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="eventRewardLinhThach" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng text</label>
-                        <input type="text" id="eventRewardText" class="form-control" placeholder="Ví dụ: U Lan Linh Giáp +8">
-                    </div>
-                    <div class="form-group">
-                        <label>Trạng thái</label>
-                        <select id="eventStatus" class="form-control">
-                            <option value="true">Đang hoạt động</option>
-                            <option value="false">Tạm dừng</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary" onclick="createEvent()">Tạo sự kiện</button>
-                    <button class="btn btn-danger" onclick="deleteEvent()">Xóa sự kiện</button>
+                <div class="card"><div class="card-title">🎉 Tạo sự kiện</div>
+                    <div class="form-group"><label>ID</label><input type="text" id="eventId" class="form-control" value="sukien_001"></div>
+                    <div class="form-group"><label>Tiêu đề</label><input type="text" id="eventTitle" class="form-control"></div>
+                    <div class="form-group"><label>Nội dung</label><textarea id="eventContent" class="form-control" rows="3"></textarea></div>
+                    <div class="form-group"><label>Ngày bắt đầu</label><input type="date" id="eventStartDate" class="form-control"></div>
+                    <div class="form-group"><label>Ngày kết thúc</label><input type="date" id="eventEndDate" class="form-control"></div>
+                    <div class="form-group"><label>Thưởng linh thạch</label><input type="number" id="eventRewardLinhThach" class="form-control" value="100"></div>
+                    <div class="form-group"><label>Thưởng text</label><input type="text" id="eventRewardText" class="form-control"></div>
+                    <div class="form-group"><label>Trạng thái</label><select id="eventStatus" class="form-control"><option value="true">Hoạt động</option><option value="false">Tạm dừng</option></select></div>
+                    <button class="btn btn-primary" onclick="createEvent()">Tạo</button>
+                    <button class="btn btn-danger" onclick="deleteEvent()">Xóa</button>
                 </div>
-
-                <div class="card">
-                    <div class="card-title">📋 Sự kiện hiện tại</div>
-                    <div id="currentEventInfo"></div>
-                </div>
+                <div class="card"><div class="card-title">📋 Sự kiện hiện tại</div><div id="currentEventInfo"></div></div>
             </div>
 
             <!-- Giftcode Tab -->
             <div id="giftcode" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🎁 Tạo Giftcode mới</div>
-                    <div class="form-group">
-                        <label>Mã code</label>
-                        <input type="text" id="giftCode" class="form-control" placeholder="VD: XUYENKHONGVIP">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng vàng</label>
-                        <input type="number" id="giftGold" class="form-control" value="1000">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="giftLinhThach" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Trang bị thưởng</label>
-                        <input type="text" id="giftItem" class="form-control" placeholder="Tên trang bị (cách nhau bằng dấu phẩy)">
-                    </div>
-                    <div class="form-group">
-                        <label>Số lần sử dụng tối đa</label>
-                        <input type="number" id="giftMaxUses" class="form-control" value="999">
-                    </div>
-                    <button class="btn btn-primary" onclick="createGiftCode()">Tạo Giftcode</button>
+                <div class="card"><div class="card-title">🎁 Tạo Giftcode</div>
+                    <div class="form-group"><label>Mã code</label><input type="text" id="giftCode" class="form-control"></div>
+                    <div class="form-group"><label>Vàng</label><input type="number" id="giftGold" class="form-control" value="1000"></div>
+                    <div class="form-group"><label>Linh thạch</label><input type="number" id="giftLinhThach" class="form-control" value="100"></div>
+                    <div class="form-group"><label>Trang bị</label><input type="text" id="giftItem" class="form-control" placeholder="cách nhau bằng dấu phẩy"></div>
+                    <div class="form-group"><label>Số lần tối đa</label><input type="number" id="giftMaxUses" class="form-control" value="999"></div>
+                    <button class="btn btn-primary" onclick="createGiftCode()">Tạo</button>
                 </div>
-
-                <div class="card">
-                    <div class="card-title">📋 Danh sách Giftcode</div>
-                    <table class="table" id="giftCodeList">
-                        <thead>
-                            <tr><th>Mã code</th><th>Phần thưởng</th><th>Đã dùng</th><th>Thao tác</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="card"><div class="card-title">📋 Danh sách Giftcode</div>
+                    <table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Phần thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody></tbody></table>
                 </div>
             </div>
 
             <!-- Database Tab -->
             <div id="database" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🗄️ Sao lưu & Phục hồi</div>
-                    <button class="btn btn-primary" onclick="backupDatabase()">📥 Sao lưu toàn bộ dữ liệu</button>
-                    <button class="btn btn-warning" onclick="restoreDatabase()">📤 Phục hồi dữ liệu</button>
-                    <button class="btn btn-danger" onclick="clearAllData()">⚠️ Xóa toàn bộ dữ liệu</button>
-                </div>
-                <div class="card">
-                    <div class="card-title">📊 Thống kê</div>
-                    <pre id="dbStats" style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; overflow: auto;"></pre>
+                <div class="card"><div class="card-title">🗄️ Sao lưu & Phục hồi</div>
+                    <button class="btn btn-primary" onclick="backupDatabase()">📥 Sao lưu</button>
+                    <button class="btn btn-warning" onclick="restoreDatabase()">📤 Phục hồi</button>
+                    <button class="btn btn-danger" onclick="clearAllData()">⚠️ Xóa toàn bộ</button>
                 </div>
             </div>
 
             <!-- Settings Tab -->
             <div id="settings" class="tab-content">
-                <div class="card">
-                    <div class="card-title">⚙️ Cài đặt hệ thống</div>
-                    <div class="form-group">
-                        <label>Phiên bản game</label>
-                        <input type="text" id="gameVersion" class="form-control" value="4.0">
-                    </div>
-                    <div class="form-group">
-                        <label>Phiên bản code</label>
-                        <input type="number" id="versionCode" class="form-control" value="31">
-                    </div>
-                    <div class="form-group">
-                        <label>Force Update</label>
-                        <select id="forceUpdate" class="form-control">
-                            <option value="false">Không</option>
-                            <option value="true">Bắt buộc cập nhật</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ghi chú cập nhật</label>
-                        <textarea id="changelog" class="form-control" rows="3"></textarea>
-                    </div>
-                    <button class="btn btn-primary" onclick="saveSystemConfig()">Lưu cài đặt</button>
+                <div class="card"><div class="card-title">⚙️ Cài đặt hệ thống</div>
+                    <div class="form-group"><label>Phiên bản game</label><input type="text" id="gameVersion" class="form-control" value="4.0"></div>
+                    <div class="form-group"><label>Phiên bản code</label><input type="number" id="versionCode" class="form-control" value="31"></div>
+                    <div class="form-group"><label>Force Update</label><select id="forceUpdate" class="form-control"><option value="false">Không</option><option value="true">Bắt buộc</option></select></div>
+                    <div class="form-group"><label>Ghi chú</label><textarea id="changelog" class="form-control" rows="3"></textarea></div>
+                    <button class="btn btn-primary" onclick="saveSystemConfig()">Lưu</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="loading" class="loading" style="display: none;">
-        <div class="spinner"></div>
-    </div>
+    <div id="loading" class="loading" style="display: none;"><div class="spinner"></div></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -746,27 +530,19 @@
             appId: "1:626113784056:android:193990ae1ce494634f730d"
         };
 
-        // Khởi tạo Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // Biến toàn cục
         let currentUser = null;
         let currentPlayerId = null;
+        let allPlayers = [];
 
-        // ==================== AUTHENTICATION ====================
-        
-        // 🆕 Đăng nhập bằng Email/Password
+        // ==================== AUTH ====================
         async function loginWithEmail() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showToast('Vui lòng nhập email và mật khẩu', 'error');
-                return;
-            }
-            
+            if (!email || !password) { showToast('Nhập email và mật khẩu', 'error'); return; }
             showLoading();
             try {
                 const result = await auth.signInWithEmailAndPassword(email, password);
@@ -776,26 +552,14 @@
                 loadDashboard();
                 showToast('Đăng nhập thành công!', 'success');
             } catch (error) {
-                console.error(error);
-                let errorMsg = 'Đăng nhập thất bại: ';
-                if (error.code === 'auth/user-not-found') {
-                    errorMsg += 'Email không tồn tại';
-                } else if (error.code === 'auth/wrong-password') {
-                    errorMsg += 'Sai mật khẩu';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMsg += 'Email không hợp lệ';
-                } else if (error.code === 'auth/too-many-requests') {
-                    errorMsg += 'Quá nhiều lần thử, vui lòng thử lại sau';
-                } else {
-                    errorMsg += error.message;
-                }
-                showToast(errorMsg, 'error');
+                showToast('Lỗi: ' + error.message, 'error');
             }
             hideLoading();
         }
-        
+
         async function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
+            showLoading();
             try {
                 const result = await auth.signInWithPopup(provider);
                 currentUser = result.user;
@@ -804,9 +568,9 @@
                 loadDashboard();
                 showToast('Đăng nhập thành công!', 'success');
             } catch (error) {
-                console.error(error);
-                showToast('Đăng nhập thất bại: ' + error.message, 'error');
+                showToast('Lỗi: ' + error.message, 'error');
             }
+            hideLoading();
         }
 
         function logout() {
@@ -817,34 +581,22 @@
             showToast('Đã đăng xuất', 'success');
         }
 
-        // ==================== HELPER FUNCTIONS ====================
-        function showLoading() {
-            document.getElementById('loading').style.display = 'flex';
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-        }
-
-        function showToast(message, type = 'success') {
+        // ==================== HELPERS ====================
+        function showLoading() { document.getElementById('loading').style.display = 'flex'; }
+        function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+        function showToast(msg, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerText = message;
+            toast.innerText = msg;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
 
         function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            
-            document.querySelectorAll('.sidebar-menu a').forEach(link => {
-                link.classList.remove('active');
-            });
+            document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
             document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            
             if (tabId === 'dashboard') loadDashboard();
             if (tabId === 'vip') loadVipList();
             if (tabId === 'giftcode') loadGiftCodeList();
@@ -852,25 +604,26 @@
             if (tabId === 'events') loadCurrentEvent();
         }
 
+        function getStageName(stage) {
+            const stages = ['Luyện Khí', 'Trúc Cơ', 'Kim Đan', 'Nguyên Anh', 'Hóa Thần', 'Phàm Tiên', 'Địa Tiên', 'Thiên Tiên', 'Chân Tiên', 'Kim Tiên'];
+            return stages[stage] || '???';
+        }
+
         // ==================== DASHBOARD ====================
         async function loadDashboard() {
             if (!currentUser) return;
             showLoading();
             try {
-                const usersSnapshot = await db.ref('users').once('value');
-                const users = usersSnapshot.val();
-                let totalPlayers = 0;
-                let totalVip = 0;
-                let totalGold = 0;
-                let totalLinhThach = 0;
-                
+                const usersSnap = await db.ref('users').once('value');
+                const users = usersSnap.val();
+                let totalPlayers = 0, totalVip = 0, totalGold = 0, totalLinhThach = 0;
                 if (users) {
                     totalPlayers = Object.keys(users).length;
                     for (let uid in users) {
-                        const gameData = users[uid]?.gameData?.data;
-                        if (gameData) {
+                        const gd = users[uid]?.gameData?.data;
+                        if (gd) {
                             try {
-                                const data = JSON.parse(gameData);
+                                const data = JSON.parse(gd);
                                 if (data.daMuaVip) totalVip++;
                                 totalGold += data.vang || 0;
                                 totalLinhThach += data.linhThach || 0;
@@ -878,628 +631,424 @@
                         }
                     }
                 }
-                
                 document.getElementById('totalPlayers').innerText = totalPlayers;
                 document.getElementById('totalVip').innerText = totalVip;
                 document.getElementById('totalGold').innerText = totalGold.toLocaleString();
                 document.getElementById('totalLinhThach').innerText = totalLinhThach.toLocaleString();
-                
-                // Bảng xếp hạng Tu Vi
-                const tuViSnapshot = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
-                const tuViBoard = document.querySelector('#leaderboardTuVi tbody');
-                tuViBoard.innerHTML = '';
+
+                const tuViSnap = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
+                const tb = document.querySelector('#leaderboardTuVi tbody');
+                tb.innerHTML = '';
                 let rank = 1;
-                const tuViList = [];
-                tuViSnapshot.forEach(child => {
-                    tuViList.push({ name: child.val().name, score: child.val().score });
+                const list = [];
+                tuViSnap.forEach(c => list.push({ name: c.val().name, score: c.val().score }));
+                list.reverse().forEach(e => {
+                    const stage = Math.floor(e.score / 10000);
+                    const tang = Math.floor((e.score % 10000) / 1000);
+                    tb.innerHTML += `<tr><td>${rank++}</td><td>${e.name}</td><td>${getStageName(stage)} tầng ${tang}</td><td>${e.score}</td></tr>`;
                 });
-                tuViList.reverse().forEach(entry => {
-                    const stage = Math.floor(entry.score / 10000);
-                    const tang = Math.floor((entry.score % 10000) / 1000);
-                    const stageName = ['Luyện Khí', 'Trúc Cơ', 'Kim Đan', 'Nguyên Anh', 'Hóa Thần', 'Phàm Tiên', 'Địa Tiên', 'Thiên Tiên', 'Chân Tiên', 'Kim Tiên'][stage] || '???';
-                    tuViBoard.innerHTML += `<tr><td>${rank++}</td><td>${entry.name}</td><td>${stageName} tầng ${tang}</td><td>${entry.score}</td></tr>`;
-                });
-                
-                // Bảng xếp hạng Linh Thạch
-                const linhThachSnapshot = await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
-                const ltBoard = document.querySelector('#leaderboardLinhThach tbody');
-                ltBoard.innerHTML = '';
+
+                const ltSnap = await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
+                const ltBody = document.querySelector('#leaderboardLinhThach tbody');
+                ltBody.innerHTML = '';
                 rank = 1;
                 const ltList = [];
-                linhThachSnapshot.forEach(child => {
-                    ltList.push({ name: child.val().name, score: child.val().score });
+                ltSnap.forEach(c => ltList.push({ name: c.val().name, score: c.val().score }));
+                ltList.reverse().forEach(e => {
+                    ltBody.innerHTML += `<tr><td>${rank++}</td><td>${e.name}</td><td>${e.score.toLocaleString()}</td></tr>`;
                 });
-                ltList.reverse().forEach(entry => {
-                    ltBoard.innerHTML += `<tr><td>${rank++}</td><td>${entry.name}</td><td>${entry.score.toLocaleString()}</td></tr>`;
-                });
-                
-            } catch (error) {
-                console.error(error);
-                showToast('Lỗi tải dashboard: ' + error.message, 'error');
-            }
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
 
-        // ==================== PLAYER MANAGEMENT ====================
-        async function searchPlayer() {
-            const userId = document.getElementById('searchUserId').value.trim();
-            if (!userId) {
-                showToast('Vui lòng nhập User ID', 'error');
-                return;
-            }
-            
+        // ==================== SEARCH PLAYER (NÂNG CAO) ====================
+        async function loadAllPlayers() {
+            if (allPlayers.length > 0) return allPlayers;
             showLoading();
             try {
-                const snapshot = await db.ref(`users/${userId}/gameData`).once('value');
-                if (!snapshot.exists()) {
-                    showToast('Không tìm thấy người chơi!', 'error');
-                    document.getElementById('playerInfo').style.display = 'none';
-                    hideLoading();
-                    return;
+                const snap = await db.ref('users').once('value');
+                const users = snap.val();
+                allPlayers = [];
+                if (users) {
+                    for (let uid in users) {
+                        const gd = users[uid]?.gameData?.data;
+                        if (gd) {
+                            try {
+                                const data = JSON.parse(gd);
+                                allPlayers.push({
+                                    uid, name: data.tenNhanVat || 'Không tên', email: data.email || '',
+                                    stage: data.chiSoCanhGio || 0, tang: data.tang || 1
+                                });
+                            } catch(e) {}
+                        }
+                    }
                 }
-                
-                let data = snapshot.val();
-                if (data.data) {
-                    data = JSON.parse(data.data);
-                }
-                
-                currentPlayerId = userId;
-                document.getElementById('playerUserId').value = userId;
+                return allPlayers;
+            } catch(e) { console.error(e); return []; }
+            finally { hideLoading(); }
+        }
+
+        let searchTimeout;
+        document.getElementById('searchInput')?.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const kw = e.target.value.trim();
+            if (kw.length < 2) { document.getElementById('searchResults').style.display = 'none'; return; }
+            searchTimeout = setTimeout(() => performSearch(kw), 300);
+        });
+
+        async function performSearch(keyword) {
+            const players = await loadAllPlayers();
+            const kw = keyword.toLowerCase();
+            const results = players.filter(p => 
+                p.name.toLowerCase().includes(kw) || p.email.toLowerCase().includes(kw) || p.uid.toLowerCase().includes(kw)
+            );
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const container = document.getElementById('searchResults');
+            const tbody = document.getElementById('searchResultsBody');
+            if (results.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Không tìm thấy</td></tr>';
+                container.style.display = 'block';
+                return;
+            }
+            tbody.innerHTML = results.map(p => `
+                <tr><td><code>${p.uid.substring(0, 12)}...</code></td>
+                <td><strong>${escapeHtml(p.name)}</strong></td>
+                <td>${escapeHtml(p.email)}</td>
+                <td>${getStageName(p.stage)} tầng ${p.tang}</td>
+                <td><button class="btn btn-primary btn-sm" onclick="selectPlayer('${p.uid}')">Chọn</button></td></tr>
+            `).join('');
+            container.style.display = 'block';
+        }
+
+        async function selectPlayer(uid) {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').style.display = 'none';
+            await loadPlayerData(uid);
+        }
+
+        async function searchPlayer() {
+            const kw = document.getElementById('searchInput').value.trim();
+            if (kw.length < 2) { showToast('Nhập ít nhất 2 ký tự', 'error'); return; }
+            await performSearch(kw);
+        }
+
+        async function loadPlayerData(uid) {
+            showLoading();
+            try {
+                const snap = await db.ref(`users/${uid}/gameData`).once('value');
+                if (!snap.exists()) { showToast('Không tìm thấy', 'error'); hideLoading(); return; }
+                let data = snap.val();
+                if (data.data) data = JSON.parse(data.data);
+                currentPlayerId = uid;
+                document.getElementById('playerUserId').value = uid;
+                document.getElementById('playerEmail').value = data.email || '';
                 document.getElementById('playerName').value = data.tenNhanVat || '';
                 document.getElementById('playerStage').value = data.chiSoCanhGio || 0;
                 document.getElementById('playerTang').value = data.tang || 1;
                 document.getElementById('playerExp').value = data.expHienTai || 0;
                 document.getElementById('playerVang').value = data.vang || 0;
                 document.getElementById('playerLinhThach').value = data.linhThach || 0;
-                
                 document.getElementById('playerInfo').style.display = 'block';
-            } catch (error) {
-                console.error(error);
-                showToast('Lỗi tìm kiếm: ' + error.message, 'error');
-            }
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         function clearSearch() {
-            document.getElementById('searchUserId').value = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').style.display = 'none';
             document.getElementById('playerInfo').style.display = 'none';
             currentPlayerId = null;
         }
-        
+
+        function escapeHtml(text) { if (!text) return ''; const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
+
         async function updatePlayer() {
-            if (!currentPlayerId) {
-                showToast('Vui lòng tìm kiếm người chơi trước', 'error');
-                return;
-            }
-            
+            if (!currentPlayerId) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                const snapshot = await db.ref(`users/${currentPlayerId}/gameData`).once('value');
-                let data = snapshot.val();
-                if (data.data) {
-                    data = JSON.parse(data.data);
-                }
-                
+                const snap = await db.ref(`users/${currentPlayerId}/gameData`).once('value');
+                let data = snap.val();
+                if (data.data) data = JSON.parse(data.data);
+                data.email = document.getElementById('playerEmail').value;
                 data.tenNhanVat = document.getElementById('playerName').value;
                 data.chiSoCanhGio = parseInt(document.getElementById('playerStage').value);
                 data.tang = parseInt(document.getElementById('playerTang').value);
                 data.expHienTai = parseInt(document.getElementById('playerExp').value);
                 data.vang = parseInt(document.getElementById('playerVang').value);
                 data.linhThach = parseInt(document.getElementById('playerLinhThach').value);
-                
                 const json = JSON.stringify(data);
-                const signature = await generateSignature(json);
-                
-                await db.ref(`users/${currentPlayerId}/gameData`).set({
-                    data: json,
-                    signature: signature,
-                    timestamp: Date.now()
-                });
-                
+                const sig = await generateSignature(json);
+                await db.ref(`users/${currentPlayerId}/gameData`).set({ data: json, signature: sig, timestamp: Date.now() });
                 showToast('Cập nhật thành công!', 'success');
-            } catch (error) {
-                console.error(error);
-                showToast('Lỗi cập nhật: ' + error.message, 'error');
-            }
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         async function banPlayer() {
             if (!currentPlayerId) return;
-            const reason = prompt('Lý do cấm tài khoản:');
+            const reason = prompt('Lý do cấm:');
             if (!reason) return;
-            
             showLoading();
             try {
-                await db.ref(`banned/${currentPlayerId}`).set({
-                    reason: reason,
-                    timestamp: Date.now(),
-                    bannedBy: currentUser?.email
-                });
-                showToast('Đã cấm tài khoản!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+                await db.ref(`banned/${currentPlayerId}`).set({ reason, timestamp: Date.now(), bannedBy: currentUser?.email });
+                showToast('Đã cấm!', 'success');
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         async function unbanPlayer() {
             if (!currentPlayerId) return;
             showLoading();
             try {
                 await db.ref(`banned/${currentPlayerId}`).remove();
-                showToast('Đã mở khóa tài khoản!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+                showToast('Đã mở khóa!', 'success');
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
-        // ==================== VIP MANAGEMENT ====================
+
+        // ==================== CÁC HÀM QUẢN LÝ KHÁC ====================
         async function saveVipConfig() {
-            const config = {
-                price: parseInt(document.getElementById('vipPrice').value),
-                reward: parseInt(document.getElementById('vipReward').value),
-                duration: parseInt(document.getElementById('vipDuration').value),
-                updatedAt: Date.now()
-            };
-            
+            const cfg = { price: parseInt(document.getElementById('vipPrice').value), reward: parseInt(document.getElementById('vipReward').value), duration: parseInt(document.getElementById('vipDuration').value), updatedAt: Date.now() };
             showLoading();
-            try {
-                await db.ref('config/vip').set(config);
-                showToast('Đã lưu cấu hình VIP!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref('config/vip').set(cfg); showToast('Đã lưu!', 'success'); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         async function loadVipList() {
             if (!currentUser) return;
             showLoading();
             try {
-                const snapshot = await db.ref('users').once('value');
-                const users = snapshot.val();
+                const snap = await db.ref('users').once('value');
+                const users = snap.val();
                 const tbody = document.querySelector('#vipList tbody');
                 tbody.innerHTML = '';
-                
                 if (users) {
                     for (let uid in users) {
-                        const gameData = users[uid]?.gameData?.data;
-                        if (gameData) {
+                        const gd = users[uid]?.gameData?.data;
+                        if (gd) {
                             try {
-                                const data = JSON.parse(gameData);
+                                const data = JSON.parse(gd);
                                 if (data.daMuaVip) {
-                                    tbody.innerHTML += `
-                                        <tr>
-                                            <td>${uid}</td>
-                                            <td>${data.tenNhanVat || 'Không tên'}</td>
-                                            <td>${data.vipExpiry ? new Date(data.vipExpiry).toLocaleDateString() : 'Vĩnh viễn'}</td>
-                                            <td><button class="btn btn-danger btn-sm" onclick="removeVip('${uid}')">Xóa VIP</button></td>
-                                        </tr>
-                                    `;
+                                    tbody.innerHTML += `<tr><td><code>${uid.substring(0,12)}...</code></td><td>${data.tenNhanVat || 'Không tên'}</td><td>${data.vipExpiry ? new Date(data.vipExpiry).toLocaleDateString() : 'Vĩnh viễn'}</td><td><button class="btn btn-danger btn-sm" onclick="removeVip('${uid}')">Xóa</button></td></tr>`;
                                 }
                             } catch(e) {}
                         }
                     }
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch(e) { console.error(e); }
             hideLoading();
         }
-        
+
         async function removeVip(uid) {
-            if (!confirm('Xóa VIP cho người chơi này?')) return;
+            if (!confirm('Xóa VIP?')) return;
             showLoading();
             try {
-                const snapshot = await db.ref(`users/${uid}/gameData`).once('value');
-                let data = snapshot.val();
-                if (data.data) {
-                    data = JSON.parse(data.data);
-                }
+                const snap = await db.ref(`users/${uid}/gameData`).once('value');
+                let data = snap.val();
+                if (data.data) data = JSON.parse(data.data);
                 data.daMuaVip = false;
                 const json = JSON.stringify(data);
-                const signature = await generateSignature(json);
-                await db.ref(`users/${uid}/gameData`).set({
-                    data: json,
-                    signature: signature,
-                    timestamp: Date.now()
-                });
+                const sig = await generateSignature(json);
+                await db.ref(`users/${uid}/gameData`).set({ data: json, signature: sig, timestamp: Date.now() });
                 showToast('Đã xóa VIP!', 'success');
                 loadVipList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
-        // ==================== GIFTCODE MANAGEMENT ====================
+
         async function createGiftCode() {
             const code = document.getElementById('giftCode').value.toUpperCase().trim();
-            if (!code) {
-                showToast('Vui lòng nhập mã code', 'error');
-                return;
-            }
-            
-            const giftData = {
-                code: code,
-                gold: parseInt(document.getElementById('giftGold').value),
-                linhThach: parseInt(document.getElementById('giftLinhThach').value),
-                items: document.getElementById('giftItem').value.split(',').map(s => s.trim()).filter(s => s),
-                maxUses: parseInt(document.getElementById('giftMaxUses').value),
-                used: 0,
-                usedBy: [],
-                createdAt: Date.now()
+            if (!code) { showToast('Nhập mã code', 'error'); return; }
+            const data = {
+                code, gold: parseInt(document.getElementById('giftGold').value), linhThach: parseInt(document.getElementById('giftLinhThach').value),
+                items: document.getElementById('giftItem').value.split(',').map(s=>s.trim()).filter(s=>s),
+                maxUses: parseInt(document.getElementById('giftMaxUses').value), used: 0, usedBy: [], createdAt: Date.now()
             };
-            
             showLoading();
-            try {
-                await db.ref(`giftcodes/${code}`).set(giftData);
-                showToast('Tạo giftcode thành công!', 'success');
-                document.getElementById('giftCode').value = '';
-                loadGiftCodeList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref(`giftcodes/${code}`).set(data); showToast('Tạo thành công!', 'success'); document.getElementById('giftCode').value = ''; loadGiftCodeList(); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         async function loadGiftCodeList() {
             if (!currentUser) return;
             showLoading();
             try {
-                const snapshot = await db.ref('giftcodes').once('value');
-                const codes = snapshot.val();
+                const snap = await db.ref('giftcodes').once('value');
+                const codes = snap.val();
                 const tbody = document.querySelector('#giftCodeList tbody');
                 tbody.innerHTML = '';
-                
                 if (codes) {
-                    for (let code in codes) {
-                        const data = codes[code];
+                    for (let c in codes) {
+                        const d = codes[c];
                         const reward = [];
-                        if (data.gold > 0) reward.push(`${data.gold} vàng`);
-                        if (data.linhThach > 0) reward.push(`${data.linhThach} linh thạch`);
-                        if (data.items?.length) reward.push(data.items.join(', '));
-                        
-                        tbody.innerHTML += `
-                            <tr>
-                                <td><strong>${code}</strong></td>
-                                <td>${reward.join(' + ')}</td>
-                                <td>${data.used}/${data.maxUses}</td>
-                                <td><button class="btn btn-danger btn-sm" onclick="deleteGiftCode('${code}')">Xóa</button></td>
-                            </tr>
-                        `;
+                        if (d.gold > 0) reward.push(`${d.gold} vàng`);
+                        if (d.linhThach > 0) reward.push(`${d.linhThach} linh thạch`);
+                        if (d.items?.length) reward.push(d.items.join(', '));
+                        tbody.innerHTML += `<tr><td><strong>${c}</strong></td><td>${reward.join(' + ')}</td><td>${d.used}/${d.maxUses}</td><td><button class="btn btn-danger btn-sm" onclick="deleteGiftCode('${c}')">Xóa</button></td></tr>`;
                     }
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch(e) { console.error(e); }
             hideLoading();
         }
-        
+
         async function deleteGiftCode(code) {
-            if (!confirm(`Xóa giftcode ${code}?`)) return;
+            if (!confirm('Xóa?')) return;
             showLoading();
-            try {
-                await db.ref(`giftcodes/${code}`).remove();
-                showToast('Đã xóa!', 'success');
-                loadGiftCodeList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref(`giftcodes/${code}`).remove(); showToast('Đã xóa!', 'success'); loadGiftCodeList(); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
-        // ==================== EVENT MANAGEMENT ====================
+
         async function createEvent() {
-            const eventData = {
-                id: document.getElementById('eventId').value,
-                tieuDe: document.getElementById('eventTitle').value,
-                noiDung: document.getElementById('eventContent').value,
-                thoiGianBatDau: document.getElementById('eventStartDate').value,
-                thoiGianKetThuc: document.getElementById('eventEndDate').value,
-                phanThuongLinhThach: parseInt(document.getElementById('eventRewardLinhThach').value),
-                phanThuongText: document.getElementById('eventRewardText').value,
-                dangHoatDong: document.getElementById('eventStatus').value === 'true',
-                updatedAt: Date.now()
+            const data = {
+                id: document.getElementById('eventId').value, tieuDe: document.getElementById('eventTitle').value, noiDung: document.getElementById('eventContent').value,
+                thoiGianBatDau: document.getElementById('eventStartDate').value, thoiGianKetThuc: document.getElementById('eventEndDate').value,
+                phanThuongLinhThach: parseInt(document.getElementById('eventRewardLinhThach').value), phanThuongText: document.getElementById('eventRewardText').value,
+                dangHoatDong: document.getElementById('eventStatus').value === 'true', updatedAt: Date.now()
             };
-            
             showLoading();
-            try {
-                await db.ref('sukien/current').set(eventData);
-                showToast('Tạo sự kiện thành công!', 'success');
-                loadCurrentEvent();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref('sukien/current').set(data); showToast('Tạo sự kiện thành công!', 'success'); loadCurrentEvent(); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         async function deleteEvent() {
-            if (!confirm('Xóa sự kiện hiện tại?')) return;
+            if (!confirm('Xóa sự kiện?')) return;
             showLoading();
-            try {
-                await db.ref('sukien/current').remove();
-                showToast('Đã xóa sự kiện!', 'success');
-                loadCurrentEvent();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref('sukien/current').remove(); showToast('Đã xóa!', 'success'); loadCurrentEvent(); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         async function loadCurrentEvent() {
             try {
-                const snapshot = await db.ref('sukien/current').once('value');
-                const event = snapshot.val();
+                const snap = await db.ref('sukien/current').once('value');
+                const ev = snap.val();
                 const container = document.getElementById('currentEventInfo');
-                if (event) {
-                    container.innerHTML = `
-                        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                            <h3>🎉 ${event.tieuDe || 'Sự kiện'}</h3>
-                            <p>${event.noiDung || ''}</p>
-                            <p>📅 ${event.thoiGianBatDau || ''} - ${event.thoiGianKetThuc || ''}</p>
-                            <p>🎁 Phần thưởng: ${event.phanThuongLinhThach || 0} linh thạch | ${event.phanThuongText || ''}</p>
-                            <p>📌 Trạng thái: ${event.dangHoatDong ? 'Đang hoạt động' : 'Tạm dừng'}</p>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML = '<p>Không có sự kiện nào đang diễn ra</p>';
-                }
-            } catch (error) {
-                console.error(error);
-            }
+                if (ev) {
+                    container.innerHTML = `<div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:8px;"><h3>🎉 ${ev.tieuDe || 'Sự kiện'}</h3><p>${ev.noiDung || ''}</p><p>📅 ${ev.thoiGianBatDau || ''} - ${ev.thoiGianKetThuc || ''}</p><p>🎁 ${ev.phanThuongLinhThach || 0} linh thạch | ${ev.phanThuongText || ''}</p><p>📌 ${ev.dangHoatDong ? 'Đang hoạt động' : 'Tạm dừng'}</p></div>`;
+                } else container.innerHTML = '<p>Không có sự kiện</p>';
+            } catch(e) { console.error(e); }
         }
-        
-        // ==================== ITEM MANAGEMENT ====================
+
         async function addItem() {
-            const itemData = {
-                name: document.getElementById('itemName').value,
-                type: document.getElementById('itemType').value,
-                price: parseInt(document.getElementById('itemPrice').value),
-                description: document.getElementById('itemDesc').value,
-                createdAt: Date.now()
-            };
-            
-            if (!itemData.name) {
-                showToast('Vui lòng nhập tên vật phẩm', 'error');
-                return;
-            }
-            
+            const data = { name: document.getElementById('itemName').value, type: document.getElementById('itemType').value, price: parseInt(document.getElementById('itemPrice').value), description: document.getElementById('itemDesc').value, createdAt: Date.now() };
+            if (!data.name) { showToast('Nhập tên', 'error'); return; }
             showLoading();
-            try {
-                const path = itemData.type === 'trangbi' ? 'items/trangbi' : 'items/dan';
-                await db.ref(`${path}/${itemData.name}`).set(itemData);
-                showToast('Thêm vật phẩm thành công!', 'success');
-                clearItemForm();
-                loadItemList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref(`items/${data.type}/${data.name}`).set(data); showToast('Thêm thành công!', 'success'); clearItemForm(); loadItemList(); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
-        function clearItemForm() {
-            document.getElementById('itemName').value = '';
-            document.getElementById('itemPrice').value = '100';
-            document.getElementById('itemDesc').value = '';
-        }
-        
+
+        function clearItemForm() { document.getElementById('itemName').value = ''; document.getElementById('itemPrice').value = '100'; document.getElementById('itemDesc').value = ''; }
+
         async function loadItemList() {
             if (!currentUser) return;
             showLoading();
             try {
-                const trangBiSnapshot = await db.ref('items/trangbi').once('value');
-                const danSnapshot = await db.ref('items/dan').once('value');
+                const tb = await db.ref('items/trangbi').once('value');
+                const dbSnap = await db.ref('items/dan').once('value');
                 const tbody = document.querySelector('#itemList tbody');
                 tbody.innerHTML = '';
-                
-                let index = 1;
-                if (trangBiSnapshot.val()) {
-                    for (let id in trangBiSnapshot.val()) {
-                        const item = trangBiSnapshot.val()[id];
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${index++}</td>
-                                <td>${id}</td>
-                                <td>Trang bị</td>
-                                <td>${item.price}</td>
-                                <td><button class="btn btn-danger btn-sm" onclick="deleteItem('trangbi', '${id}')">Xóa</button></td>
-                            </tr>
-                        `;
-                    }
-                }
-                if (danSnapshot.val()) {
-                    for (let id in danSnapshot.val()) {
-                        const item = danSnapshot.val()[id];
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${index++}</td>
-                                <td>${id}</td>
-                                <td>Đan dược</td>
-                                <td>${item.price}</td>
-                                <td><button class="btn btn-danger btn-sm" onclick="deleteItem('dan', '${id}')">Xóa</button></td>
-                            </tr>
-                        `;
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-            }
+                let idx = 1;
+                if (tb.val()) for (let id in tb.val()) tbody.innerHTML += `<tr><td>${idx++}</td><td>${id}</td><td>Trang bị</td><td>${tb.val()[id].price}</td><td><button class="btn btn-danger btn-sm" onclick="deleteItem('trangbi','${id}')">Xóa</button></td></tr>`;
+                if (dbSnap.val()) for (let id in dbSnap.val()) tbody.innerHTML += `<tr><td>${idx++}</td><td>${id}</td><td>Đan dược</td><td>${dbSnap.val()[id].price}</td><td><button class="btn btn-danger btn-sm" onclick="deleteItem('dan','${id}')">Xóa</button></td></tr>`;
+            } catch(e) { console.error(e); }
             hideLoading();
         }
-        
+
         async function deleteItem(type, id) {
-            if (!confirm(`Xóa vật phẩm ${id}?`)) return;
+            if (!confirm(`Xóa ${id}?`)) return;
             showLoading();
-            try {
-                await db.ref(`items/${type}/${id}`).remove();
-                showToast('Đã xóa!', 'success');
-                loadItemList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref(`items/${type}/${id}`).remove(); showToast('Đã xóa!', 'success'); loadItemList(); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
-        // ==================== DATABASE ====================
+
+        async function addQuest() {
+            const data = {
+                questID: document.getElementById('questId').value, questName: document.getElementById('questName').value, questType: document.getElementById('questType').value,
+                targetID: document.getElementById('questTarget').value, requiredAmount: parseInt(document.getElementById('questAmount').value),
+                rewardExp: parseInt(document.getElementById('questRewardExp').value), rewardGold: parseInt(document.getElementById('questRewardGold').value),
+                rewardLinhThach: parseInt(document.getElementById('questRewardLinhThach').value), requiredStage: 0,
+                description: `Hoàn thành nhiệm vụ ${document.getElementById('questName').value}`, createdAt: Date.now()
+            };
+            if (!data.questID) { showToast('Nhập ID nhiệm vụ', 'error'); return; }
+            showLoading();
+            try { await db.ref(`quests/${data.questID}`).set(data); showToast('Thêm thành công!', 'success'); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
+        async function saveResourceConfig() {
+            const cfg = { defaultGold: parseInt(document.getElementById('defaultGold').value), defaultLinhThach: parseInt(document.getElementById('defaultLinhThach').value), defaultExp: parseInt(document.getElementById('defaultExp').value), updatedAt: Date.now() };
+            showLoading();
+            try { await db.ref('config/resources').set(cfg); showToast('Đã lưu!', 'success'); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
+        async function saveDropConfig() {
+            const cfg = { dropRateItem: parseFloat(document.getElementById('dropRateItem').value), dropRateLinhThach: parseFloat(document.getElementById('dropRateLinhThach').value), updatedAt: Date.now() };
+            showLoading();
+            try { await db.ref('config/drop').set(cfg); showToast('Đã lưu!', 'success'); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
+        async function saveSystemConfig() {
+            const cfg = { versionName: document.getElementById('gameVersion').value, versionCode: parseInt(document.getElementById('versionCode').value), forceUpdate: document.getElementById('forceUpdate').value === 'true', changelog: document.getElementById('changelog').value, updatedAt: Date.now() };
+            showLoading();
+            try { await db.ref('version/android').set(cfg); showToast('Đã lưu!', 'success'); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
         async function backupDatabase() {
             showLoading();
             try {
-                const snapshot = await db.ref().once('value');
-                const data = snapshot.val();
+                const snap = await db.ref().once('value');
+                const data = snap.val();
                 const json = JSON.stringify(data, null, 2);
                 const blob = new Blob([json], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url;
-                a.download = `backup_${new Date().toISOString()}.json`;
-                a.click();
+                a.href = url; a.download = `backup_${new Date().toISOString()}.json`; a.click();
                 URL.revokeObjectURL(url);
-                showToast('Đã tải file backup!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+                showToast('Đã tải backup!', 'success');
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
+
         async function restoreDatabase() {
-            alert('Chức năng phục hồi: Chọn file backup JSON');
+            alert('Chọn file backup JSON');
             const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'application/json';
+            input.type = 'file'; input.accept = 'application/json';
             input.onchange = async (e) => {
                 const file = e.target.files[0];
                 const reader = new FileReader();
-                reader.onload = async (event) => {
+                reader.onload = async (ev) => {
                     showLoading();
                     try {
-                        const data = JSON.parse(event.target.result);
+                        const data = JSON.parse(ev.target.result);
                         await db.ref().set(data);
-                        showToast('Phục hồi dữ liệu thành công!', 'success');
-                    } catch (error) {
-                        showToast('Lỗi: ' + error.message, 'error');
-                    }
+                        showToast('Phục hồi thành công!', 'success');
+                    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
                     hideLoading();
                 };
                 reader.readAsText(file);
             };
             input.click();
         }
-        
+
         async function clearAllData() {
-            if (!confirm('⚠️ CẢNH BÁO: Xóa toàn bộ dữ liệu! Hành động này không thể hoàn tác. Bạn có chắc chắn?')) return;
-            if (!confirm('LẦN CUỐI: Xóa toàn bộ dữ liệu? Gõ "DELETE" để xác nhận')) return;
-            const confirmText = prompt('Gõ "DELETE" để xác nhận xóa:');
-            if (confirmText !== 'DELETE') return;
-            
+            if (!confirm('⚠️ XÓA TOÀN BỘ DỮ LIỆU? Không thể hoàn tác!')) return;
+            if (prompt('Gõ "DELETE" để xác nhận') !== 'DELETE') return;
             showLoading();
-            try {
-                await db.ref().set(null);
-                showToast('Đã xóa toàn bộ dữ liệu!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
+            try { await db.ref().set(null); showToast('Đã xóa!', 'success'); } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
-        
-        // ==================== SYSTEM CONFIG ====================
-        async function saveSystemConfig() {
-            const config = {
-                versionName: document.getElementById('gameVersion').value,
-                versionCode: parseInt(document.getElementById('versionCode').value),
-                forceUpdate: document.getElementById('forceUpdate').value === 'true',
-                changelog: document.getElementById('changelog').value,
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('version/android').set(config);
-                showToast('Đã lưu cấu hình hệ thống!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== RESOURCE CONFIG ====================
-        async function saveResourceConfig() {
-            const config = {
-                defaultGold: parseInt(document.getElementById('defaultGold').value),
-                defaultLinhThach: parseInt(document.getElementById('defaultLinhThach').value),
-                defaultExp: parseInt(document.getElementById('defaultExp').value),
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('config/resources').set(config);
-                showToast('Đã lưu cấu hình tài nguyên!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function saveDropConfig() {
-            const config = {
-                dropRateItem: parseFloat(document.getElementById('dropRateItem').value),
-                dropRateLinhThach: parseFloat(document.getElementById('dropRateLinhThach').value),
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('config/drop').set(config);
-                showToast('Đã lưu cấu hình tỷ lệ rơi!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== QUEST ====================
-        async function addQuest() {
-            const questData = {
-                questID: document.getElementById('questId').value,
-                questName: document.getElementById('questName').value,
-                questType: document.getElementById('questType').value,
-                targetID: document.getElementById('questTarget').value,
-                requiredAmount: parseInt(document.getElementById('questAmount').value),
-                rewardExp: parseInt(document.getElementById('questRewardExp').value),
-                rewardGold: parseInt(document.getElementById('questRewardGold').value),
-                rewardLinhThach: parseInt(document.getElementById('questRewardLinhThach').value),
-                requiredStage: 0,
-                description: `Hoàn thành nhiệm vụ ${document.getElementById('questName').value}`,
-                createdAt: Date.now()
-            };
-            
-            if (!questData.questID) {
-                showToast('Vui lòng nhập ID nhiệm vụ', 'error');
-                return;
-            }
-            
-            showLoading();
-            try {
-                await db.ref(`quests/${questData.questID}`).set(questData);
-                showToast('Thêm nhiệm vụ thành công!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== SIGNATURE ====================
+
         async function generateSignature(data) {
             const encoder = new TextEncoder();
-            const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data + 'your-secret-key'));
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return btoa(String.fromCharCode(...hashArray));
+            const hash = await crypto.subtle.digest('SHA-256', encoder.encode(data + 'your-secret-key'));
+            return btoa(String.fromCharCode(...new Uint8Array(hash)));
         }
-        
-        // ==================== KHỞI TẠO ====================
+
         auth.onAuthStateChanged((user) => {
             if (user) {
                 currentUser = user;
