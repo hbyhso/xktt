@@ -179,6 +179,31 @@
         .refresh-btn:hover { background: #ffd700; color: #1a1a2e; }
         
         .warning-text { color: #ff9800; font-size: 11px; margin-top: 5px; }
+        
+        .skill-item {
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+        }
+        .skill-name { font-weight: bold; color: #ffd700; }
+        
+        .inner-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .inner-tab {
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .inner-tab.active { background: #ffd700; color: #1a1a2e; }
+        .inner-content { display: none; }
+        .inner-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -200,7 +225,8 @@
         <ul class="sidebar-menu">
             <li><a onclick="showTab('dashboard')" data-tab="dashboard">📊 Dashboard</a></li>
             <li><a onclick="showTab('players')" data-tab="players">👤 Người chơi</a></li>
-            <li><a onclick="showTab('edit_resource')" data-tab="edit_resource">💰 Sửa tài nguyên</a></li>
+            <li><a onclick="showTab('edit_player')" data-tab="edit_player">✏️ Sửa chi tiết</a></li>
+            <li><a onclick="showTab('skills')" data-tab="skills">✨ Kỹ năng</a></li>
             <li><a onclick="showTab('inventory')" data-tab="inventory">📦 Kho đồ</a></li>
             <li><a onclick="showTab('recharge')" data-tab="recharge">💰 Đã nạp</a></li>
             <li><a onclick="showTab('suspicious')" data-tab="suspicious">⚠️ Nghi ngờ</a></li>
@@ -220,11 +246,11 @@
             </div>
             <div class="card">
                 <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></tr></div>
             </div>
             <div class="card">
                 <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></td></div>
             </div>
         </div>
 
@@ -238,32 +264,121 @@
             </div>
         </div>
 
-        <!-- CHỈ SỬA TÀI NGUYÊN - KHÔNG ĐỘNG GÌ KHÁC -->
-        <div id="edit_resource" class="tab-content">
+        <!-- EDIT PLAYER FULL -->
+        <div id="edit_player" class="tab-content">
             <div class="card">
-                <div class="card-title">💰 Chọn người chơi để sửa tài nguyên</div>
-                <div class="form-row"><div class="form-group"><select id="resourcePlayerSelect" class="form-control" onchange="loadResourceData()"><option value="">-- Chọn người chơi --</option></select></div></div>
+                <div class="card-title">✏️ Chọn người chơi để sửa</div>
+                <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
             </div>
-            <div id="resourceEditor" style="display: none;">
-                <div class="card">
-                    <div class="card-title">📝 Thông tin người chơi</div>
+            <div id="fullEditor" style="display: none;">
+                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - CÁC TRƯỜNG KHÁC GIỮ NGUYÊN</div>
+                
+                <!-- Thông tin cơ bản -->
+                <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
                     <div class="form-row">
-                        <div class="form-group"><label>User ID</label><input type="text" id="resourceUid" class="form-control" readonly></div>
-                        <div class="form-group"><label>Tên nhân vật</label><input type="text" id="resourceName" class="form-control" readonly></div>
+                        <div class="form-group"><label>User ID</label><input type="text" id="editUid" class="form-control" readonly></div>
+                        <div class="form-group"><label>Tên nhân vật</label><input type="text" id="editName" class="form-control"></div>
+                        <div class="form-group"><label>Email</label><input type="text" id="editEmail" class="form-control"></div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-title">💰 Tài nguyên (CHỈ SỬA 2 MỤC NÀY)</div>
-                    <div class="warning-text" style="margin-bottom: 10px;">⚠️ Lưu ý: Chỉ sửa vàng và linh thạch. Các dữ liệu khác (kỹ năng, trang bị, pet, v.v.) KHÔNG BỊ ẢNH HƯỞNG!</div>
+
+                <!-- Tu Vi -->
+                <div class="card"><div class="card-title">🧘 Tu Vi</div>
                     <div class="form-row">
-                        <div class="form-group"><label>Vàng</label><input type="number" id="editGoldOnly" class="form-control" value="0"></div>
-                        <div class="form-group"><label>Linh thạch</label><input type="number" id="editLinhThachOnly" class="form-control" value="0"></div>
+                        <div class="form-group"><label>Cảnh giới (0-9)</label><input type="number" id="editStage" class="form-control" min="0" max="9"></div>
+                        <div class="form-group"><label>Tầng (1-9)</label><input type="number" id="editTang" class="form-control" min="1" max="9"></div>
+                        <div class="form-group"><label>EXP</label><input type="number" id="editExp" class="form-control"></div>
+                        <div class="form-group"><label>Điểm thuộc tính</label><input type="number" id="editDiem" class="form-control"></div>
                     </div>
-                    <button class="btn btn-success" onclick="saveResourceOnly()">💾 Chỉ lưu vàng và linh thạch</button>
+                    <div class="form-row">
+                        <div class="form-group"><label>HP gốc</label><input type="number" id="editHp" class="form-control"></div>
+                        <div class="form-group"><label>ATK gốc</label><input type="number" id="editAtk" class="form-control"></div>
+                        <div class="form-group"><label>DEF gốc</label><input type="number" id="editDef" class="form-control"></div>
+                        <div class="form-group"><label>Luck gốc</label><input type="number" id="editLuck" class="form-control"></div>
+                    </div>
+                </div>
+
+                <!-- Tài nguyên -->
+                <div class="card"><div class="card-title">💰 Tài nguyên</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Vàng</label><input type="number" id="editGold" class="form-control"></div>
+                        <div class="form-group"><label>Linh thạch</label><input type="number" id="editLinhThach" class="form-control"></div>
+                    </div>
+                </div>
+
+                <!-- Trang bị đang mặc -->
+                <div class="card"><div class="card-title">⚔️ Trang bị đang mặc</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Vũ khí</label><input type="text" id="editWeapon" class="form-control"></div>
+                        <div class="form-group"><label>Cấp vũ khí</label><input type="number" id="editWeaponLevel" class="form-control" min="0" max="8"></div>
+                        <div class="form-group"><label>Giáp</label><input type="text" id="editArmor" class="form-control"></div>
+                        <div class="form-group"><label>Cấp giáp</label><input type="number" id="editArmorLevel" class="form-control" min="0" max="8"></div>
+                    </div>
+                </div>
+
+                <!-- Thú cưng -->
+                <div class="card"><div class="card-title">🐾 Thú cưng</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Cảnh giới pet</label><input type="number" id="editPetStage" class="form-control" min="0" max="9"></div>
+                        <div class="form-group"><label>Tầng pet</label><input type="number" id="editPetTang" class="form-control" min="1" max="9"></div>
+                        <div class="form-group"><label>EXP pet</label><input type="number" id="editPetExp" class="form-control"></div>
+                    </div>
+                </div>
+
+                <!-- VIP -->
+                <div class="card"><div class="card-title">👑 VIP</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Đã mua VIP</label><select id="editVip" class="form-control"><option value="true">Có</option><option value="false">Không</option></select></div>
+                        <div class="form-group"><label>VIP bắt đầu (ticks)</label><input type="text" id="editVipStart" class="form-control"></div>
+                        <div class="form-group"><label>VIP kết thúc (ticks)</label><input type="text" id="editVipEnd" class="form-control"></div>
+                    </div>
+                </div>
+
+                <!-- Thiên phú -->
+                <div class="card"><div class="card-title">✨ Thiên phú</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Loại (exp/mau/atk/def/luck)</label><input type="text" id="editThienPhu" class="form-control"></div>
+                        <div class="form-group"><label>Phần trăm</label><input type="number" id="editThienPhuPercent" class="form-control" step="0.01"></div>
+                    </div>
+                </div>
+
+                <!-- Nhiệm vụ -->
+                <div class="card"><div class="card-title">📜 Nhiệm vụ</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Active Quest IDs</label><input type="text" id="editActiveQuests" class="form-control" placeholder="cách nhau dấu phẩy"></div>
+                        <div class="form-group"><label>Completed Quest IDs</label><input type="text" id="editCompletedQuests" class="form-control" placeholder="cách nhau dấu phẩy"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <button class="btn btn-success" onclick="saveFullPlayerData()">💾 Lưu (CHỈ cập nhật trường đã sửa)</button>
+                    <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm</button>
+                    <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa</button>
                 </div>
             </div>
         </div>
 
+        <!-- SKILLS -->
+        <div id="skills" class="tab-content">
+            <div class="card">
+                <div class="card-title">✨ Quản lý kỹ năng</div>
+                <div class="form-row"><div class="form-group"><select id="skillPlayerSelect" class="form-control" onchange="loadPlayerSkills()"><option value="">-- Chọn người chơi --</option></select></div></div>
+                <div id="skillsEditor" style="display: none;">
+                    <div class="card"><div class="card-title">📌 Kỹ năng đã trang bị (4 ô)</div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Ô 1</label><input type="text" id="skillSlot0" class="form-control"></div>
+                            <div class="form-group"><label>Ô 2</label><input type="text" id="skillSlot1" class="form-control"></div>
+                            <div class="form-group"><label>Ô 3</label><input type="text" id="skillSlot2" class="form-control"></div>
+                            <div class="form-group"><label>Ô 4</label><input type="text" id="skillSlot3" class="form-control"></div>
+                        </div>
+                    </div>
+                    <div class="card"><div class="card-title">📚 Danh sách kỹ năng</div><div id="skillsList"></div></div>
+                    <button class="btn btn-success" onclick="savePlayerSkills()">💾 Lưu kỹ năng</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INVENTORY -->
         <div id="inventory" class="tab-content">
             <div class="card">
                 <div class="card-title">📦 Quản lý kho đồ</div>
@@ -285,6 +400,7 @@
             </div>
         </div>
 
+        <!-- RECHARGE -->
         <div id="recharge" class="tab-content">
             <div class="card">
                 <div class="card-title">💰 Người chơi đã nạp <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button></div>
@@ -292,13 +408,15 @@
             </div>
         </div>
 
+        <!-- SUSPICIOUS -->
         <div id="suspicious" class="tab-content">
             <div class="card">
                 <div class="card-title">⚠️ Nghi ngờ Hack/Mod <button class="refresh-btn" onclick="loadSuspicious()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="suspiciousTable"><thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></tr></thead><tbody><tr><td colspan="6">Đang phân tích...<span class="loading-status"></span><tr></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="suspiciousTable"><thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></tr></thead><tbody><tr><td colspan="6">Đang phân tích...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
+        <!-- GIFTCODE -->
         <div id="giftcode" class="tab-content">
             <div class="card">
                 <div class="card-title">🎁 Tạo Giftcode</div>
@@ -315,10 +433,11 @@
             </div>
             <div class="card">
                 <div class="card-title">📋 Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></td></div>
+                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
+        <!-- EVENTS -->
         <div id="events" class="tab-content">
             <div class="card">
                 <div class="card-title">🎉 Sự kiện</div>
@@ -336,6 +455,7 @@
             <div class="card"><div class="card-title">📋 Sự kiện hiện tại <button class="refresh-btn" onclick="loadEvent()">🔄 Refresh</button></div><div id="currentEventInfo">Đang tải...</div></div>
         </div>
 
+        <!-- CACHE -->
         <div id="cache" class="tab-content">
             <div class="card">
                 <div class="card-title">💾 Quản lý Cache</div>
@@ -372,21 +492,17 @@
         const db = firebase.database();
 
         let currentUser = null;
-        let currentResourceUid = null;
+        let currentEditUid = null;
+        let currentOriginalData = null;
         let playersCache = null;
         let inventoryData = null;
+        let currentSkillsData = null;
         let currentSort = { field: 'name', order: 'asc' };
 
-        // Đọc dữ liệu từ Firebase (dạng phẳng)
-        async function readGameData(uid) {
-            const snap = await db.ref(`users/${uid}/gameData`).once('value');
-            return snap.val();
-        }
-
-        // CHỈ CẬP NHẬT CÁC TRƯỜNG ĐƯỢC CHỈ ĐỊNH - KHÔNG ĐỌC DỮ LIỆU CŨ
+        // HÀM CẬP NHẬT - CHỈ GỬI ĐÚNG TRƯỜNG THAY ĐỔI
         async function patchGameData(uid, updates) {
-            // Ghi trực tiếp các trường cần cập nhật, không đọc dữ liệu cũ
-            // Dùng update để merge với dữ liệu hiện có
+            if (Object.keys(updates).length === 0) return false;
+            updates.timestamp = Date.now();
             await db.ref(`users/${uid}/gameData`).update(updates);
             console.log('✅ Đã cập nhật:', Object.keys(updates));
             return true;
@@ -540,7 +656,7 @@
                 </thead><tbody>`;
             
             filtered.slice(0, 200).forEach(p => {
-                html += `<tr class="player-row" onclick="selectPlayerForResource('${p.uid}')">
+                html += `<tr class="player-row" onclick="selectPlayer('${p.uid}')">
                     <td><strong>${escapeHtml(p.name)}</strong></td>
                     <td>${getStageName(p.stage)} tầng ${p.tang}</td>
                     <td>${(p.gold || 0).toLocaleString()}</td>
@@ -549,7 +665,7 @@
                     <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</td>
                 </tr>`;
             });
-            html += '</tbody><tr></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa tài nguyên</p>';
+            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
             document.getElementById('playerListContainer').innerHTML = html;
         }
 
@@ -562,71 +678,274 @@
 
         function updateSelects() {
             if (!playersCache) return;
-            const resourceSelect = document.getElementById('resourcePlayerSelect');
+            const playerSelect = document.getElementById('playerSelect');
+            const skillSelect = document.getElementById('skillPlayerSelect');
             const invSelect = document.getElementById('invPlayerSelect');
             const options = '<option value="">-- Chọn người chơi --</option>' + playersCache.map(p => `<option value="${p.uid}">${escapeHtml(p.name)} (${p.uid.substring(0,12)}...)</option>`).join('');
-            if (resourceSelect) resourceSelect.innerHTML = options;
+            if (playerSelect) playerSelect.innerHTML = options;
+            if (skillSelect) skillSelect.innerHTML = options;
             if (invSelect) invSelect.innerHTML = options;
         }
 
-        async function selectPlayerForResource(uid) {
-            document.getElementById('resourcePlayerSelect').value = uid;
-            await loadResourceData();
-            showTab('edit_resource');
+        async function selectPlayer(uid) {
+            document.getElementById('playerSelect').value = uid;
+            await loadFullPlayerData();
+            showTab('edit_player');
         }
 
-        // ==================== RESOURCE EDITOR ====================
-        async function loadResourceData() {
-            const uid = document.getElementById('resourcePlayerSelect').value;
+        // ==================== FULL PLAYER EDITOR ====================
+        async function loadFullPlayerData() {
+            const uid = document.getElementById('playerSelect').value;
             if (!uid) return;
             showLoading();
             try {
-                const data = await readGameData(uid);
-                currentResourceUid = uid;
-                document.getElementById('resourceEditor').style.display = 'block';
-                document.getElementById('resourceUid').value = uid;
-                document.getElementById('resourceName').value = data.tenNhanVat || 'Không tên';
-                document.getElementById('editGoldOnly').value = data.vang || 0;
-                document.getElementById('editLinhThachOnly').value = data.linhThach || 0;
+                const snap = await db.ref(`users/${uid}/gameData`).once('value');
+                const data = snap.val();
+                currentOriginalData = JSON.parse(JSON.stringify(data));
+                currentEditUid = uid;
+
+                document.getElementById('fullEditor').style.display = 'block';
+                document.getElementById('editUid').value = uid;
+                document.getElementById('editName').value = data.tenNhanVat || '';
+                document.getElementById('editEmail').value = data.email || '';
+                document.getElementById('editStage').value = data.chiSoCanhGio || 0;
+                document.getElementById('editTang').value = data.tang || 1;
+                document.getElementById('editExp').value = data.expHienTai || 0;
+                document.getElementById('editDiem').value = data.diemThuocTinhChuaCong || 0;
+                document.getElementById('editHp').value = data.hpGoc || 100;
+                document.getElementById('editAtk').value = data.atkGoc || 20;
+                document.getElementById('editDef').value = data.defGoc || 10;
+                document.getElementById('editLuck').value = data.luckGoc || 5;
+                document.getElementById('editGold').value = data.vang || 0;
+                document.getElementById('editLinhThach').value = data.linhThach || 0;
+                document.getElementById('editWeapon').value = data.vuKhiDangMac || '';
+                document.getElementById('editWeaponLevel').value = data.vuKhiCapDo || 0;
+                document.getElementById('editArmor').value = data.giapDangMac || '';
+                document.getElementById('editArmorLevel').value = data.giapCapDo || 0;
+                document.getElementById('editPetStage').value = data.petCanhGio || 0;
+                document.getElementById('editPetTang').value = data.petCapDo || 1;
+                document.getElementById('editPetExp').value = data.petExp || 0;
+                document.getElementById('editVip').value = data.daMuaVip ? 'true' : 'false';
+                document.getElementById('editVipStart').value = data.vipStartTicks || 0;
+                document.getElementById('editVipEnd').value = data.vipEndTicks || 0;
+                document.getElementById('editThienPhu').value = data.loaiThienPhu || '';
+                document.getElementById('editThienPhuPercent').value = data.phanTramThienPhu || 0;
+                document.getElementById('editActiveQuests').value = (data.activeQuestIDs || []).join(',');
+                document.getElementById('editCompletedQuests').value = (data.completedQuestIDs || []).join(',');
+
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
 
-        async function saveResourceOnly() {
-            if (!currentResourceUid) { showToast('Chọn người chơi trước', 'error'); return; }
+        async function saveFullPlayerData() {
+            if (!currentEditUid || !currentOriginalData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                const gold = parseInt(document.getElementById('editGoldOnly').value) || 0;
-                const linhThach = parseInt(document.getElementById('editLinhThachOnly').value) || 0;
+                const updates = {};
                 
-                // CHỈ GỬI ĐÚNG 2 TRƯỜNG CẦN SỬA
-                const updates = {
-                    vang: gold,
-                    linhThach: linhThach,
-                    timestamp: Date.now()
-                };
+                const name = document.getElementById('editName').value;
+                if (name !== currentOriginalData.tenNhanVat) updates.tenNhanVat = name;
                 
-                console.log('📝 Chỉ cập nhật:', updates);
+                const email = document.getElementById('editEmail').value;
+                if (email !== currentOriginalData.email) updates.email = email;
                 
-                // Dùng update để merge với dữ liệu hiện có, không ghi đè
-                await db.ref(`users/${currentResourceUid}/gameData`).update(updates);
+                const stage = parseInt(document.getElementById('editStage').value);
+                if (stage !== currentOriginalData.chiSoCanhGio) updates.chiSoCanhGio = stage;
                 
-                // Cập nhật leaderboard linh thạch
-                const name = document.getElementById('resourceName').value;
-                await db.ref(`leaderboard/linhthach/${currentResourceUid}`).update({ name: name, score: linhThach });
+                const tang = parseInt(document.getElementById('editTang').value);
+                if (tang !== currentOriginalData.tang) updates.tang = tang;
                 
-                showToast(`Đã cập nhật: Vàng = ${gold.toLocaleString()}, Linh thạch = ${linhThach.toLocaleString()}`, 'success');
+                const exp = parseFloat(document.getElementById('editExp').value);
+                if (exp !== currentOriginalData.expHienTai) updates.expHienTai = exp;
                 
-                // Refresh cache
+                const diem = parseInt(document.getElementById('editDiem').value);
+                if (diem !== currentOriginalData.diemThuocTinhChuaCong) updates.diemThuocTinhChuaCong = diem;
+                
+                const hp = parseInt(document.getElementById('editHp').value);
+                if (hp !== currentOriginalData.hpGoc) updates.hpGoc = hp;
+                
+                const atk = parseInt(document.getElementById('editAtk').value);
+                if (atk !== currentOriginalData.atkGoc) updates.atkGoc = atk;
+                
+                const def = parseInt(document.getElementById('editDef').value);
+                if (def !== currentOriginalData.defGoc) updates.defGoc = def;
+                
+                const luck = parseInt(document.getElementById('editLuck').value);
+                if (luck !== currentOriginalData.luckGoc) updates.luckGoc = luck;
+                
+                const gold = parseInt(document.getElementById('editGold').value);
+                if (gold !== currentOriginalData.vang) updates.vang = gold;
+                
+                const linhThach = parseInt(document.getElementById('editLinhThach').value);
+                if (linhThach !== currentOriginalData.linhThach) updates.linhThach = linhThach;
+                
+                const weapon = document.getElementById('editWeapon').value;
+                if (weapon !== currentOriginalData.vuKhiDangMac) updates.vuKhiDangMac = weapon;
+                
+                const weaponLevel = parseInt(document.getElementById('editWeaponLevel').value);
+                if (weaponLevel !== currentOriginalData.vuKhiCapDo) updates.vuKhiCapDo = weaponLevel;
+                
+                const armor = document.getElementById('editArmor').value;
+                if (armor !== currentOriginalData.giapDangMac) updates.giapDangMac = armor;
+                
+                const armorLevel = parseInt(document.getElementById('editArmorLevel').value);
+                if (armorLevel !== currentOriginalData.giapCapDo) updates.giapCapDo = armorLevel;
+                
+                const petStage = parseInt(document.getElementById('editPetStage').value);
+                if (petStage !== currentOriginalData.petCanhGio) updates.petCanhGio = petStage;
+                
+                const petTang = parseInt(document.getElementById('editPetTang').value);
+                if (petTang !== currentOriginalData.petCapDo) updates.petCapDo = petTang;
+                
+                const petExp = parseInt(document.getElementById('editPetExp').value);
+                if (petExp !== currentOriginalData.petExp) updates.petExp = petExp;
+                
+                const isVip = document.getElementById('editVip').value === 'true';
+                if (isVip !== currentOriginalData.daMuaVip) updates.daMuaVip = isVip;
+                
+                const vipStart = parseInt(document.getElementById('editVipStart').value) || 0;
+                if (vipStart !== currentOriginalData.vipStartTicks) updates.vipStartTicks = vipStart;
+                
+                const vipEnd = parseInt(document.getElementById('editVipEnd').value) || 0;
+                if (vipEnd !== currentOriginalData.vipEndTicks) updates.vipEndTicks = vipEnd;
+                
+                const thienPhu = document.getElementById('editThienPhu').value;
+                if (thienPhu !== currentOriginalData.loaiThienPhu) updates.loaiThienPhu = thienPhu;
+                
+                const thienPhuPercent = parseFloat(document.getElementById('editThienPhuPercent').value);
+                if (thienPhuPercent !== currentOriginalData.phanTramThienPhu) updates.phanTramThienPhu = thienPhuPercent;
+                
+                const activeQuests = document.getElementById('editActiveQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
+                const oldActive = currentOriginalData.activeQuestIDs || [];
+                if (JSON.stringify(activeQuests) !== JSON.stringify(oldActive)) updates.activeQuestIDs = activeQuests;
+                
+                const completedQuests = document.getElementById('editCompletedQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
+                const oldCompleted = currentOriginalData.completedQuestIDs || [];
+                if (JSON.stringify(completedQuests) !== JSON.stringify(oldCompleted)) updates.completedQuestIDs = completedQuests;
+                
+                if (Object.keys(updates).length === 0) {
+                    showToast('Không có thay đổi nào!', 'warning');
+                    hideLoading();
+                    return;
+                }
+                
+                console.log('📝 Sẽ cập nhật:', Object.keys(updates));
+                
+                await patchGameData(currentEditUid, updates);
+                
+                // Cập nhật leaderboard nếu cần
+                if (updates.chiSoCanhGio !== undefined || updates.tang !== undefined || updates.tenNhanVat !== undefined || updates.linhThach !== undefined) {
+                    const newStage = updates.chiSoCanhGio !== undefined ? updates.chiSoCanhGio : currentOriginalData.chiSoCanhGio;
+                    const newTang = updates.tang !== undefined ? updates.tang : currentOriginalData.tang;
+                    const newName = updates.tenNhanVat !== undefined ? updates.tenNhanVat : currentOriginalData.tenNhanVat;
+                    const newLinhThach = updates.linhThach !== undefined ? updates.linhThach : currentOriginalData.linhThach;
+                    const diem = newStage * 10000 + newTang * 1000;
+                    await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: newName, score: diem });
+                    await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: newName, score: newLinhThach });
+                }
+                
+                showToast(`Đã cập nhật: ${Object.keys(updates).join(', ')}`, 'success');
+                
+                // Refresh dữ liệu
                 playersCache = null;
                 await loadPlayers(true);
                 await loadLeaderboard();
                 await loadRecharge();
+                await loadFullPlayerData();
                 
             } catch(e) { 
                 showToast('Lỗi: ' + e.message, 'error');
                 console.error(e);
             }
+            hideLoading();
+        }
+
+        async function banCurrentPlayer() {
+            if (!currentEditUid) return;
+            const reason = prompt('Lý do cấm:');
+            if (!reason) return;
+            showLoading();
+            try {
+                await db.ref(`banned/${currentEditUid}`).set({ reason, timestamp: Date.now(), bannedBy: currentUser?.email });
+                showToast('Đã cấm!', 'success');
+                await loadPlayers(true);
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
+        async function unbanCurrentPlayer() {
+            if (!currentEditUid) return;
+            showLoading();
+            try {
+                await db.ref(`banned/${currentEditUid}`).remove();
+                showToast('Đã mở khóa!', 'success');
+                await loadPlayers(true);
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
+        // ==================== SKILLS ====================
+        async function loadPlayerSkills() {
+            const uid = document.getElementById('skillPlayerSelect').value;
+            if (!uid) return;
+            showLoading();
+            try {
+                const snap = await db.ref(`users/${uid}/gameData`).once('value');
+                const data = snap.val();
+                
+                document.getElementById('skillsEditor').style.display = 'block';
+                currentSkillsData = JSON.parse(JSON.stringify(data));
+                currentEditUid = uid;
+                
+                document.getElementById('skillSlot0').value = data.skillSlot_0 || '';
+                document.getElementById('skillSlot1').value = data.skillSlot_1 || '';
+                document.getElementById('skillSlot2').value = data.skillSlot_2 || '';
+                document.getElementById('skillSlot3').value = data.skillSlot_3 || '';
+                
+                const skillKeys = Object.keys(data).filter(k => k.startsWith('skill_') && (k.endsWith('_daHoc') || k.endsWith('_capDo')));
+                const skillMap = {};
+                skillKeys.forEach(k => {
+                    const baseKey = k.replace(/_daHoc$|_capDo$/, '');
+                    if (!skillMap[baseKey]) skillMap[baseKey] = {};
+                    if (k.endsWith('_daHoc')) skillMap[baseKey].daHoc = data[k];
+                    if (k.endsWith('_capDo')) skillMap[baseKey].capDo = data[k];
+                });
+                
+                let html = '';
+                for (let key in skillMap) {
+                    html += `<div class="skill-item">
+                        <span class="skill-name">${key}</span><br>
+                        Đã học: <input type="checkbox" id="skill_${key}_daHoc" ${skillMap[key].daHoc ? 'checked' : ''}>
+                        Cấp độ: <input type="number" id="skill_${key}_capDo" value="${skillMap[key].capDo || 0}" min="0" max="20" style="width:60px">
+                    </div>`;
+                }
+                document.getElementById('skillsList').innerHTML = html;
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
+        async function savePlayerSkills() {
+            if (!currentEditUid || !currentSkillsData) { showToast('Chọn người chơi trước', 'error'); return; }
+            showLoading();
+            try {
+                const updates = {};
+                
+                updates.skillSlot_0 = document.getElementById('skillSlot0').value;
+                updates.skillSlot_1 = document.getElementById('skillSlot1').value;
+                updates.skillSlot_2 = document.getElementById('skillSlot2').value;
+                updates.skillSlot_3 = document.getElementById('skillSlot3').value;
+                
+                const checkboxes = document.querySelectorAll('#skillsList input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    const key = cb.id.replace('_daHoc', '');
+                    const capDoInput = document.getElementById(`${key}_capDo`);
+                    updates[`${key}_daHoc`] = cb.checked;
+                    updates[`${key}_capDo`] = parseInt(capDoInput?.value) || 0;
+                });
+                
+                await patchGameData(currentEditUid, updates);
+                showToast('Lưu kỹ năng thành công!', 'success');
+            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
 
@@ -636,10 +955,12 @@
             if (!uid) return;
             showLoading();
             try {
-                const data = await readGameData(uid);
+                const snap = await db.ref(`users/${uid}/gameData`).once('value');
+                const data = snap.val();
+                
                 document.getElementById('inventoryEditor').style.display = 'block';
                 inventoryData = JSON.parse(JSON.stringify(data));
-                currentResourceUid = uid;
+                currentEditUid = uid;
                 refreshInventoryDisplay();
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
@@ -648,7 +969,7 @@
         function refreshInventoryDisplay() {
             if (!inventoryData) return;
             
-            let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th><tr></thead><tbody>';
+            let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th></tr></thead><tbody>';
             (inventoryData.danhSachTrangBi || []).forEach((item, idx) => {
                 tbHtml += `<tr>
                     <td>${item.tenItem}</td>
@@ -706,10 +1027,10 @@
         }
 
         async function savePlayerInventory() {
-            if (!currentResourceUid || !inventoryData) { showToast('Chọn người chơi trước', 'error'); return; }
+            if (!currentEditUid || !inventoryData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                await db.ref(`users/${currentResourceUid}/gameData`).update({
+                await patchGameData(currentEditUid, {
                     danhSachTrangBi: inventoryData.danhSachTrangBi || [],
                     danhSachDan: inventoryData.danhSachDan || []
                 });
@@ -838,7 +1159,7 @@
                 suspicious.sort((a,b) => b.linhThach - a.linhThach);
                 let html = '';
                 if (suspicious.length === 0) {
-                    html = '<tr><td colspan="6">Không phát hiện bất thường</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
+                    html = '<td><td colspan="6">Không phát hiện bất thường</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
                 } else {
                     suspicious.slice(0, 50).forEach(s => {
                         const badge = s.level === 'high' ? '<span class="badge" style="background:#8b0000;">NGHIÊM TRỌNG</span>' : '<span class="badge" style="background:#ff9800;">CẢNH BÁO</span>';
@@ -846,7 +1167,7 @@
                             <td><code>${s.uid.substring(0,12)}...</code></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                     });
                 }
-                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></tr></thead><tbody>${html}</tbody>`;
+                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th><tr></thead><tbody>${html}</tbody>`;
                 console.log(`✅ Đã tải ${suspicious.length} tài khoản nghi ngờ`);
             } catch(e) { console.error('Lỗi load suspicious:', e); }
         }
@@ -881,7 +1202,7 @@
                             <td>${reward.join(' + ')}</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                     }
                 }
-                document.getElementById('giftCodeList').innerHTML = `<thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th><tr></thead><tbody>${html || '<tr><td colspan="4">Chưa có giftcode</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>'}</tbody>`;
+                document.getElementById('giftCodeList').innerHTML = `<thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody>${html || '<tr><td colspan="4">Chưa có giftcode</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>'}</tbody>`;
             } catch(e) { console.error(e); }
         }
 
