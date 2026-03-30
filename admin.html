@@ -178,35 +178,6 @@
             border-radius: 6px;
         }
         .skill-name { font-weight: bold; color: #ffd700; }
-        .inner-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-        .inner-tab {
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-        .inner-tab.active { background: #ffd700; color: #1a1a2e; }
-        .inner-content { display: none; }
-        .inner-content.active { display: block; }
-        
-        .debug-info {
-            font-size: 10px;
-            color: #aaa;
-            margin-top: 10px;
-            padding: 8px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 6px;
-            word-break: break-all;
-        }
-        .status-ok { color: #28a745; }
-        .status-error { color: #dc3545; }
-        .status-warning { color: #ff9800; }
     </style>
 </head>
 <body>
@@ -236,7 +207,6 @@
             <li><a onclick="showTab('giftcode')" data-tab="giftcode">🎁 Giftcode</a></li>
             <li><a onclick="showTab('events')" data-tab="events">🎉 Sự kiện</a></li>
             <li><a onclick="showTab('cache')" data-tab="cache">💾 Cache</a></li>
-            <li><a onclick="showTab('debug')" data-tab="debug">🐛 Debug</a></li>
         </ul>
     </div>
 
@@ -250,19 +220,19 @@
                 <div class="stat-card"><div class="stat-value" id="totalLinhThach">-</div><div class="stat-label">Tổng linh thạch</div></div>
             </div>
             <div class="card">
-                <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...</td></tr></tbody></table></div>
+                <div class="card-title">🏆 Top 10 Tu Vi</div>
+                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
             <div class="card">
-                <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...</td></tr></tbody></table></div>
+                <div class="card-title">💰 Top 10 Linh Thạch</div>
+                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
         <!-- Players List -->
         <div id="players" class="tab-content">
             <div class="card">
-                <div class="card-title">👤 Danh sách người chơi <button class="refresh-btn" onclick="forceRefreshPlayers()">🔄 Refresh</button></div>
+                <div class="card-title">👤 Danh sách người chơi <button class="refresh-btn" onclick="loadPlayers(true)">🔄 Refresh</button></div>
                 <div class="form-row"><div class="form-group"><input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm theo tên hoặc ID..."></div></div>
                 <button class="btn btn-primary" onclick="searchPlayer()">Tìm</button>
                 <button class="btn btn-warning" onclick="clearSearch()">Xóa</button>
@@ -392,7 +362,7 @@
         <div id="recharge" class="tab-content">
             <div class="card">
                 <div class="card-title">💰 Người chơi đã nạp <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="rechargeTable"><thead><tr><th>User ID</th><th>Tên</th><th>Số lần</th><th>Tổng tiền</th><th></th></tr></thead><tbody><tr><td colspan="5">Đang tải...</td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="rechargeTable"><thead><tr><th>User ID</th><th>Tên</th><th>Số lần</th><th>Tổng tiền</th><th></th></tr></thead><tbody><tr><td colspan="5">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -400,7 +370,7 @@
         <div id="suspicious" class="tab-content">
             <div class="card">
                 <div class="card-title">⚠️ Nghi ngờ Hack/Mod <button class="refresh-btn" onclick="loadSuspicious()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="suspiciousTable"><thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></tr></thead><tbody><tr><td colspan="6">Đang phân tích...</td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="suspiciousTable"><thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></tr></thead><tbody><tr><td colspan="6">Đang phân tích...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -421,14 +391,14 @@
             </div>
             <div class="card">
                 <div class="card-title">📋 Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...</td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
         <!-- Events -->
         <div id="events" class="tab-content">
             <div class="card">
-                <div class="card-title">🎉 Sự kiện <button class="refresh-btn" onclick="loadEvent()">🔄 Refresh</button></div>
+                <div class="card-title">🎉 Sự kiện</div>
                 <div class="form-row">
                     <div class="form-group"><label>Tiêu đề</label><input type="text" id="eventTitle" class="form-control"></div>
                     <div class="form-group"><label>Nội dung</label><input type="text" id="eventContent" class="form-control"></div>
@@ -440,7 +410,7 @@
                 <button class="btn btn-primary" onclick="createEvent()">📌 Lưu</button>
                 <button class="btn btn-danger" onclick="deleteEvent()">🗑️ Xóa</button>
             </div>
-            <div class="card"><div class="card-title">📋 Sự kiện hiện tại</div><div id="currentEventInfo">Đang tải...</div></div>
+            <div class="card"><div class="card-title">📋 Sự kiện hiện tại <button class="refresh-btn" onclick="loadEvent()">🔄 Refresh</button></div><div id="currentEventInfo">Đang tải...</div></div>
         </div>
 
         <!-- Cache -->
@@ -452,20 +422,8 @@
                     <div class="stat-card"><div class="stat-value" id="cacheSize">0</div><div class="stat-label">Kích thước (KB)</div></div>
                     <div class="stat-card"><div class="stat-value" id="lastUpdate">-</div><div class="stat-label">Cập nhật cuối</div></div>
                 </div>
-                <div id="cacheStatusBox" class="debug-info">Đang kiểm tra cache...</div>
                 <button class="btn btn-warning" onclick="clearAllCache()">🗑️ Xóa cache</button>
                 <button class="btn btn-primary" onclick="forceRefreshAll()">🔄 Refresh toàn bộ</button>
-                <button class="btn btn-info" onclick="testCache()">🔍 Kiểm tra cache</button>
-            </div>
-        </div>
-
-        <!-- Debug -->
-        <div id="debug" class="tab-content">
-            <div class="card">
-                <div class="card-title">🐛 Debug Information</div>
-                <div id="debugInfo" class="debug-info"></div>
-                <button class="btn btn-primary" onclick="refreshDebug()">🔄 Refresh Debug</button>
-                <button class="btn btn-warning" onclick="clearLocalStorage()">🗑️ Xóa toàn bộ localStorage</button>
             </div>
         </div>
     </div>
@@ -496,12 +454,7 @@
         let currentPlayerData = null;
         let playersCache = null;
         let inventoryData = null;
-
-        // Cache keys
-        const CACHE_KEYS = {
-            PLAYERS: 'admin_players_v2',
-            PLAYERS_TIME: 'admin_players_time'
-        };
+        let currentSkillsData = null;
 
         // ==================== AUTH ====================
         async function loginWithEmail() {
@@ -533,7 +486,7 @@
                 const adminSnap = await db.ref(`admins/${currentUser.uid}`).once('value');
                 if (!adminSnap.exists()) { showToast('Không có quyền Admin!', 'error'); logout(); return; }
                 showToast('Đăng nhập thành công!', 'success');
-                // Tải TẤT CẢ dữ liệu ngay sau khi đăng nhập
+                // Tải TẤT CẢ dữ liệu
                 await Promise.all([
                     loadPlayers(),
                     loadLeaderboard(),
@@ -542,7 +495,6 @@
                     loadGiftcodes(),
                     loadEvent()
                 ]);
-                refreshDebug();
                 updateCacheUI();
             } catch(e) { 
                 showToast('Lỗi: ' + e.message, 'error');
@@ -592,8 +544,6 @@
                     }
                 }
                 playersCache = players.sort((a,b) => a.name.localeCompare(b.name));
-                localStorage.setItem(CACHE_KEYS.PLAYERS, JSON.stringify(playersCache));
-                localStorage.setItem(CACHE_KEYS.PLAYERS_TIME, Date.now().toString());
                 displayPlayers();
                 updateStats();
                 updatePlayerSelect();
@@ -631,7 +581,7 @@
                     <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</td>
                 </tr>`;
             });
-            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 Cache: ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
+            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa</p>';
             document.getElementById('playerListContainer').innerHTML = html;
         }
 
@@ -718,7 +668,7 @@
                 rechargers.slice(0, 50).forEach(r => {
                     html += `<tr><td><code>${r.uid.substring(0,12)}...</code></td><td>${escapeHtml(r.name)}</td><td>${r.count}</td><td>${r.total.toLocaleString()}đ</td><td><button class="btn btn-info btn-sm" onclick="selectPlayer('${r.uid}')">✏️</button></td></tr>`;
                 });
-                document.getElementById('rechargeTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Số lần</th><th>Tổng tiền</th><th></th></tr></thead><tbody>${html || '<td><td colspan="5">Chưa có dữ liệu</td></tr>'}</tbody>`;
+                document.getElementById('rechargeTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Số lần</th><th>Tổng tiền</th><th></th></tr></thead><tbody>${html || '<tr><td colspan="5">Chưa có dữ liệu</td></tr>'}</tbody>`;
                 document.getElementById('totalRecharged').innerText = rechargers.length;
                 console.log(`✅ Đã tải ${rechargers.length} người đã nạp`);
             } catch(e) { console.error('Lỗi load recharge:', e); }
@@ -748,7 +698,7 @@
                 let html = '';
                 suspicious.slice(0, 50).forEach(s => {
                     const badge = s.level === 'high' ? '<span class="badge" style="background:#8b0000;">NGHIÊM TRỌNG</span>' : '<span class="badge" style="background:#ff9800;">CẢNH BÁO</span>';
-                    html += `<td><td><code>${s.uid.substring(0,12)}...</code></td><td>${escapeHtml(s.name)}</td><td>${s.linhThach.toLocaleString()}</td><td>${s.reasons.join(', ')}</td><td>${badge}</td><td><button class="btn btn-danger btn-sm" onclick="banSuspicious('${s.uid}')">🚫 Cấm</button></td></tr>`;
+                    html += `<tr><td><code>${s.uid.substring(0,12)}...</code></td><td>${escapeHtml(s.name)}</td><td>${s.linhThach.toLocaleString()}</td><td>${s.reasons.join(', ')}</td><td>${badge}</td><td><button class="btn btn-danger btn-sm" onclick="banSuspicious('${s.uid}')">🚫 Cấm</button></td></tr>`;
                 });
                 document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></tr></thead><tbody>${html || '<tr><td colspan="6">Không phát hiện bất thường</td></tr>'}</tbody>`;
                 console.log(`✅ Đã tải ${suspicious.length} tài khoản nghi ngờ`);
@@ -865,6 +815,8 @@
                 playersCache = null;
                 await loadPlayers(true);
                 await loadLeaderboard();
+                await loadRecharge();
+                await loadSuspicious();
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
@@ -904,6 +856,9 @@
                 if (data?.data) data = JSON.parse(data.data);
                 
                 document.getElementById('skillsEditor').style.display = 'block';
+                currentSkillsData = data;
+                currentEditUid = uid;
+                
                 document.getElementById('skillSlot0').value = data.skillSlot_0 || '';
                 document.getElementById('skillSlot1').value = data.skillSlot_1 || '';
                 document.getElementById('skillSlot2').value = data.skillSlot_2 || '';
@@ -927,18 +882,15 @@
                     </div>`;
                 }
                 document.getElementById('skillsList').innerHTML = html;
-                currentEditUid = uid;
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
 
         async function savePlayerSkills() {
-            if (!currentEditUid) return;
+            if (!currentEditUid || !currentSkillsData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                const snap = await db.ref(`users/${currentEditUid}/gameData`).once('value');
-                let data = snap.val();
-                if (data?.data) data = JSON.parse(data.data);
+                let data = currentSkillsData;
                 
                 data.skillSlot_0 = document.getElementById('skillSlot0').value;
                 data.skillSlot_1 = document.getElementById('skillSlot1').value;
@@ -977,35 +929,40 @@
                 document.getElementById('inventoryEditor').style.display = 'block';
                 inventoryData = data;
                 currentEditUid = uid;
-                
-                let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th></tr></thead><tbody>';
-                (data.danhSachTrangBi || []).forEach((item, idx) => {
-                    tbHtml += `<tr><td>${item.tenItem}</td><td>${item.capDo || 0}</td><td><button class="btn btn-danger btn-sm" onclick="removeTrangBi(${idx})">Xóa</button></td></tr>`;
-                });
-                tbHtml += '</tbody></table>';
-                document.getElementById('trangBiList').innerHTML = tbHtml;
-                
-                let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>';
-                (data.danhSachDan || []).forEach((item, idx) => {
-                    danHtml += `<tr><td>${item.tenDan}</td><td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td></tr>`;
-                });
-                danHtml += '</tbody></table>';
-                document.getElementById('danList').innerHTML = danHtml;
+                refreshInventoryDisplay();
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
+        }
+
+        function refreshInventoryDisplay() {
+            if (!inventoryData) return;
+            
+            let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th></tr></thead><tbody>';
+            (inventoryData.danhSachTrangBi || []).forEach((item, idx) => {
+                tbHtml += `<tr><td>${item.tenItem}</td><td>${item.capDo || 0}</td><td><button class="btn btn-danger btn-sm" onclick="removeTrangBi(${idx})">Xóa</button></td></tr>`;
+            });
+            tbHtml += '</tbody></table>';
+            document.getElementById('trangBiList').innerHTML = tbHtml;
+            
+            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>';
+            (inventoryData.danhSachDan || []).forEach((item, idx) => {
+                danHtml += `<tr><td>${item.tenDan}</td><td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td></tr>`;
+            });
+            danHtml += '</tbody></table>';
+            document.getElementById('danList').innerHTML = danHtml;
         }
 
         function removeTrangBi(idx) {
             if (inventoryData && inventoryData.danhSachTrangBi) {
                 inventoryData.danhSachTrangBi.splice(idx, 1);
-                loadPlayerInventory();
+                refreshInventoryDisplay();
             }
         }
 
         function removeDan(idx) {
             if (inventoryData && inventoryData.danhSachDan) {
                 inventoryData.danhSachDan.splice(idx, 1);
-                loadPlayerInventory();
+                refreshInventoryDisplay();
             }
         }
 
@@ -1016,7 +973,8 @@
             if (!inventoryData.danhSachTrangBi) inventoryData.danhSachTrangBi = [];
             inventoryData.danhSachTrangBi.push({ tenItem: name, capDo: level });
             document.getElementById('addTrangBiName').value = '';
-            loadPlayerInventory();
+            refreshInventoryDisplay();
+            showToast('Đã thêm ' + name, 'success');
         }
 
         function addDan() {
@@ -1025,11 +983,12 @@
             if (!inventoryData.danhSachDan) inventoryData.danhSachDan = [];
             inventoryData.danhSachDan.push({ tenDan: name });
             document.getElementById('addDanName').value = '';
-            loadPlayerInventory();
+            refreshInventoryDisplay();
+            showToast('Đã thêm ' + name, 'success');
         }
 
         async function savePlayerInventory() {
-            if (!currentEditUid || !inventoryData) return;
+            if (!currentEditUid || !inventoryData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
                 const snap = await db.ref(`users/${currentEditUid}/gameData`).once('value');
@@ -1148,71 +1107,29 @@
             hideLoading();
         }
 
-        // ==================== CACHE & DEBUG ====================
+        // ==================== CACHE ====================
         function updateCacheUI() {
-            const cached = localStorage.getItem(CACHE_KEYS.PLAYERS);
+            const cached = localStorage.getItem('admin_players_v2');
             if (cached) {
                 const data = JSON.parse(cached);
                 document.getElementById('cachePlayersCount').innerHTML = data.length;
                 document.getElementById('cacheSize').innerHTML = Math.round(cached.length / 1024);
-                const lastTime = localStorage.getItem(CACHE_KEYS.PLAYERS_TIME);
+                const lastTime = localStorage.getItem('admin_players_time');
                 if (lastTime) document.getElementById('lastUpdate').innerHTML = new Date(parseInt(lastTime)).toLocaleTimeString();
-                document.getElementById('cacheStatusBox').innerHTML = `<span class="status-ok">✅ Cache có ${data.length} người chơi (${Math.round(cached.length/1024)} KB)</span>`;
             } else {
                 document.getElementById('cachePlayersCount').innerHTML = '0';
                 document.getElementById('cacheSize').innerHTML = '0';
                 document.getElementById('lastUpdate').innerHTML = 'Chưa có';
-                document.getElementById('cacheStatusBox').innerHTML = '<span class="status-warning">⚠️ Chưa có cache, đang tải...</span>';
             }
         }
 
         function clearAllCache() {
             playersCache = null;
-            for (let key in CACHE_KEYS) {
-                localStorage.removeItem(CACHE_KEYS[key]);
-            }
+            localStorage.removeItem('admin_players_v2');
+            localStorage.removeItem('admin_players_time');
             showToast('Đã xóa cache!', 'warning');
             updateCacheUI();
-            forceRefreshAll();
-        }
-
-        function testCache() {
-            const cached = localStorage.getItem(CACHE_KEYS.PLAYERS);
-            if (cached) {
-                const data = JSON.parse(cached);
-                showToast(`Cache có ${data.length} người chơi, dung lượng ${Math.round(cached.length / 1024)} KB`, 'success');
-                updateCacheUI();
-            } else {
-                showToast('Chưa có cache, đang tải dữ liệu...', 'warning');
-                loadPlayers(true);
-            }
-        }
-
-        function clearLocalStorage() {
-            if (confirm('Xóa toàn bộ localStorage? Bạn sẽ mất cache!')) {
-                localStorage.clear();
-                playersCache = null;
-                showToast('Đã xóa localStorage!', 'warning');
-                refreshDebug();
-                updateCacheUI();
-                loadPlayers(true);
-            }
-        }
-
-        function refreshDebug() {
-            let html = '<h4>📦 Cache Status</h4>';
-            for (let key in CACHE_KEYS) {
-                const val = localStorage.getItem(key);
-                const size = val ? Math.round(val.length / 1024) : 0;
-                const status = val ? `<span class="status-ok">✅ Có (${size} KB)</span>` : '<span class="status-error">❌ Không có</span>';
-                html += `<p><strong>${key}:</strong> ${status}</p>`;
-            }
-            html += '<h4>🔐 Auth Status</h4>';
-            html += `<p>Đăng nhập: ${currentUser ? `<span class="status-ok">✅ ${currentUser.email}</span>` : '<span class="status-error">❌ Chưa</span>'}</p>`;
-            html += `<p>UID: ${currentUser ? currentUser.uid : 'N/A'}</p>`;
-            html += '<h4>📊 Data Status</h4>';
-            html += `<p>Players Cache: ${playersCache ? `<span class="status-ok">✅ ${playersCache.length} người</span>` : '<span class="status-error">❌ Chưa có</span>'}</p>`;
-            document.getElementById('debugInfo').innerHTML = html;
+            loadPlayers(true);
         }
 
         async function forceRefreshAll() {
@@ -1225,11 +1142,8 @@
             await loadEvent();
             hideLoading();
             showToast('Đã cập nhật dữ liệu mới!', 'success');
-            refreshDebug();
             updateCacheUI();
         }
-
-        async function forceRefreshPlayers() { await loadPlayers(true); }
 
         // ==================== UTILITIES ====================
         function showTab(tabId) {
@@ -1239,7 +1153,6 @@
             const activeLink = document.querySelector(`[data-tab="${tabId}"]`);
             if (activeLink) activeLink.classList.add('active');
             if (tabId === 'cache') updateCacheUI();
-            if (tabId === 'debug') refreshDebug();
         }
 
         function getStageName(stage) {
