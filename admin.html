@@ -185,6 +185,7 @@
             border-radius: 6px;
         }
         .skill-name { font-weight: bold; color: #ffd700; }
+        .warning-text { color: #ff9800; font-size: 11px; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -228,7 +229,7 @@
             </div>
             <div class="card">
                 <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span><tr></tr></tbody></table></div>
             </div>
             <div class="card">
                 <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
@@ -236,13 +237,11 @@
             </div>
         </div>
 
-        <!-- Players List với sắp xếp -->
+        <!-- Players List -->
         <div id="players" class="tab-content">
             <div class="card">
                 <div class="card-title">👤 Danh sách người chơi <button class="refresh-btn" onclick="loadPlayers(true)">🔄 Refresh</button></div>
-                <div class="form-row">
-                    <div class="form-group"><input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm theo tên hoặc ID..."></div>
-                </div>
+                <div class="form-row"><div class="form-group"><input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm theo tên hoặc ID..."></div></div>
                 <button class="btn btn-primary" onclick="searchPlayer()">Tìm</button>
                 <button class="btn btn-warning" onclick="clearSearch()">Xóa</button>
                 <div id="playerListContainer" style="margin-top: 12px;">Đang tải dữ liệu...</div>
@@ -256,6 +255,7 @@
                 <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
             </div>
             <div id="fullEditor" style="display: none;">
+                <div class="warning-text" style="margin-bottom: 10px;">⚠️ Lưu ý: Sửa ở đây KHÔNG ảnh hưởng đến kỹ năng đã học. Kỹ năng được bảo toàn!</div>
                 <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
                     <div class="form-row">
                         <div class="form-group"><label>User ID</label><input type="text" id="editUid" class="form-control" readonly></div>
@@ -318,7 +318,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <button class="btn btn-success" onclick="saveFullPlayerData()">💾 Lưu tất cả</button>
+                    <button class="btn btn-success" onclick="saveFullPlayerData()">💾 Lưu tất cả (giữ nguyên kỹ năng)</button>
                     <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm</button>
                     <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa</button>
                 </div>
@@ -400,7 +400,7 @@
             </div>
             <div class="card">
                 <div class="card-title">📋 Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></td></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -520,7 +520,7 @@
             showToast('Đã đăng xuất', 'success');
         }
 
-        // ==================== LOAD PLAYERS với sắp xếp ====================
+        // ==================== LOAD PLAYERS ====================
         async function loadPlayers(force = false) {
             if (!force && playersCache) {
                 displayPlayers();
@@ -617,7 +617,7 @@
             filtered.slice(0, 200).forEach(p => {
                 html += `<tr class="player-row" onclick="selectPlayer('${p.uid}')">
                     <td><strong>${escapeHtml(p.name)}</strong></td>
-                    <td>${getStageName(p.stage)} tầng ${p.tang}</td>
+                    <td>${getStageName(p.stage)} tầng ${p.tang}</span></td>
                     <td>${(p.gold || 0).toLocaleString()}</span></td>
                     <td>${(p.linhThach || 0).toLocaleString()}</span></td>
                     <td>${p.isVip ? '<span class="badge badge-vip">VIP</span>' : '-'}</span></td>
@@ -759,7 +759,7 @@
             hideLoading();
         }
 
-        // ==================== FULL PLAYER EDITOR ====================
+        // ==================== FULL PLAYER EDITOR (GIỮ NGUYÊN KỸ NĂNG) ====================
         async function loadFullPlayerData() {
             const uid = document.getElementById('playerSelect').value;
             if (!uid) return;
@@ -809,56 +809,86 @@
             if (!currentEditUid || !currentPlayerData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                let data = currentPlayerData;
-                data.tenNhanVat = document.getElementById('editName').value;
-                data.email = document.getElementById('editEmail').value;
-                data.chiSoCanhGio = parseInt(document.getElementById('editStage').value);
-                data.tang = parseInt(document.getElementById('editTang').value);
-                data.expHienTai = parseFloat(document.getElementById('editExp').value);
-                data.diemThuocTinhChuaCong = parseInt(document.getElementById('editDiem').value);
-                data.hpGoc = parseInt(document.getElementById('editHp').value);
-                data.atkGoc = parseInt(document.getElementById('editAtk').value);
-                data.defGoc = parseInt(document.getElementById('editDef').value);
-                data.luckGoc = parseInt(document.getElementById('editLuck').value);
-                data.vang = parseInt(document.getElementById('editGold').value);
-                data.linhThach = parseInt(document.getElementById('editLinhThach').value);
-                data.vuKhiDangMac = document.getElementById('editWeapon').value;
-                data.vuKhiCapDo = parseInt(document.getElementById('editWeaponLevel').value);
-                data.giapDangMac = document.getElementById('editArmor').value;
-                data.giapCapDo = parseInt(document.getElementById('editArmorLevel').value);
-                data.petCanhGio = parseInt(document.getElementById('editPetStage').value);
-                data.petCapDo = parseInt(document.getElementById('editPetTang').value);
-                data.petExp = parseInt(document.getElementById('editPetExp').value);
-                data.daMuaVip = document.getElementById('editVip').value === 'true';
-                data.vipStartTicks = parseInt(document.getElementById('editVipStart').value) || 0;
-                data.vipEndTicks = parseInt(document.getElementById('editVipEnd').value) || 0;
-                data.loaiThienPhu = document.getElementById('editThienPhu').value;
-                data.phanTramThienPhu = parseFloat(document.getElementById('editThienPhuPercent').value);
+                // Lấy dữ liệu hiện tại từ Firebase để đảm bảo không mất kỹ năng
+                const snap = await db.ref(`users/${currentEditUid}/gameData`).once('value');
+                let existingData = snap.val();
+                if (existingData?.data) existingData = JSON.parse(existingData.data);
                 
-                const activeQuests = document.getElementById('editActiveQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
-                const completedQuests = document.getElementById('editCompletedQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
-                data.activeQuestIDs = activeQuests;
-                data.completedQuestIDs = completedQuests;
-                data.dataVersion = 2;
-                data.timestamp = Date.now();
-
-                const json = JSON.stringify(data);
+                // BẢO TOÀN TOÀN BỘ DỮ LIỆU KỸ NĂNG từ dữ liệu hiện có
+                const preservedSkills = {};
+                for (let key in existingData) {
+                    if (key.startsWith('skill_') || key.startsWith('skillSlot_')) {
+                        preservedSkills[key] = existingData[key];
+                    }
+                }
+                
+                // Tạo dữ liệu mới từ form (chỉ các trường cơ bản)
+                let newData = {
+                    tenNhanVat: document.getElementById('editName').value,
+                    email: document.getElementById('editEmail').value,
+                    chiSoCanhGio: parseInt(document.getElementById('editStage').value),
+                    tang: parseInt(document.getElementById('editTang').value),
+                    expHienTai: parseFloat(document.getElementById('editExp').value),
+                    diemThuocTinhChuaCong: parseInt(document.getElementById('editDiem').value),
+                    hpGoc: parseInt(document.getElementById('editHp').value),
+                    atkGoc: parseInt(document.getElementById('editAtk').value),
+                    defGoc: parseInt(document.getElementById('editDef').value),
+                    luckGoc: parseInt(document.getElementById('editLuck').value),
+                    vang: parseInt(document.getElementById('editGold').value),
+                    linhThach: parseInt(document.getElementById('editLinhThach').value),
+                    vuKhiDangMac: document.getElementById('editWeapon').value,
+                    vuKhiCapDo: parseInt(document.getElementById('editWeaponLevel').value),
+                    giapDangMac: document.getElementById('editArmor').value,
+                    giapCapDo: parseInt(document.getElementById('editArmorLevel').value),
+                    petCanhGio: parseInt(document.getElementById('editPetStage').value),
+                    petCapDo: parseInt(document.getElementById('editPetTang').value),
+                    petExp: parseInt(document.getElementById('editPetExp').value),
+                    daMuaVip: document.getElementById('editVip').value === 'true',
+                    vipStartTicks: parseInt(document.getElementById('editVipStart').value) || 0,
+                    vipEndTicks: parseInt(document.getElementById('editVipEnd').value) || 0,
+                    loaiThienPhu: document.getElementById('editThienPhu').value,
+                    phanTramThienPhu: parseFloat(document.getElementById('editThienPhuPercent').value),
+                    activeQuestIDs: document.getElementById('editActiveQuests').value.split(',').map(s=>s.trim()).filter(s=>s),
+                    completedQuestIDs: document.getElementById('editCompletedQuests').value.split(',').map(s=>s.trim()).filter(s=>s),
+                    danhSachTrangBi: existingData.danhSachTrangBi || [],
+                    danhSachDan: existingData.danhSachDan || [],
+                    dataVersion: 2,
+                    clientVersion: "5.8",
+                    timestamp: Date.now()
+                };
+                
+                // GỘP DỮ LIỆU KỸ NĂNG đã bảo toàn
+                for (let key in preservedSkills) {
+                    newData[key] = preservedSkills[key];
+                }
+                
+                // Đảm bảo các mảng không bị null
+                if (!newData.danhSachTrangBi) newData.danhSachTrangBi = [];
+                if (!newData.danhSachDan) newData.danhSachDan = [];
+                if (!newData.activeQuestIDs) newData.activeQuestIDs = [];
+                if (!newData.completedQuestIDs) newData.completedQuestIDs = [];
+                
+                const json = JSON.stringify(newData);
                 const encoder = new TextEncoder();
                 const hash = await crypto.subtle.digest('SHA-256', encoder.encode(json + 'your-secret-key'));
                 const sig = btoa(String.fromCharCode(...new Uint8Array(hash)));
                 await db.ref(`users/${currentEditUid}/gameData`).set({ data: json, signature: sig, timestamp: Date.now() });
 
-                const diem = data.chiSoCanhGio * 10000 + data.tang * 1000;
-                await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: data.tenNhanVat, score: diem });
-                await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: data.tenNhanVat, score: data.linhThach });
+                const diem = newData.chiSoCanhGio * 10000 + newData.tang * 1000;
+                await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: newData.tenNhanVat, score: diem });
+                await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: newData.tenNhanVat, score: newData.linhThach });
 
-                showToast('Lưu thành công!', 'success');
+                showToast('Lưu thành công! (Kỹ năng được giữ nguyên)', 'success');
                 playersCache = null;
                 await loadPlayers(true);
                 await loadLeaderboard();
                 await loadRecharge();
                 await loadSuspicious();
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+                await loadFullPlayerData(); // Reload để hiển thị dữ liệu mới
+            } catch(e) { 
+                showToast('Lỗi: ' + e.message, 'error');
+                console.error(e);
+            }
             hideLoading();
         }
 
@@ -989,7 +1019,7 @@
             (inventoryData.danhSachDan || []).forEach((item, idx) => {
                 danHtml += `<tr><td>${item.tenDan}</td><td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td></tr>`;
             });
-            danHtml += '</tbody></table>';
+            danHtml += '</tbody></tr>';
             document.getElementById('danList').innerHTML = danHtml;
         }
 
