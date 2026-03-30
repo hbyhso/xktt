@@ -73,6 +73,14 @@
             align-items: center;
             flex-wrap: wrap;
         }
+        .sortable-header {
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+        }
+        .sortable-header:hover { color: #ffd700; }
+        .sort-icon { font-size: 10px; margin-left: 4px; }
+        
         .form-group { margin-bottom: 10px; }
         .form-group label { font-size: 11px; display: block; margin-bottom: 3px; }
         .form-control {
@@ -104,7 +112,7 @@
         .btn-sm { padding: 3px 6px; font-size: 10px; }
         
         .table-container { overflow-x: auto; }
-        .table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 400px; }
+        .table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 500px; }
         .table th, .table td { padding: 6px 6px; text-align: left; border-bottom: 1px solid #333; }
         .table th { color: #ffd700; }
         
@@ -156,7 +164,6 @@
         .badge { display: inline-block; padding: 2px 5px; border-radius: 8px; font-size: 9px; font-weight: bold; }
         .badge-vip { background: #ffd700; color: #1a1a2e; }
         .badge-ban { background: #dc3545; color: white; }
-        .badge-cached { background: #17a2b8; color: white; }
         
         .player-row { cursor: pointer; }
         .player-row:hover { background: rgba(255,215,0,0.1); }
@@ -220,20 +227,22 @@
                 <div class="stat-card"><div class="stat-value" id="totalLinhThach">-</div><div class="stat-label">Tổng linh thạch</div></div>
             </div>
             <div class="card">
-                <div class="card-title">🏆 Top 10 Tu Vi</div>
+                <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
                 <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
             <div class="card">
-                <div class="card-title">💰 Top 10 Linh Thạch</div>
+                <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
                 <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
-        <!-- Players List -->
+        <!-- Players List với sắp xếp -->
         <div id="players" class="tab-content">
             <div class="card">
                 <div class="card-title">👤 Danh sách người chơi <button class="refresh-btn" onclick="loadPlayers(true)">🔄 Refresh</button></div>
-                <div class="form-row"><div class="form-group"><input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm theo tên hoặc ID..."></div></div>
+                <div class="form-row">
+                    <div class="form-group"><input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm theo tên hoặc ID..."></div>
+                </div>
                 <button class="btn btn-primary" onclick="searchPlayer()">Tìm</button>
                 <button class="btn btn-warning" onclick="clearSearch()">Xóa</button>
                 <div id="playerListContainer" style="margin-top: 12px;">Đang tải dữ liệu...</div>
@@ -455,6 +464,7 @@
         let playersCache = null;
         let inventoryData = null;
         let currentSkillsData = null;
+        let currentSort = { field: 'name', order: 'asc' };
 
         // ==================== AUTH ====================
         async function loginWithEmail() {
@@ -486,7 +496,6 @@
                 const adminSnap = await db.ref(`admins/${currentUser.uid}`).once('value');
                 if (!adminSnap.exists()) { showToast('Không có quyền Admin!', 'error'); logout(); return; }
                 showToast('Đăng nhập thành công!', 'success');
-                // Tải TẤT CẢ dữ liệu
                 await Promise.all([
                     loadPlayers(),
                     loadLeaderboard(),
@@ -511,7 +520,7 @@
             showToast('Đã đăng xuất', 'success');
         }
 
-        // ==================== LOAD PLAYERS ====================
+        // ==================== LOAD PLAYERS với sắp xếp ====================
         async function loadPlayers(force = false) {
             if (!force && playersCache) {
                 displayPlayers();
@@ -538,12 +547,13 @@
                                 uid, name: data.tenNhanVat || 'Không tên',
                                 stage: data.chiSoCanhGio || 0, tang: data.tang || 1,
                                 gold: data.vang || 0, linhThach: data.linhThach || 0,
-                                isVip: data.daMuaVip || false, isBanned: !!banned[uid]
+                                isVip: data.daMuaVip || false, isBanned: !!banned[uid],
+                                exp: data.expHienTai || 0
                             });
                         }
                     }
                 }
-                playersCache = players.sort((a,b) => a.name.localeCompare(b.name));
+                playersCache = players;
                 displayPlayers();
                 updateStats();
                 updatePlayerSelect();
@@ -554,6 +564,28 @@
                 showToast('Lỗi tải dữ liệu: ' + e.message, 'error');
             }
             hideLoading();
+        }
+
+        function sortPlayers(field) {
+            if (currentSort.field === field) {
+                currentSort.order = currentSort.order === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.field = field;
+                currentSort.order = 'desc';
+            }
+            
+            playersCache.sort((a, b) => {
+                let valA = a[field];
+                let valB = b[field];
+                if (field === 'name') {
+                    valA = (valA || '').toLowerCase();
+                    valB = (valB || '').toLowerCase();
+                }
+                if (valA < valB) return currentSort.order === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSort.order === 'asc' ? 1 : -1;
+                return 0;
+            });
+            displayPlayers();
         }
 
         function displayPlayers() {
@@ -570,18 +602,29 @@
                 document.getElementById('playerListContainer').innerHTML = '<div class="card"><p>Không tìm thấy người chơi</p></div>';
                 return;
             }
-            let html = '<div class="table-container"><table class="table"><thead><tr><th>Tên</th><th>Cảnh giới</th><th>Vàng</th><th>Linh thạch</th><th>VIP</th><th>Ban</th></tr></thead><tbody>';
-            filtered.slice(0, 100).forEach(p => {
+            
+            const sortIcon = (field) => currentSort.field === field ? (currentSort.order === 'asc' ? '▲' : '▼') : '⇅';
+            
+            let html = `<div class="table-container"><table class="table"><thead>
+                <tr><th class="sortable-header" onclick="sortPlayers('name')">Tên <span class="sort-icon">${sortIcon('name')}</span></th>
+                <th class="sortable-header" onclick="sortPlayers('stage')">Cảnh giới <span class="sort-icon">${sortIcon('stage')}</span></th>
+                <th class="sortable-header" onclick="sortPlayers('gold')">Vàng <span class="sort-icon">${sortIcon('gold')}</span></th>
+                <th class="sortable-header" onclick="sortPlayers('linhThach')">Linh thạch <span class="sort-icon">${sortIcon('linhThach')}</span></th>
+                <th class="sortable-header" onclick="sortPlayers('isVip')">VIP <span class="sort-icon">${sortIcon('isVip')}</span></th>
+                <th>Ban</th>
+                </thead><tbody>`;
+            
+            filtered.slice(0, 200).forEach(p => {
                 html += `<tr class="player-row" onclick="selectPlayer('${p.uid}')">
                     <td><strong>${escapeHtml(p.name)}</strong></td>
                     <td>${getStageName(p.stage)} tầng ${p.tang}</td>
-                    <td>${(p.gold || 0).toLocaleString()}</td>
-                    <td>${(p.linhThach || 0).toLocaleString()}</td>
-                    <td>${p.isVip ? '<span class="badge badge-vip">VIP</span>' : '-'}</td>
-                    <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</td>
+                    <td>${(p.gold || 0).toLocaleString()}</span></td>
+                    <td>${(p.linhThach || 0).toLocaleString()}</span></td>
+                    <td>${p.isVip ? '<span class="badge badge-vip">VIP</span>' : '-'}</span></td>
+                    <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</span></td>
                 </tr>`;
             });
-            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa</p>';
+            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa | Click vào tiêu đề để sắp xếp</p>';
             document.getElementById('playerListContainer').innerHTML = html;
         }
 
@@ -612,7 +655,6 @@
         // ==================== LEADERBOARD ====================
         async function loadLeaderboard() {
             try {
-                // Tu Vi Top 10
                 const tuVi = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
                 let html = '', rank = 1;
                 const list = [];
@@ -624,7 +666,6 @@
                 });
                 document.querySelector('#leaderboardTuVi tbody').innerHTML = html || '<tr><td colspan="4">Chưa có dữ liệu</td></tr>';
                 
-                // Linh Thach Top 10
                 const lt = await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
                 html = ''; rank = 1;
                 const ltList = [];
@@ -856,7 +897,7 @@
                 if (data?.data) data = JSON.parse(data.data);
                 
                 document.getElementById('skillsEditor').style.display = 'block';
-                currentSkillsData = data;
+                currentSkillsData = JSON.parse(JSON.stringify(data));
                 currentEditUid = uid;
                 
                 document.getElementById('skillSlot0').value = data.skillSlot_0 || '';
@@ -927,7 +968,7 @@
                 if (data?.data) data = JSON.parse(data.data);
                 
                 document.getElementById('inventoryEditor').style.display = 'block';
-                inventoryData = data;
+                inventoryData = JSON.parse(JSON.stringify(data));
                 currentEditUid = uid;
                 refreshInventoryDisplay();
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
