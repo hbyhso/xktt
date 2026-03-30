@@ -179,7 +179,17 @@
         .refresh-btn:hover { background: #ffd700; color: #1a1a2e; }
         
         .warning-text { color: #ff9800; font-size: 11px; margin-top: 5px; }
-        .success-text { color: #28a745; font-size: 11px; }
+        .debug-console {
+            background: #1a1a2e;
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -226,7 +236,7 @@
             </div>
             <div class="card">
                 <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th><tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -243,14 +253,14 @@
             </div>
         </div>
 
-        <!-- Edit Player - PATCH MODE (chỉ gửi trường thay đổi) -->
+        <!-- Edit Player - PATCH MODE -->
         <div id="edit_player" class="tab-content">
             <div class="card">
                 <div class="card-title">✏️ Chọn người chơi để sửa</div>
                 <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
             </div>
             <div id="fullEditor" style="display: none;">
-                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - CÁC TRƯỜNG KHÁC GIỮ NGUYÊN (bao gồm KỸ NĂNG)</div>
+                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - KỸ NĂNG GIỮ NGUYÊN</div>
                 
                 <!-- Thông tin cơ bản -->
                 <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
@@ -333,6 +343,14 @@
                     <button class="btn btn-success" onclick="patchPlayerData()">💾 Lưu (CHỈ cập nhật trường đã sửa)</button>
                     <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm</button>
                     <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa</button>
+                </div>
+                
+                <!-- Debug Console -->
+                <div class="card">
+                    <div class="card-title">🐛 Debug Console (F12 xem chi tiết)</div>
+                    <div class="debug-console" id="debugConsole">
+                        Chưa có dữ liệu
+                    </div>
                 </div>
             </div>
         </div>
@@ -471,31 +489,83 @@
             return rawData;
         }
 
-        // Hàm PATCH - CHỈ cập nhật các trường thay đổi
+        // Hàm PATCH - ĐỌC, GIẢI MÃ, CẬP NHẬT, MÃ HÓA LẠI
         async function patchGameData(uid, updates) {
+            console.log('🔧 patchGameData called for uid:', uid);
+            console.log('📝 Updates to apply:', updates);
+            
             // Lấy dữ liệu hiện tại
             const snap = await db.ref(`users/${uid}/gameData`).once('value');
-            const currentData = decodeGameData(snap.val());
+            const rawData = snap.val();
+            
+            if (!rawData) {
+                console.error('❌ No data found for uid:', uid);
+                return false;
+            }
+            
+            // Giải mã
+            let currentData = null;
+            if (rawData.data) {
+                try {
+                    currentData = JSON.parse(rawData.data);
+                    console.log('✅ Decoded data from JSON string');
+                } catch(e) {
+                    currentData = rawData;
+                    console.log('⚠️ Data is not JSON string, using as is');
+                }
+            } else {
+                currentData = rawData;
+                console.log('⚠️ No .data field, using raw');
+            }
+            
             if (!currentData) return false;
             
-            // CHỈ cập nhật các trường có trong updates
+            // ĐẾM SỐ LƯỢNG KỸ NĂNG TRƯỚC KHI CẬP NHẬT
+            const skillKeysBefore = Object.keys(currentData).filter(k => k.startsWith('skill_'));
+            console.log(`📊 Kỹ năng trước khi cập nhật: ${skillKeysBefore.length} keys`);
+            console.log('   Danh sách:', skillKeysBefore.slice(0, 10));
+            
+            // Cập nhật các trường
             let hasChange = false;
             for (let key in updates) {
                 if (currentData[key] !== updates[key]) {
+                    const oldValue = currentData[key];
                     currentData[key] = updates[key];
                     hasChange = true;
+                    console.log(`✏️ Cập nhật ${key}: ${oldValue} → ${updates[key]}`);
                 }
             }
             
-            if (!hasChange) return false;
+            if (!hasChange) {
+                console.log('ℹ️ No changes detected');
+                return false;
+            }
             
             // Cập nhật timestamp
             currentData.timestamp = Date.now();
             
-            // Lưu lại
+            // ĐẾM SỐ LƯỢNG KỸ NĂNG SAU KHI CẬP NHẬT
+            const skillKeysAfter = Object.keys(currentData).filter(k => k.startsWith('skill_'));
+            console.log(`📊 Kỹ năng sau khi cập nhật: ${skillKeysAfter.length} keys`);
+            
+            if (skillKeysBefore.length !== skillKeysAfter.length) {
+                console.error(`🚨 CẢNH BÁO: Số lượng kỹ năng thay đổi! Trước: ${skillKeysBefore.length}, Sau: ${skillKeysAfter.length}`);
+            } else {
+                console.log(`✅ Kỹ năng được giữ nguyên: ${skillKeysAfter.length} keys`);
+            }
+            
+            // Mã hóa lại
             const json = JSON.stringify(currentData);
-            const signature = "admin_patch_" + Date.now();
-            await db.ref(`users/${uid}/gameData`).set({ data: json, signature: signature, timestamp: Date.now() });
+            const signature = rawData.signature || "admin_patch_" + Date.now();
+            
+            // Ghi đè
+            await db.ref(`users/${uid}/gameData`).set({ 
+                data: json, 
+                signature: signature, 
+                timestamp: Date.now() 
+            });
+            
+            console.log('✅ Saved successfully, skills preserved!');
             
             return currentData;
         }
@@ -657,7 +727,7 @@
                     <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</td>
                 </tr>`;
             });
-            html += '</tbody><table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
+            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
             document.getElementById('playerListContainer').innerHTML = html;
         }
 
@@ -683,7 +753,7 @@
             showTab('edit_player');
         }
 
-        // ==================== FULL PLAYER EDITOR (PATCH MODE) ====================
+        // ==================== FULL PLAYER EDITOR ====================
         async function loadFullPlayerData() {
             const uid = document.getElementById('playerSelect').value;
             if (!uid) return;
@@ -692,7 +762,7 @@
                 const snap = await db.ref(`users/${uid}/gameData`).once('value');
                 if (!snap.exists()) { showToast('Không tìm thấy dữ liệu', 'error'); return; }
                 const data = decodeGameData(snap.val());
-                currentOriginalData = JSON.parse(JSON.stringify(data)); // Lưu bản gốc để so sánh
+                currentOriginalData = JSON.parse(JSON.stringify(data));
                 currentEditUid = uid;
 
                 document.getElementById('fullEditor').style.display = 'block';
@@ -723,6 +793,17 @@
                 document.getElementById('editThienPhuPercent').value = data.phanTramThienPhu || 0;
                 document.getElementById('editActiveQuests').value = (data.activeQuestIDs || []).join(',');
                 document.getElementById('editCompletedQuests').value = (data.completedQuestIDs || []).join(',');
+                
+                // Hiển thị debug
+                const skillCount = Object.keys(data).filter(k => k.startsWith('skill_')).length;
+                document.getElementById('debugConsole').innerHTML = `
+                    <div>✅ Đã tải dữ liệu cho: ${data.tenNhanVat || 'Không tên'}</div>
+                    <div>📊 Số lượng kỹ năng: ${skillCount}</div>
+                    <div>🆔 User ID: ${uid}</div>
+                    <div>💰 Vàng: ${data.vang?.toLocaleString()}</div>
+                    <div>💎 Linh thạch: ${data.linhThach?.toLocaleString()}</div>
+                    <div>📅 Timestamp: ${new Date(data.timestamp).toLocaleString()}</div>
+                `;
 
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
@@ -824,11 +905,17 @@
                 
                 console.log('📝 Sẽ cập nhật các trường:', Object.keys(updates));
                 
+                // Cập nhật debug console
+                document.getElementById('debugConsole').innerHTML += `<div>🔄 Đang cập nhật: ${Object.keys(updates).join(', ')}</div>`;
+                
                 // Thực hiện PATCH
                 const newData = await patchGameData(currentEditUid, updates);
                 
                 if (newData) {
-                    showToast(`Đã cập nhật: ${Object.keys(updates).join(', ')} (Kỹ năng giữ nguyên)`, 'success');
+                    const skillCount = Object.keys(newData).filter(k => k.startsWith('skill_')).length;
+                    showToast(`Đã cập nhật: ${Object.keys(updates).join(', ')} (${skillCount} kỹ năng được giữ nguyên)`, 'success');
+                    
+                    document.getElementById('debugConsole').innerHTML += `<div>✅ Lưu thành công! Còn ${skillCount} kỹ năng</div>`;
                     
                     // Cập nhật leaderboard nếu cần
                     if (updates.chiSoCanhGio !== undefined || updates.tang !== undefined || updates.tenNhanVat !== undefined || updates.linhThach !== undefined) {
@@ -850,6 +937,7 @@
             } catch(e) { 
                 showToast('Lỗi: ' + e.message, 'error');
                 console.error(e);
+                document.getElementById('debugConsole').innerHTML += `<div style="color:red;">❌ Lỗi: ${e.message}</div>`;
             }
             hideLoading();
         }
@@ -906,17 +994,17 @@
                     <td><button class="btn btn-danger btn-sm" onclick="removeTrangBi(${idx})">Xóa</button></td>
                 </tr>`;
             });
-            tbHtml += '</tbody></table>';
+            tbHtml += '</tbody></tr>';
             document.getElementById('trangBiList').innerHTML = tbHtml;
             
-            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>';
+            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></table></thead><tbody>';
             (inventoryData.danhSachDan || []).forEach((item, idx) => {
                 danHtml += `<tr>
                     <td>${item.tenDan}</td>
                     <td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td>
                 </tr>`;
             });
-            danHtml += '</tbody></tr>';
+            danHtml += '</tbody></table>';
             document.getElementById('danList').innerHTML = danHtml;
         }
 
@@ -959,7 +1047,6 @@
             if (!currentEditUid || !inventoryData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                // Chỉ cập nhật danh sách trang bị và đan
                 await patchGameData(currentEditUid, {
                     danhSachTrangBi: inventoryData.danhSachTrangBi || [],
                     danhSachDan: inventoryData.danhSachDan || []
@@ -1098,7 +1185,7 @@
                             <td><code>${s.uid.substring(0,12)}...</code></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                     });
                 }
-                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></table></thead><tbody>${html}</tbody>`;
+                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></td></thead><tbody>${html}</tbody>`;
                 console.log(`✅ Đã tải ${suspicious.length} tài khoản nghi ngờ`);
             } catch(e) { console.error('Lỗi load suspicious:', e); }
         }
@@ -1133,7 +1220,7 @@
                             <td>${reward.join(' + ')}</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                     }
                 }
-                document.getElementById('giftCodeList').innerHTML = `<thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody>${html || '<tr><td colspan="4">Chưa có giftcode</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>'}</tbody>`;
+                document.getElementById('giftCodeList').innerHTML = `<thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th><tr></thead><tbody>${html || '<tr><td colspan="4">Chưa có giftcode</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>'}</tbody>`;
                 console.log(`✅ Đã tải giftcode`);
             } catch(e) { console.error(e); }
         }
