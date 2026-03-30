@@ -184,7 +184,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo"><h1>🏮 Admin Panel</h1></div>
+        <div class="logo"><h1>🏮 Admin Panel - PATCH Mode</h1></div>
         <div class="user-info">
             <div id="loginForm" class="login-form">
                 <input type="email" id="loginEmail" placeholder="Email" value="hoangnv.vnpt@gmail.com">
@@ -226,7 +226,7 @@
             </div>
             <div class="card">
                 <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th><tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -243,14 +243,14 @@
             </div>
         </div>
 
-        <!-- Edit Player FULL - BẢO TOÀN KỸ NĂNG -->
+        <!-- Edit Player - PATCH MODE (chỉ gửi trường thay đổi) -->
         <div id="edit_player" class="tab-content">
             <div class="card">
                 <div class="card-title">✏️ Chọn người chơi để sửa</div>
                 <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
             </div>
             <div id="fullEditor" style="display: none;">
-                <div class="warning-text" style="margin-bottom: 10px;">⚠️ Lưu ý: Kỹ năng sẽ được giữ nguyên, không bị ảnh hưởng khi sửa các dữ liệu khác!</div>
+                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - CÁC TRƯỜNG KHÁC GIỮ NGUYÊN (bao gồm KỸ NĂNG)</div>
                 
                 <!-- Thông tin cơ bản -->
                 <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
@@ -316,7 +316,7 @@
                 <!-- Thiên phú -->
                 <div class="card"><div class="card-title">✨ Thiên phú</div>
                     <div class="form-row">
-                        <div class="form-group"><label>Loại</label><input type="text" id="editThienPhu" class="form-control"></div>
+                        <div class="form-group"><label>Loại (exp/mau/atk/def/luck)</label><input type="text" id="editThienPhu" class="form-control"></div>
                         <div class="form-group"><label>Phần trăm</label><input type="number" id="editThienPhuPercent" class="form-control" step="0.01"></div>
                     </div>
                 </div>
@@ -330,7 +330,7 @@
                 </div>
 
                 <div class="card">
-                    <button class="btn btn-success" onclick="saveFullPlayerData()">💾 Lưu tất cả (giữ nguyên kỹ năng)</button>
+                    <button class="btn btn-success" onclick="patchPlayerData()">💾 Lưu (CHỈ cập nhật trường đã sửa)</button>
                     <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm</button>
                     <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa</button>
                 </div>
@@ -392,7 +392,7 @@
             </div>
             <div class="card">
                 <div class="card-title">📋 Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></tr></div>
+                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -452,7 +452,7 @@
 
         let currentUser = null;
         let currentEditUid = null;
-        let currentPlayerData = null;
+        let currentOriginalData = null;
         let playersCache = null;
         let inventoryData = null;
         let currentSort = { field: 'name', order: 'asc' };
@@ -471,22 +471,32 @@
             return rawData;
         }
 
-        // Hàm mã hóa gameData - GIỮ NGUYÊN TOÀN BỘ DỮ LIỆU CŨ, CHỈ CẬP NHẬT CÁC TRƯỜNG ĐƯỢC CHỌN
-        async function saveGameData(uid, updatedFields) {
+        // Hàm PATCH - CHỈ cập nhật các trường thay đổi
+        async function patchGameData(uid, updates) {
+            // Lấy dữ liệu hiện tại
             const snap = await db.ref(`users/${uid}/gameData`).once('value');
             const currentData = decodeGameData(snap.val());
-            if (!currentData) return null;
+            if (!currentData) return false;
             
-            // Cập nhật chỉ các trường được chỉ định
-            for (let key in updatedFields) {
-                currentData[key] = updatedFields[key];
+            // CHỈ cập nhật các trường có trong updates
+            let hasChange = false;
+            for (let key in updates) {
+                if (currentData[key] !== updates[key]) {
+                    currentData[key] = updates[key];
+                    hasChange = true;
+                }
             }
+            
+            if (!hasChange) return false;
+            
+            // Cập nhật timestamp
             currentData.timestamp = Date.now();
             
             // Lưu lại
             const json = JSON.stringify(currentData);
-            const signature = "admin_edit_" + Date.now();
+            const signature = "admin_patch_" + Date.now();
             await db.ref(`users/${uid}/gameData`).set({ data: json, signature: signature, timestamp: Date.now() });
+            
             return currentData;
         }
 
@@ -647,7 +657,7 @@
                     <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</td>
                 </tr>`;
             });
-            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
+            html += '</tbody><table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
             document.getElementById('playerListContainer').innerHTML = html;
         }
 
@@ -673,7 +683,7 @@
             showTab('edit_player');
         }
 
-        // ==================== FULL PLAYER EDITOR (BẢO TOÀN KỸ NĂNG) ====================
+        // ==================== FULL PLAYER EDITOR (PATCH MODE) ====================
         async function loadFullPlayerData() {
             const uid = document.getElementById('playerSelect').value;
             if (!uid) return;
@@ -682,7 +692,7 @@
                 const snap = await db.ref(`users/${uid}/gameData`).once('value');
                 if (!snap.exists()) { showToast('Không tìm thấy dữ liệu', 'error'); return; }
                 const data = decodeGameData(snap.val());
-                currentPlayerData = data;
+                currentOriginalData = JSON.parse(JSON.stringify(data)); // Lưu bản gốc để so sánh
                 currentEditUid = uid;
 
                 document.getElementById('fullEditor').style.display = 'block';
@@ -718,86 +728,124 @@
             hideLoading();
         }
 
-        async function saveFullPlayerData() {
-            if (!currentEditUid) { showToast('Chọn người chơi trước', 'error'); return; }
+        async function patchPlayerData() {
+            if (!currentEditUid || !currentOriginalData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                // Lấy dữ liệu hiện tại để bảo toàn kỹ năng
-                const snap = await db.ref(`users/${currentEditUid}/gameData`).once('value');
-                const existingData = decodeGameData(snap.val());
-                if (!existingData) { showToast('Không có dữ liệu', 'error'); return; }
+                // Xác định các trường đã thay đổi
+                const updates = {};
                 
-                // BẢO TOÀN TOÀN BỘ KỸ NĂNG (tất cả key bắt đầu bằng skill_)
-                const preservedSkills = {};
-                for (let key in existingData) {
-                    if (key.startsWith('skill_')) {
-                        preservedSkills[key] = existingData[key];
+                const name = document.getElementById('editName').value;
+                if (name !== currentOriginalData.tenNhanVat) updates.tenNhanVat = name;
+                
+                const email = document.getElementById('editEmail').value;
+                if (email !== currentOriginalData.email) updates.email = email;
+                
+                const stage = parseInt(document.getElementById('editStage').value);
+                if (stage !== currentOriginalData.chiSoCanhGio) updates.chiSoCanhGio = stage;
+                
+                const tang = parseInt(document.getElementById('editTang').value);
+                if (tang !== currentOriginalData.tang) updates.tang = tang;
+                
+                const exp = parseFloat(document.getElementById('editExp').value);
+                if (exp !== currentOriginalData.expHienTai) updates.expHienTai = exp;
+                
+                const diem = parseInt(document.getElementById('editDiem').value);
+                if (diem !== currentOriginalData.diemThuocTinhChuaCong) updates.diemThuocTinhChuaCong = diem;
+                
+                const hp = parseInt(document.getElementById('editHp').value);
+                if (hp !== currentOriginalData.hpGoc) updates.hpGoc = hp;
+                
+                const atk = parseInt(document.getElementById('editAtk').value);
+                if (atk !== currentOriginalData.atkGoc) updates.atkGoc = atk;
+                
+                const def = parseInt(document.getElementById('editDef').value);
+                if (def !== currentOriginalData.defGoc) updates.defGoc = def;
+                
+                const luck = parseInt(document.getElementById('editLuck').value);
+                if (luck !== currentOriginalData.luckGoc) updates.luckGoc = luck;
+                
+                const gold = parseInt(document.getElementById('editGold').value);
+                if (gold !== currentOriginalData.vang) updates.vang = gold;
+                
+                const linhThach = parseInt(document.getElementById('editLinhThach').value);
+                if (linhThach !== currentOriginalData.linhThach) updates.linhThach = linhThach;
+                
+                const weapon = document.getElementById('editWeapon').value;
+                if (weapon !== currentOriginalData.vuKhiDangMac) updates.vuKhiDangMac = weapon;
+                
+                const weaponLevel = parseInt(document.getElementById('editWeaponLevel').value);
+                if (weaponLevel !== currentOriginalData.vuKhiCapDo) updates.vuKhiCapDo = weaponLevel;
+                
+                const armor = document.getElementById('editArmor').value;
+                if (armor !== currentOriginalData.giapDangMac) updates.giapDangMac = armor;
+                
+                const armorLevel = parseInt(document.getElementById('editArmorLevel').value);
+                if (armorLevel !== currentOriginalData.giapCapDo) updates.giapCapDo = armorLevel;
+                
+                const petStage = parseInt(document.getElementById('editPetStage').value);
+                if (petStage !== currentOriginalData.petCanhGio) updates.petCanhGio = petStage;
+                
+                const petTang = parseInt(document.getElementById('editPetTang').value);
+                if (petTang !== currentOriginalData.petCapDo) updates.petCapDo = petTang;
+                
+                const petExp = parseInt(document.getElementById('editPetExp').value);
+                if (petExp !== currentOriginalData.petExp) updates.petExp = petExp;
+                
+                const isVip = document.getElementById('editVip').value === 'true';
+                if (isVip !== currentOriginalData.daMuaVip) updates.daMuaVip = isVip;
+                
+                const vipStart = parseInt(document.getElementById('editVipStart').value) || 0;
+                if (vipStart !== currentOriginalData.vipStartTicks) updates.vipStartTicks = vipStart;
+                
+                const vipEnd = parseInt(document.getElementById('editVipEnd').value) || 0;
+                if (vipEnd !== currentOriginalData.vipEndTicks) updates.vipEndTicks = vipEnd;
+                
+                const thienPhu = document.getElementById('editThienPhu').value;
+                if (thienPhu !== currentOriginalData.loaiThienPhu) updates.loaiThienPhu = thienPhu;
+                
+                const thienPhuPercent = parseFloat(document.getElementById('editThienPhuPercent').value);
+                if (thienPhuPercent !== currentOriginalData.phanTramThienPhu) updates.phanTramThienPhu = thienPhuPercent;
+                
+                const activeQuests = document.getElementById('editActiveQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
+                const oldActive = currentOriginalData.activeQuestIDs || [];
+                if (JSON.stringify(activeQuests) !== JSON.stringify(oldActive)) updates.activeQuestIDs = activeQuests;
+                
+                const completedQuests = document.getElementById('editCompletedQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
+                const oldCompleted = currentOriginalData.completedQuestIDs || [];
+                if (JSON.stringify(completedQuests) !== JSON.stringify(oldCompleted)) updates.completedQuestIDs = completedQuests;
+                
+                // Kiểm tra có thay đổi gì không
+                if (Object.keys(updates).length === 0) {
+                    showToast('Không có thay đổi nào!', 'warning');
+                    hideLoading();
+                    return;
+                }
+                
+                console.log('📝 Sẽ cập nhật các trường:', Object.keys(updates));
+                
+                // Thực hiện PATCH
+                const newData = await patchGameData(currentEditUid, updates);
+                
+                if (newData) {
+                    showToast(`Đã cập nhật: ${Object.keys(updates).join(', ')} (Kỹ năng giữ nguyên)`, 'success');
+                    
+                    // Cập nhật leaderboard nếu cần
+                    if (updates.chiSoCanhGio !== undefined || updates.tang !== undefined || updates.tenNhanVat !== undefined || updates.linhThach !== undefined) {
+                        const diem = (newData.chiSoCanhGio || currentOriginalData.chiSoCanhGio) * 10000 + (newData.tang || currentOriginalData.tang) * 1000;
+                        await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: newData.tenNhanVat, score: diem });
+                        await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: newData.tenNhanVat, score: newData.linhThach });
                     }
+                    
+                    // Refresh lại dữ liệu
+                    await loadFullPlayerData();
+                    playersCache = null;
+                    await loadPlayers(true);
+                    await loadLeaderboard();
+                    await loadRecharge();
+                } else {
+                    showToast('Không có thay đổi!', 'warning');
                 }
-                
-                // Tạo object cập nhật - CHỈ các trường từ form
-                const updatedFields = {
-                    tenNhanVat: document.getElementById('editName').value,
-                    email: document.getElementById('editEmail').value,
-                    chiSoCanhGio: parseInt(document.getElementById('editStage').value),
-                    tang: parseInt(document.getElementById('editTang').value),
-                    expHienTai: parseFloat(document.getElementById('editExp').value),
-                    diemThuocTinhChuaCong: parseInt(document.getElementById('editDiem').value),
-                    hpGoc: parseInt(document.getElementById('editHp').value),
-                    atkGoc: parseInt(document.getElementById('editAtk').value),
-                    defGoc: parseInt(document.getElementById('editDef').value),
-                    luckGoc: parseInt(document.getElementById('editLuck').value),
-                    vang: parseInt(document.getElementById('editGold').value),
-                    linhThach: parseInt(document.getElementById('editLinhThach').value),
-                    vuKhiDangMac: document.getElementById('editWeapon').value,
-                    vuKhiCapDo: parseInt(document.getElementById('editWeaponLevel').value),
-                    giapDangMac: document.getElementById('editArmor').value,
-                    giapCapDo: parseInt(document.getElementById('editArmorLevel').value),
-                    petCanhGio: parseInt(document.getElementById('editPetStage').value),
-                    petCapDo: parseInt(document.getElementById('editPetTang').value),
-                    petExp: parseInt(document.getElementById('editPetExp').value),
-                    daMuaVip: document.getElementById('editVip').value === 'true',
-                    vipStartTicks: parseInt(document.getElementById('editVipStart').value) || 0,
-                    vipEndTicks: parseInt(document.getElementById('editVipEnd').value) || 0,
-                    loaiThienPhu: document.getElementById('editThienPhu').value,
-                    phanTramThienPhu: parseFloat(document.getElementById('editThienPhuPercent').value),
-                    activeQuestIDs: document.getElementById('editActiveQuests').value.split(',').map(s=>s.trim()).filter(s=>s),
-                    completedQuestIDs: document.getElementById('editCompletedQuests').value.split(',').map(s=>s.trim()).filter(s=>s),
-                    timestamp: Date.now()
-                };
-                
-                // GIỮ NGUYÊN các mảng từ dữ liệu cũ
-                updatedFields.danhSachTrangBi = existingData.danhSachTrangBi || [];
-                updatedFields.danhSachDan = existingData.danhSachDan || [];
-                updatedFields.questProgress = existingData.questProgress || [];
-                updatedFields.transactionHistory = existingData.transactionHistory || [];
-                updatedFields.usedGiftCodes = existingData.usedGiftCodes || [];
-                updatedFields.dataVersion = existingData.dataVersion || 2;
-                updatedFields.clientVersion = existingData.clientVersion || "5.8";
-                
-                // GỘP KỸ NĂNG ĐÃ BẢO TOÀN
-                for (let key in preservedSkills) {
-                    updatedFields[key] = preservedSkills[key];
-                }
-                
-                // Lưu lên Firebase
-                const json = JSON.stringify(updatedFields);
-                const signature = "admin_edit_" + Date.now();
-                await db.ref(`users/${currentEditUid}/gameData`).set({ data: json, signature: signature, timestamp: Date.now() });
-                
-                // Cập nhật leaderboard
-                const diem = updatedFields.chiSoCanhGio * 10000 + updatedFields.tang * 1000;
-                await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: updatedFields.tenNhanVat, score: diem });
-                await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: updatedFields.tenNhanVat, score: updatedFields.linhThach });
-                
-                showToast('Lưu thành công! (Kỹ năng được giữ nguyên)', 'success');
-                
-                // Refresh cache và dữ liệu
-                playersCache = null;
-                await loadPlayers(true);
-                await loadLeaderboard();
-                await loadRecharge();
-                await loadFullPlayerData();
                 
             } catch(e) { 
                 showToast('Lỗi: ' + e.message, 'error');
@@ -868,7 +916,7 @@
                     <td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td>
                 </tr>`;
             });
-            danHtml += '</tbody></table>';
+            danHtml += '</tbody></tr>';
             document.getElementById('danList').innerHTML = danHtml;
         }
 
@@ -911,16 +959,11 @@
             if (!currentEditUid || !inventoryData) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                const snap = await db.ref(`users/${currentEditUid}/gameData`).once('value');
-                let data = decodeGameData(snap.val());
-                data.danhSachTrangBi = inventoryData.danhSachTrangBi || [];
-                data.danhSachDan = inventoryData.danhSachDan || [];
-                data.timestamp = Date.now();
-                
-                const json = JSON.stringify(data);
-                const signature = "admin_edit_" + Date.now();
-                await db.ref(`users/${currentEditUid}/gameData`).set({ data: json, signature: signature, timestamp: Date.now() });
-                
+                // Chỉ cập nhật danh sách trang bị và đan
+                await patchGameData(currentEditUid, {
+                    danhSachTrangBi: inventoryData.danhSachTrangBi || [],
+                    danhSachDan: inventoryData.danhSachDan || []
+                });
                 showToast('Lưu kho đồ thành công!', 'success');
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
