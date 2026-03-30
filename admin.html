@@ -241,7 +241,7 @@
             </div>
             <div class="card">
                 <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></tr></div>
+                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
             <div class="card">
                 <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
@@ -268,7 +268,6 @@
             <div id="fullEditor" style="display: none;">
                 <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - CÁC TRƯỜNG KHÁC GIỮ NGUYÊN</div>
                 
-                <!-- Thông tin cơ bản -->
                 <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
                     <div class="form-row">
                         <div class="form-group"><label>User ID</label><input type="text" id="editUid" class="form-control" readonly></div>
@@ -277,7 +276,6 @@
                     </div>
                 </div>
 
-                <!-- Tu Vi -->
                 <div class="card"><div class="card-title">🧘 Tu Vi</div>
                     <div class="form-row">
                         <div class="form-group"><label>Cảnh giới (0-9)</label><input type="number" id="editStage" class="form-control" min="0" max="9"></div>
@@ -293,7 +291,6 @@
                     </div>
                 </div>
 
-                <!-- Tài nguyên -->
                 <div class="card"><div class="card-title">💰 Tài nguyên</div>
                     <div class="form-row">
                         <div class="form-group"><label>Vàng</label><input type="number" id="editGold" class="form-control"></div>
@@ -301,7 +298,6 @@
                     </div>
                 </div>
 
-                <!-- Trang bị đang mặc -->
                 <div class="card"><div class="card-title">⚔️ Trang bị đang mặc</div>
                     <div class="form-row">
                         <div class="form-group"><label>Vũ khí</label><input type="text" id="editWeapon" class="form-control"></div>
@@ -311,7 +307,6 @@
                     </div>
                 </div>
 
-                <!-- Thú cưng -->
                 <div class="card"><div class="card-title">🐾 Thú cưng</div>
                     <div class="form-row">
                         <div class="form-group"><label>Cảnh giới pet</label><input type="number" id="editPetStage" class="form-control" min="0" max="9"></div>
@@ -320,7 +315,6 @@
                     </div>
                 </div>
 
-                <!-- VIP -->
                 <div class="card"><div class="card-title">👑 VIP</div>
                     <div class="form-row">
                         <div class="form-group"><label>Đã mua VIP</label><select id="editVip" class="form-control"><option value="true">Có</option><option value="false">Không</option></select></div>
@@ -329,7 +323,6 @@
                     </div>
                 </div>
 
-                <!-- Thiên phú -->
                 <div class="card"><div class="card-title">✨ Thiên phú</div>
                     <div class="form-row">
                         <div class="form-group"><label>Loại (exp/mau/atk/def/luck)</label><input type="text" id="editThienPhu" class="form-control"></div>
@@ -337,7 +330,6 @@
                     </div>
                 </div>
 
-                <!-- Nhiệm vụ -->
                 <div class="card"><div class="card-title">📜 Nhiệm vụ</div>
                     <div class="form-row">
                         <div class="form-group"><label>Active Quest IDs</label><input type="text" id="editActiveQuests" class="form-control" placeholder="cách nhau dấu phẩy"></div>
@@ -393,7 +385,7 @@
         <div id="recharge" class="tab-content">
             <div class="card">
                 <div class="card-title">💰 Người chơi đã nạp <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="rechargeTable"><thead><tr><th>User ID</th><th>Tên</th><th>Số lần nạp</th><th>Tổng tiền (VND)</th><th>Linh thạch nhận</th><th></th></tr></thead><tbody><tr><td colspan="6">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="rechargeTable"><thead><tr><th>User ID</th><th>Tên</th><th>Số lần nạp</th><th>Tổng tiền (VND)</th><th>Linh thạch nhận</th><th></th></tr></thead><tbody><tr><td colspan="6">Đang tải...<span class="loading-status"></span></td></tr></tbody></td></div>
             </div>
         </div>
 
@@ -653,7 +645,7 @@
                     <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</td>
                 </tr>`;
             });
-            html += '</tbody></table></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
+            html += '</tbody></tr></div><p style="margin-top:8px;font-size:10px;">📦 ' + playersCache.length + ' người | Click vào dòng để sửa chi tiết</p>';
             document.getElementById('playerListContainer').innerHTML = html;
         }
 
@@ -762,17 +754,17 @@
                     <td><button class="btn btn-danger btn-sm" onclick="removeTrangBi(${idx})">Xóa</button></td>
                 </tr>`;
             });
-            tbHtml += '</tbody></tr>';
+            tbHtml += '</tbody></table>';
             document.getElementById('trangBiList').innerHTML = tbHtml;
             
-            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th><tr></thead><tbody>';
+            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>';
             (inventoryData.danhSachDan || []).forEach((item, idx) => {
                 danHtml += `<tr>
                     <td>${item.tenDan}</td>
                     <td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td>
                 </tr>`;
             });
-            danHtml += '</tbody></table>';
+            danHtml += '</tbody></tr>';
             document.getElementById('danList').innerHTML = danHtml;
         }
 
@@ -1013,14 +1005,14 @@
                         <td>${rank++}</td>
                         <td>${escapeHtml(e.name)}</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                 });
-                document.querySelector('#leaderboardLinhThach tbody').innerHTML = html || '<tr><td colspan="3">Chưa có dữ liệu</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
+                document.querySelector('#leaderboardLinhThach tbody').innerHTML = html || '</tr><td colspan="3">Chưa có dữ liệu</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
                 
                 const total = ltList.reduce((s,e) => s + e.score, 0);
                 document.getElementById('totalLinhThach').innerText = total.toLocaleString();
             } catch(e) { console.error('Lỗi load leaderboard:', e); }
         }
 
-        // ==================== RECHARGE (đã sửa) ====================
+        // ==================== RECHARGE ====================
         async function loadRecharge() {
             try {
                 console.log('🔄 Đang tải dữ liệu nạp...');
@@ -1068,7 +1060,7 @@
                 
                 let html = '';
                 if (rechargers.length === 0) {
-                    html = '<td><td colspan="6">Chưa có dữ liệu nạp</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
+                    html = '<tr><td colspan="6">Chưa có dữ liệu nạp</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
                 } else {
                     rechargers.slice(0, 100).forEach(r => {
                         html += `<tr>
