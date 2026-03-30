@@ -188,22 +188,17 @@
         }
         .skill-name { font-weight: bold; color: #ffd700; }
         
-        .inner-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
+        .debug-console {
+            background: #1a1a2e;
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
         }
-        .inner-tab {
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-        .inner-tab.active { background: #ffd700; color: #1a1a2e; }
-        .inner-content { display: none; }
-        .inner-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -233,6 +228,7 @@
             <li><a onclick="showTab('giftcode')" data-tab="giftcode">🎁 Giftcode</a></li>
             <li><a onclick="showTab('events')" data-tab="events">🎉 Sự kiện</a></li>
             <li><a onclick="showTab('cache')" data-tab="cache">💾 Cache</a></li>
+            <li><a onclick="showTab('debug')" data-tab="debug">🐛 Debug</a></li>
         </ul>
     </div>
 
@@ -246,11 +242,11 @@
             </div>
             <div class="card">
                 <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></tr></div>
+                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
             <div class="card">
                 <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></td></div>
+                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -264,16 +260,13 @@
             </div>
         </div>
 
-        <!-- EDIT PLAYER FULL -->
         <div id="edit_player" class="tab-content">
             <div class="card">
                 <div class="card-title">✏️ Chọn người chơi để sửa</div>
                 <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
             </div>
             <div id="fullEditor" style="display: none;">
-                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - CÁC TRƯỜNG KHÁC GIỮ NGUYÊN</div>
-                
-                <!-- Thông tin cơ bản -->
+                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA</div>
                 <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
                     <div class="form-row">
                         <div class="form-group"><label>User ID</label><input type="text" id="editUid" class="form-control" readonly></div>
@@ -281,8 +274,6 @@
                         <div class="form-group"><label>Email</label><input type="text" id="editEmail" class="form-control"></div>
                     </div>
                 </div>
-
-                <!-- Tu Vi -->
                 <div class="card"><div class="card-title">🧘 Tu Vi</div>
                     <div class="form-row">
                         <div class="form-group"><label>Cảnh giới (0-9)</label><input type="number" id="editStage" class="form-control" min="0" max="9"></div>
@@ -297,16 +288,12 @@
                         <div class="form-group"><label>Luck gốc</label><input type="number" id="editLuck" class="form-control"></div>
                     </div>
                 </div>
-
-                <!-- Tài nguyên -->
                 <div class="card"><div class="card-title">💰 Tài nguyên</div>
                     <div class="form-row">
                         <div class="form-group"><label>Vàng</label><input type="number" id="editGold" class="form-control"></div>
                         <div class="form-group"><label>Linh thạch</label><input type="number" id="editLinhThach" class="form-control"></div>
                     </div>
                 </div>
-
-                <!-- Trang bị đang mặc -->
                 <div class="card"><div class="card-title">⚔️ Trang bị đang mặc</div>
                     <div class="form-row">
                         <div class="form-group"><label>Vũ khí</label><input type="text" id="editWeapon" class="form-control"></div>
@@ -315,8 +302,6 @@
                         <div class="form-group"><label>Cấp giáp</label><input type="number" id="editArmorLevel" class="form-control" min="0" max="8"></div>
                     </div>
                 </div>
-
-                <!-- Thú cưng -->
                 <div class="card"><div class="card-title">🐾 Thú cưng</div>
                     <div class="form-row">
                         <div class="form-group"><label>Cảnh giới pet</label><input type="number" id="editPetStage" class="form-control" min="0" max="9"></div>
@@ -324,8 +309,6 @@
                         <div class="form-group"><label>EXP pet</label><input type="number" id="editPetExp" class="form-control"></div>
                     </div>
                 </div>
-
-                <!-- VIP -->
                 <div class="card"><div class="card-title">👑 VIP</div>
                     <div class="form-row">
                         <div class="form-group"><label>Đã mua VIP</label><select id="editVip" class="form-control"><option value="true">Có</option><option value="false">Không</option></select></div>
@@ -333,23 +316,18 @@
                         <div class="form-group"><label>VIP kết thúc (ticks)</label><input type="text" id="editVipEnd" class="form-control"></div>
                     </div>
                 </div>
-
-                <!-- Thiên phú -->
                 <div class="card"><div class="card-title">✨ Thiên phú</div>
                     <div class="form-row">
                         <div class="form-group"><label>Loại (exp/mau/atk/def/luck)</label><input type="text" id="editThienPhu" class="form-control"></div>
                         <div class="form-group"><label>Phần trăm</label><input type="number" id="editThienPhuPercent" class="form-control" step="0.01"></div>
                     </div>
                 </div>
-
-                <!-- Nhiệm vụ -->
                 <div class="card"><div class="card-title">📜 Nhiệm vụ</div>
                     <div class="form-row">
                         <div class="form-group"><label>Active Quest IDs</label><input type="text" id="editActiveQuests" class="form-control" placeholder="cách nhau dấu phẩy"></div>
                         <div class="form-group"><label>Completed Quest IDs</label><input type="text" id="editCompletedQuests" class="form-control" placeholder="cách nhau dấu phẩy"></div>
                     </div>
                 </div>
-
                 <div class="card">
                     <button class="btn btn-success" onclick="saveFullPlayerData()">💾 Lưu (CHỈ cập nhật trường đã sửa)</button>
                     <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm</button>
@@ -358,7 +336,6 @@
             </div>
         </div>
 
-        <!-- SKILLS -->
         <div id="skills" class="tab-content">
             <div class="card">
                 <div class="card-title">✨ Quản lý kỹ năng</div>
@@ -378,7 +355,6 @@
             </div>
         </div>
 
-        <!-- INVENTORY -->
         <div id="inventory" class="tab-content">
             <div class="card">
                 <div class="card-title">📦 Quản lý kho đồ</div>
@@ -400,7 +376,6 @@
             </div>
         </div>
 
-        <!-- RECHARGE -->
         <div id="recharge" class="tab-content">
             <div class="card">
                 <div class="card-title">💰 Người chơi đã nạp <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button></div>
@@ -408,7 +383,6 @@
             </div>
         </div>
 
-        <!-- SUSPICIOUS -->
         <div id="suspicious" class="tab-content">
             <div class="card">
                 <div class="card-title">⚠️ Nghi ngờ Hack/Mod <button class="refresh-btn" onclick="loadSuspicious()">🔄 Refresh</button></div>
@@ -416,7 +390,6 @@
             </div>
         </div>
 
-        <!-- GIFTCODE -->
         <div id="giftcode" class="tab-content">
             <div class="card">
                 <div class="card-title">🎁 Tạo Giftcode</div>
@@ -437,7 +410,6 @@
             </div>
         </div>
 
-        <!-- EVENTS -->
         <div id="events" class="tab-content">
             <div class="card">
                 <div class="card-title">🎉 Sự kiện</div>
@@ -455,7 +427,6 @@
             <div class="card"><div class="card-title">📋 Sự kiện hiện tại <button class="refresh-btn" onclick="loadEvent()">🔄 Refresh</button></div><div id="currentEventInfo">Đang tải...</div></div>
         </div>
 
-        <!-- CACHE -->
         <div id="cache" class="tab-content">
             <div class="card">
                 <div class="card-title">💾 Quản lý Cache</div>
@@ -466,6 +437,15 @@
                 </div>
                 <button class="btn btn-warning" onclick="clearAllCache()">🗑️ Xóa cache</button>
                 <button class="btn btn-primary" onclick="forceRefreshAll()">🔄 Refresh toàn bộ</button>
+            </div>
+        </div>
+
+        <div id="debug" class="tab-content">
+            <div class="card">
+                <div class="card-title">🐛 Debug Console</div>
+                <div class="debug-console" id="debugConsole"></div>
+                <button class="btn btn-primary" onclick="testFirebase()">🔌 Test Firebase Connection</button>
+                <button class="btn btn-info" onclick="checkAuth()">🔐 Check Auth</button>
             </div>
         </div>
     </div>
@@ -499,13 +479,51 @@
         let currentSkillsData = null;
         let currentSort = { field: 'name', order: 'asc' };
 
-        // HÀM CẬP NHẬT - CHỈ GỬI ĐÚNG TRƯỜNG THAY ĐỔI
+        function logToDebug(msg) {
+            const debugDiv = document.getElementById('debugConsole');
+            const time = new Date().toLocaleTimeString();
+            debugDiv.innerHTML += `<div>[${time}] ${msg}</div>`;
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+            console.log(msg);
+        }
+
+        // Đọc dữ liệu từ Firebase (dạng phẳng)
+        async function readGameData(uid) {
+            const snap = await db.ref(`users/${uid}/gameData`).once('value');
+            return snap.val();
+        }
+
+        // CHỈ CẬP NHẬT CÁC TRƯỜNG ĐƯỢC CHỈ ĐỊNH
         async function patchGameData(uid, updates) {
             if (Object.keys(updates).length === 0) return false;
             updates.timestamp = Date.now();
             await db.ref(`users/${uid}/gameData`).update(updates);
-            console.log('✅ Đã cập nhật:', Object.keys(updates));
+            logToDebug(`✅ Đã cập nhật: ${Object.keys(updates).join(', ')}`);
             return true;
+        }
+
+        // Test Firebase connection
+        async function testFirebase() {
+            logToDebug('🔍 Testing Firebase connection...');
+            try {
+                const testRef = db.ref('.info/connected');
+                testRef.once('value').then(snap => {
+                    logToDebug(`✅ Connected: ${snap.val()}`);
+                });
+                const usersSnap = await db.ref('users').once('value');
+                const userCount = usersSnap.exists() ? Object.keys(usersSnap.val()).length : 0;
+                logToDebug(`📊 Users node exists, ${userCount} users found`);
+            } catch(e) {
+                logToDebug(`❌ Error: ${e.message}`);
+            }
+        }
+
+        async function checkAuth() {
+            logToDebug(`🔐 Auth: ${currentUser ? `Logged in as ${currentUser.email}` : 'Not logged in'}`);
+            if (currentUser) {
+                const adminSnap = await db.ref(`admins/${currentUser.uid}`).once('value');
+                logToDebug(`👑 Admin check: ${adminSnap.exists() ? 'IS ADMIN' : 'NOT ADMIN'}`);
+            }
         }
 
         // ==================== AUTH ====================
@@ -514,21 +532,33 @@
             const password = document.getElementById('loginPassword').value;
             if (!email || !password) { showToast('Nhập email và mật khẩu', 'error'); return; }
             showLoading();
+            logToDebug(`🔐 Attempting login with email: ${email}`);
             try {
                 const result = await auth.signInWithEmailAndPassword(email, password);
                 currentUser = result.user;
+                logToDebug(`✅ Login successful: ${currentUser.email}`);
                 await afterLogin();
-            } catch (error) { showToast('Lỗi: ' + error.message, 'error'); hideLoading(); }
+            } catch (error) { 
+                logToDebug(`❌ Login failed: ${error.message}`);
+                showToast('Lỗi: ' + error.message, 'error'); 
+                hideLoading();
+            }
         }
 
         async function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             showLoading();
+            logToDebug(`🔐 Attempting Google login...`);
             try {
                 const result = await auth.signInWithPopup(provider);
                 currentUser = result.user;
+                logToDebug(`✅ Google login successful: ${currentUser.email}`);
                 await afterLogin();
-            } catch (error) { showToast('Lỗi: ' + error.message, 'error'); hideLoading(); }
+            } catch (error) { 
+                logToDebug(`❌ Google login failed: ${error.message}`);
+                showToast('Lỗi: ' + error.message, 'error'); 
+                hideLoading();
+            }
         }
 
         async function afterLogin() {
@@ -536,7 +566,13 @@
             document.getElementById('loginForm').style.display = 'none';
             try {
                 const adminSnap = await db.ref(`admins/${currentUser.uid}`).once('value');
-                if (!adminSnap.exists()) { showToast('Không có quyền Admin!', 'error'); logout(); return; }
+                if (!adminSnap.exists()) { 
+                    logToDebug(`❌ User is not admin!`);
+                    showToast('Không có quyền Admin!', 'error'); 
+                    logout(); 
+                    return; 
+                }
+                logToDebug(`✅ Admin verified!`);
                 showToast('Đăng nhập thành công!', 'success');
                 await Promise.all([
                     loadPlayers(),
@@ -548,6 +584,7 @@
                 ]);
                 updateCacheUI();
             } catch(e) { 
+                logToDebug(`❌ Error in afterLogin: ${e.message}`);
                 showToast('Lỗi: ' + e.message, 'error');
                 console.error(e);
             }
@@ -559,6 +596,7 @@
             currentUser = null;
             document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
             document.getElementById('loginForm').style.display = 'flex';
+            logToDebug(`🔐 Logged out`);
             showToast('Đã đăng xuất', 'success');
         }
 
@@ -570,6 +608,7 @@
                 return;
             }
             showLoading();
+            logToDebug(`🔄 Loading players...`);
             try {
                 const usersSnap = await db.ref('users').once('value');
                 const users = usersSnap.val();
@@ -577,6 +616,7 @@
                 if (users) {
                     const banSnap = await db.ref('banned').once('value');
                     const banned = banSnap.val() || {};
+                    let count = 0;
                     for (let uid in users) {
                         const data = users[uid]?.gameData;
                         if (data) {
@@ -590,8 +630,12 @@
                                 isVip: data.daMuaVip || false,
                                 isBanned: !!banned[uid]
                             });
+                            count++;
                         }
                     }
+                    logToDebug(`✅ Loaded ${count} players`);
+                } else {
+                    logToDebug(`⚠️ No users found in database`);
                 }
                 playersCache = players;
                 displayPlayers();
@@ -600,9 +644,8 @@
                 updateCacheUI();
                 localStorage.setItem('admin_players_v2', JSON.stringify(playersCache));
                 localStorage.setItem('admin_players_time', Date.now().toString());
-                console.log(`✅ Đã tải ${playersCache.length} người chơi`);
             } catch(e) { 
-                console.error('Lỗi load players:', e);
+                logToDebug(`❌ Error load players: ${e.message}`);
                 showToast('Lỗi tải dữ liệu: ' + e.message, 'error');
             }
             hideLoading();
@@ -698,11 +741,17 @@
             const uid = document.getElementById('playerSelect').value;
             if (!uid) return;
             showLoading();
+            logToDebug(`📥 Loading player data for: ${uid}`);
             try {
-                const snap = await db.ref(`users/${uid}/gameData`).once('value');
-                const data = snap.val();
+                const data = await readGameData(uid);
+                if (!data) {
+                    logToDebug(`❌ No data found for uid: ${uid}`);
+                    showToast('Không tìm thấy dữ liệu', 'error');
+                    return;
+                }
                 currentOriginalData = JSON.parse(JSON.stringify(data));
                 currentEditUid = uid;
+                logToDebug(`✅ Loaded data for: ${data.tenNhanVat || 'Unknown'}`);
 
                 document.getElementById('fullEditor').style.display = 'block';
                 document.getElementById('editUid').value = uid;
@@ -733,7 +782,10 @@
                 document.getElementById('editActiveQuests').value = (data.activeQuestIDs || []).join(',');
                 document.getElementById('editCompletedQuests').value = (data.completedQuestIDs || []).join(',');
 
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+            } catch(e) { 
+                logToDebug(`❌ Error loadFullPlayerData: ${e.message}`);
+                showToast('Lỗi: ' + e.message, 'error'); 
+            }
             hideLoading();
         }
 
@@ -829,11 +881,11 @@
                     return;
                 }
                 
-                console.log('📝 Sẽ cập nhật:', Object.keys(updates));
+                logToDebug(`📝 Updating: ${Object.keys(updates).join(', ')}`);
                 
                 await patchGameData(currentEditUid, updates);
                 
-                // Cập nhật leaderboard nếu cần
+                // Update leaderboard
                 if (updates.chiSoCanhGio !== undefined || updates.tang !== undefined || updates.tenNhanVat !== undefined || updates.linhThach !== undefined) {
                     const newStage = updates.chiSoCanhGio !== undefined ? updates.chiSoCanhGio : currentOriginalData.chiSoCanhGio;
                     const newTang = updates.tang !== undefined ? updates.tang : currentOriginalData.tang;
@@ -846,7 +898,6 @@
                 
                 showToast(`Đã cập nhật: ${Object.keys(updates).join(', ')}`, 'success');
                 
-                // Refresh dữ liệu
                 playersCache = null;
                 await loadPlayers(true);
                 await loadLeaderboard();
@@ -854,8 +905,8 @@
                 await loadFullPlayerData();
                 
             } catch(e) { 
+                logToDebug(`❌ Error saveFullPlayerData: ${e.message}`);
                 showToast('Lỗi: ' + e.message, 'error');
-                console.error(e);
             }
             hideLoading();
         }
@@ -890,8 +941,8 @@
             if (!uid) return;
             showLoading();
             try {
-                const snap = await db.ref(`users/${uid}/gameData`).once('value');
-                const data = snap.val();
+                const data = await readGameData(uid);
+                if (!data) return;
                 
                 document.getElementById('skillsEditor').style.display = 'block';
                 currentSkillsData = JSON.parse(JSON.stringify(data));
@@ -955,8 +1006,8 @@
             if (!uid) return;
             showLoading();
             try {
-                const snap = await db.ref(`users/${uid}/gameData`).once('value');
-                const data = snap.val();
+                const data = await readGameData(uid);
+                if (!data) return;
                 
                 document.getElementById('inventoryEditor').style.display = 'block';
                 inventoryData = JSON.parse(JSON.stringify(data));
@@ -969,7 +1020,7 @@
         function refreshInventoryDisplay() {
             if (!inventoryData) return;
             
-            let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th></tr></thead><tbody>';
+            let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th><tr></thead><tbody>';
             (inventoryData.danhSachTrangBi || []).forEach((item, idx) => {
                 tbHtml += `<tr>
                     <td>${item.tenItem}</td>
@@ -980,14 +1031,14 @@
             tbHtml += '</tbody></table>';
             document.getElementById('trangBiList').innerHTML = tbHtml;
             
-            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>';
+            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></td></thead><tbody>';
             (inventoryData.danhSachDan || []).forEach((item, idx) => {
                 danHtml += `<tr>
                     <td>${item.tenDan}</td>
                     <td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td>
                 </tr>`;
             });
-            danHtml += '</tbody></tr>';
+            danHtml += '</tbody></table>';
             document.getElementById('danList').innerHTML = danHtml;
         }
 
@@ -1041,6 +1092,7 @@
 
         // ==================== LEADERBOARD ====================
         async function loadLeaderboard() {
+            logToDebug(`🔄 Loading leaderboard...`);
             try {
                 const tuVi = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
                 let html = '', rank = 1;
@@ -1054,6 +1106,7 @@
                         <td>${escapeHtml(e.name)}</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                 });
                 document.querySelector('#leaderboardTuVi tbody').innerHTML = html || '<tr><td colspan="4">Chưa có dữ liệu</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
+                logToDebug(`✅ Leaderboard TuVi loaded: ${list.length} entries`);
                 
                 const lt = await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
                 html = ''; rank = 1;
@@ -1068,13 +1121,17 @@
                 
                 const total = ltList.reduce((s,e) => s + e.score, 0);
                 document.getElementById('totalLinhThach').innerText = total.toLocaleString();
-            } catch(e) { console.error('Lỗi load leaderboard:', e); }
+                logToDebug(`✅ Leaderboard LinhThach loaded: ${ltList.length} entries, total: ${total}`);
+            } catch(e) { 
+                logToDebug(`❌ Error loadLeaderboard: ${e.message}`);
+                console.error(e); 
+            }
         }
 
         // ==================== RECHARGE ====================
         async function loadRecharge() {
+            logToDebug(`🔄 Loading recharge data...`);
             try {
-                console.log('🔄 Đang tải dữ liệu nạp...');
                 const usersSnap = await db.ref('users').once('value');
                 const users = usersSnap.val();
                 const priceMap = { 
@@ -1127,11 +1184,11 @@
                     });
                 }
                 
-                document.getElementById('rechargeTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Số lần nạp</th><th>Tổng tiền (VND)</th><th>Linh thạch nhận</th><th></th><tr></thead><tbody>${html}</tbody>`;
+                document.getElementById('rechargeTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Số lần nạp</th><th>Tổng tiền (VND)</th><th>Linh thạch nhận</th><th></th></table></thead><tbody>${html}</tbody>`;
                 document.getElementById('totalRecharged').innerText = rechargers.length;
-                console.log(`✅ Đã tải ${rechargers.length} người đã nạp`);
+                logToDebug(`✅ Loaded ${rechargers.length} recharged players`);
             } catch(e) { 
-                console.error('Lỗi load recharge:', e);
+                logToDebug(`❌ Error loadRecharge: ${e.message}`);
                 document.getElementById('rechargeTable').innerHTML = '<tbody><tr><td colspan="6">Lỗi: ' + e.message + '</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
                 showToast('Lỗi tải dữ liệu nạp: ' + e.message, 'error');
             }
@@ -1139,6 +1196,7 @@
 
         // ==================== SUSPICIOUS ====================
         async function loadSuspicious() {
+            logToDebug(`🔄 Loading suspicious data...`);
             try {
                 const usersSnap = await db.ref('users').once('value');
                 const users = usersSnap.val();
@@ -1159,7 +1217,7 @@
                 suspicious.sort((a,b) => b.linhThach - a.linhThach);
                 let html = '';
                 if (suspicious.length === 0) {
-                    html = '<td><td colspan="6">Không phát hiện bất thường</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
+                    html = '<tr><td colspan="6">Không phát hiện bất thường</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
                 } else {
                     suspicious.slice(0, 50).forEach(s => {
                         const badge = s.level === 'high' ? '<span class="badge" style="background:#8b0000;">NGHIÊM TRỌNG</span>' : '<span class="badge" style="background:#ff9800;">CẢNH BÁO</span>';
@@ -1167,9 +1225,12 @@
                             <td><code>${s.uid.substring(0,12)}...</code></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                     });
                 }
-                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th><tr></thead><tbody>${html}</tbody>`;
-                console.log(`✅ Đã tải ${suspicious.length} tài khoản nghi ngờ`);
-            } catch(e) { console.error('Lỗi load suspicious:', e); }
+                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></td></thead><tbody>${html}</tbody>`;
+                logToDebug(`✅ Loaded ${suspicious.length} suspicious accounts`);
+            } catch(e) { 
+                logToDebug(`❌ Error loadSuspicious: ${e.message}`);
+                console.error(e); 
+            }
         }
 
         async function banSuspicious(uid) {
@@ -1187,6 +1248,7 @@
 
         // ==================== GIFTCODE ====================
         async function loadGiftcodes() {
+            logToDebug(`🔄 Loading giftcodes...`);
             try {
                 const snap = await db.ref('giftcodes').once('value');
                 const codes = snap.val();
@@ -1203,7 +1265,11 @@
                     }
                 }
                 document.getElementById('giftCodeList').innerHTML = `<thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody>${html || '<tr><td colspan="4">Chưa có giftcode</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>'}</tbody>`;
-            } catch(e) { console.error(e); }
+                logToDebug(`✅ Giftcodes loaded`);
+            } catch(e) { 
+                logToDebug(`❌ Error loadGiftcodes: ${e.message}`);
+                console.error(e); 
+            }
         }
 
         async function createGiftCode() {
@@ -1240,6 +1306,7 @@
 
         // ==================== EVENTS ====================
         async function loadEvent() {
+            logToDebug(`🔄 Loading event...`);
             try {
                 const snap = await db.ref('sukien/current').once('value');
                 const ev = snap.val();
@@ -1252,7 +1319,11 @@
                 } else {
                     document.getElementById('currentEventInfo').innerHTML = '<p>Không có sự kiện</p>';
                 }
-            } catch(e) { console.error(e); }
+                logToDebug(`✅ Event loaded`);
+            } catch(e) { 
+                logToDebug(`❌ Error loadEvent: ${e.message}`);
+                console.error(e); 
+            }
         }
 
         async function createEvent() {
@@ -1330,6 +1401,10 @@
             const activeLink = document.querySelector(`[data-tab="${tabId}"]`);
             if (activeLink) activeLink.classList.add('active');
             if (tabId === 'cache') updateCacheUI();
+            if (tabId === 'debug') {
+                testFirebase();
+                checkAuth();
+            }
         }
 
         function getStageName(stage) {
@@ -1355,12 +1430,22 @@
                 currentUser = user;
                 document.getElementById('userEmail').innerText = user.email;
                 document.getElementById('loginForm').style.display = 'none';
+                logToDebug(`🔐 Auth state changed: ${user.email}`);
                 try {
                     const adminSnap = await db.ref(`admins/${user.uid}`).once('value');
-                    if (!adminSnap.exists()) { logout(); return; }
+                    if (!adminSnap.exists()) { 
+                        logToDebug(`❌ User ${user.email} is not admin`);
+                        logout(); 
+                        return; 
+                    }
+                    logToDebug(`✅ Admin verified, loading data...`);
                     await afterLogin();
-                } catch(e) { console.error(e); }
+                } catch(e) { 
+                    logToDebug(`❌ Error in auth state: ${e.message}`);
+                    console.error(e); 
+                }
             } else {
+                logToDebug(`🔐 Auth state changed: no user`);
                 document.getElementById('loginForm').style.display = 'flex';
                 document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
             }
