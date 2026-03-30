@@ -194,7 +194,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo"><h1>🏮 Admin Panel - PATCH Mode</h1></div>
+        <div class="logo"><h1>🏮 Admin Panel - Fixed</h1></div>
         <div class="user-info">
             <div id="loginForm" class="login-form">
                 <input type="email" id="loginEmail" placeholder="Email" value="hoangnv.vnpt@gmail.com">
@@ -232,7 +232,7 @@
             </div>
             <div class="card">
                 <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></tr></div>
             </div>
             <div class="card">
                 <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
@@ -253,16 +253,15 @@
             </div>
         </div>
 
-        <!-- Edit Player - PATCH MODE -->
+        <!-- Edit Player -->
         <div id="edit_player" class="tab-content">
             <div class="card">
                 <div class="card-title">✏️ Chọn người chơi để sửa</div>
                 <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
             </div>
             <div id="fullEditor" style="display: none;">
-                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - KỸ NĂNG GIỮ NGUYÊN</div>
+                <div class="warning-text" style="margin-bottom: 10px;">⚠️ CHỈ CẬP NHẬT ĐÚNG TRƯỜNG ĐƯỢC SỬA - TOÀN BỘ DỮ LIỆU KHÁC GIỮ NGUYÊN</div>
                 
-                <!-- Thông tin cơ bản -->
                 <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
                     <div class="form-row">
                         <div class="form-group"><label>User ID</label><input type="text" id="editUid" class="form-control" readonly></div>
@@ -271,7 +270,6 @@
                     </div>
                 </div>
 
-                <!-- Tu Vi -->
                 <div class="card"><div class="card-title">🧘 Tu Vi</div>
                     <div class="form-row">
                         <div class="form-group"><label>Cảnh giới (0-9)</label><input type="number" id="editStage" class="form-control" min="0" max="9"></div>
@@ -287,7 +285,6 @@
                     </div>
                 </div>
 
-                <!-- Tài nguyên -->
                 <div class="card"><div class="card-title">💰 Tài nguyên</div>
                     <div class="form-row">
                         <div class="form-group"><label>Vàng</label><input type="number" id="editGold" class="form-control"></div>
@@ -295,7 +292,6 @@
                     </div>
                 </div>
 
-                <!-- Trang bị đang mặc -->
                 <div class="card"><div class="card-title">⚔️ Trang bị đang mặc</div>
                     <div class="form-row">
                         <div class="form-group"><label>Vũ khí</label><input type="text" id="editWeapon" class="form-control"></div>
@@ -305,7 +301,6 @@
                     </div>
                 </div>
 
-                <!-- Thú cưng -->
                 <div class="card"><div class="card-title">🐾 Thú cưng</div>
                     <div class="form-row">
                         <div class="form-group"><label>Cảnh giới pet</label><input type="number" id="editPetStage" class="form-control" min="0" max="9"></div>
@@ -314,7 +309,6 @@
                     </div>
                 </div>
 
-                <!-- VIP -->
                 <div class="card"><div class="card-title">👑 VIP</div>
                     <div class="form-row">
                         <div class="form-group"><label>Đã mua VIP</label><select id="editVip" class="form-control"><option value="true">Có</option><option value="false">Không</option></select></div>
@@ -323,7 +317,6 @@
                     </div>
                 </div>
 
-                <!-- Thiên phú -->
                 <div class="card"><div class="card-title">✨ Thiên phú</div>
                     <div class="form-row">
                         <div class="form-group"><label>Loại (exp/mau/atk/def/luck)</label><input type="text" id="editThienPhu" class="form-control"></div>
@@ -331,7 +324,6 @@
                     </div>
                 </div>
 
-                <!-- Nhiệm vụ -->
                 <div class="card"><div class="card-title">📜 Nhiệm vụ</div>
                     <div class="form-row">
                         <div class="form-group"><label>Active Quest IDs</label><input type="text" id="editActiveQuests" class="form-control" placeholder="cách nhau dấu phẩy"></div>
@@ -345,9 +337,8 @@
                     <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa</button>
                 </div>
                 
-                <!-- Debug Console -->
                 <div class="card">
-                    <div class="card-title">🐛 Debug Console (F12 xem chi tiết)</div>
+                    <div class="card-title">🐛 Debug Console</div>
                     <div class="debug-console" id="debugConsole">
                         Chưa có dữ liệu
                     </div>
@@ -381,7 +372,7 @@
         <div id="recharge" class="tab-content">
             <div class="card">
                 <div class="card-title">💰 Người chơi đã nạp <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="rechargeTable"><thead><tr><th>User ID</th><th>Tên</th><th>Số lần nạp</th><th>Tổng tiền (VND)</th><th>Linh thạch nhận</th><th></th></tr></thead><tbody><tr><td colspan="6">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="rechargeTable"><thead><tr><th>User ID</th><th>Tên</th><th>Số lần nạp</th><th>Tổng tiền (VND)</th><th>Linh thạch nhận</th><th></th><tr></thead><tbody><tr><td colspan="6">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -410,7 +401,7 @@
             </div>
             <div class="card">
                 <div class="card-title">📋 Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
+                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></tr></div>
             </div>
         </div>
 
@@ -489,7 +480,7 @@
             return rawData;
         }
 
-        // Hàm PATCH - ĐỌC, GIẢI MÃ, CẬP NHẬT, MÃ HÓA LẠI
+        // Hàm PATCH - QUAN TRỌNG: CHỈ CẬP NHẬT CÁC TRƯỜNG ĐƯỢC CHỈ ĐỊNH, GIỮ NGUYÊN TẤT CẢ CÁC TRƯỜNG KHÁC
         async function patchGameData(uid, updates) {
             console.log('🔧 patchGameData called for uid:', uid);
             console.log('📝 Updates to apply:', updates);
@@ -503,7 +494,7 @@
                 return false;
             }
             
-            // Giải mã
+            // Giải mã để lấy dữ liệu hiện tại
             let currentData = null;
             if (rawData.data) {
                 try {
@@ -520,20 +511,20 @@
             
             if (!currentData) return false;
             
-            // ĐẾM SỐ LƯỢNG KỸ NĂNG TRƯỚC KHI CẬP NHẬT
-            const skillKeysBefore = Object.keys(currentData).filter(k => k.startsWith('skill_'));
-            console.log(`📊 Kỹ năng trước khi cập nhật: ${skillKeysBefore.length} keys`);
-            console.log('   Danh sách:', skillKeysBefore.slice(0, 10));
+            // LƯU LẠI TOÀN BỘ DỮ LIỆU CŨ
+            const newData = JSON.parse(JSON.stringify(currentData));
             
-            // Cập nhật các trường
+            // ĐẾM SỐ LƯỢNG KỸ NĂNG TRƯỚC KHI CẬP NHẬT
+            const skillKeysBefore = Object.keys(newData).filter(k => k.startsWith('skill_'));
+            console.log(`📊 Kỹ năng trước khi cập nhật: ${skillKeysBefore.length} keys`);
+            
+            // Cập nhật các trường được chỉ định (CHỈ CẬP NHẬT, KHÔNG XÓA)
             let hasChange = false;
             for (let key in updates) {
-                if (currentData[key] !== updates[key]) {
-                    const oldValue = currentData[key];
-                    currentData[key] = updates[key];
-                    hasChange = true;
-                    console.log(`✏️ Cập nhật ${key}: ${oldValue} → ${updates[key]}`);
-                }
+                const oldValue = newData[key];
+                newData[key] = updates[key];
+                hasChange = true;
+                console.log(`✏️ Cập nhật ${key}: ${oldValue} → ${updates[key]}`);
             }
             
             if (!hasChange) {
@@ -542,32 +533,37 @@
             }
             
             // Cập nhật timestamp
-            currentData.timestamp = Date.now();
+            newData.timestamp = Date.now();
             
             // ĐẾM SỐ LƯỢNG KỸ NĂNG SAU KHI CẬP NHẬT
-            const skillKeysAfter = Object.keys(currentData).filter(k => k.startsWith('skill_'));
+            const skillKeysAfter = Object.keys(newData).filter(k => k.startsWith('skill_'));
             console.log(`📊 Kỹ năng sau khi cập nhật: ${skillKeysAfter.length} keys`);
             
             if (skillKeysBefore.length !== skillKeysAfter.length) {
                 console.error(`🚨 CẢNH BÁO: Số lượng kỹ năng thay đổi! Trước: ${skillKeysBefore.length}, Sau: ${skillKeysAfter.length}`);
             } else {
                 console.log(`✅ Kỹ năng được giữ nguyên: ${skillKeysAfter.length} keys`);
+                // Kiểm tra xem có bị mất key nào không
+                const lostKeys = skillKeysBefore.filter(k => !skillKeysAfter.includes(k));
+                if (lostKeys.length > 0) {
+                    console.error(`🚨 Mất kỹ năng: ${lostKeys}`);
+                }
             }
             
             // Mã hóa lại
-            const json = JSON.stringify(currentData);
+            const json = JSON.stringify(newData);
             const signature = rawData.signature || "admin_patch_" + Date.now();
             
-            // Ghi đè
+            // Ghi đè - GIỮ NGUYÊN CẤU TRÚC {data, signature, timestamp}
             await db.ref(`users/${uid}/gameData`).set({ 
                 data: json, 
                 signature: signature, 
                 timestamp: Date.now() 
             });
             
-            console.log('✅ Saved successfully, skills preserved!');
+            console.log('✅ Saved successfully, all other fields preserved!');
             
-            return currentData;
+            return newData;
         }
 
         // ==================== AUTH ====================
@@ -794,7 +790,6 @@
                 document.getElementById('editActiveQuests').value = (data.activeQuestIDs || []).join(',');
                 document.getElementById('editCompletedQuests').value = (data.completedQuestIDs || []).join(',');
                 
-                // Hiển thị debug
                 const skillCount = Object.keys(data).filter(k => k.startsWith('skill_')).length;
                 document.getElementById('debugConsole').innerHTML = `
                     <div>✅ Đã tải dữ liệu cho: ${data.tenNhanVat || 'Không tên'}</div>
@@ -802,7 +797,6 @@
                     <div>🆔 User ID: ${uid}</div>
                     <div>💰 Vàng: ${data.vang?.toLocaleString()}</div>
                     <div>💎 Linh thạch: ${data.linhThach?.toLocaleString()}</div>
-                    <div>📅 Timestamp: ${new Date(data.timestamp).toLocaleString()}</div>
                 `;
 
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
@@ -896,7 +890,6 @@
                 const oldCompleted = currentOriginalData.completedQuestIDs || [];
                 if (JSON.stringify(completedQuests) !== JSON.stringify(oldCompleted)) updates.completedQuestIDs = completedQuests;
                 
-                // Kiểm tra có thay đổi gì không
                 if (Object.keys(updates).length === 0) {
                     showToast('Không có thay đổi nào!', 'warning');
                     hideLoading();
@@ -904,17 +897,13 @@
                 }
                 
                 console.log('📝 Sẽ cập nhật các trường:', Object.keys(updates));
-                
-                // Cập nhật debug console
                 document.getElementById('debugConsole').innerHTML += `<div>🔄 Đang cập nhật: ${Object.keys(updates).join(', ')}</div>`;
                 
-                // Thực hiện PATCH
                 const newData = await patchGameData(currentEditUid, updates);
                 
                 if (newData) {
                     const skillCount = Object.keys(newData).filter(k => k.startsWith('skill_')).length;
                     showToast(`Đã cập nhật: ${Object.keys(updates).join(', ')} (${skillCount} kỹ năng được giữ nguyên)`, 'success');
-                    
                     document.getElementById('debugConsole').innerHTML += `<div>✅ Lưu thành công! Còn ${skillCount} kỹ năng</div>`;
                     
                     // Cập nhật leaderboard nếu cần
@@ -924,14 +913,11 @@
                         await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: newData.tenNhanVat, score: newData.linhThach });
                     }
                     
-                    // Refresh lại dữ liệu
                     await loadFullPlayerData();
                     playersCache = null;
                     await loadPlayers(true);
                     await loadLeaderboard();
                     await loadRecharge();
-                } else {
-                    showToast('Không có thay đổi!', 'warning');
                 }
                 
             } catch(e) { 
@@ -994,10 +980,10 @@
                     <td><button class="btn btn-danger btn-sm" onclick="removeTrangBi(${idx})">Xóa</button></td>
                 </tr>`;
             });
-            tbHtml += '</tbody></tr>';
+            tbHtml += '</tbody></table>';
             document.getElementById('trangBiList').innerHTML = tbHtml;
             
-            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></table></thead><tbody>';
+            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>';
             (inventoryData.danhSachDan || []).forEach((item, idx) => {
                 danHtml += `<tr>
                     <td>${item.tenDan}</td>
@@ -1177,7 +1163,7 @@
                 suspicious.sort((a,b) => b.linhThach - a.linhThach);
                 let html = '';
                 if (suspicious.length === 0) {
-                    html = '<tr><td colspan="6">Không phát hiện bất thường</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
+                    html = '<td><td colspan="6">Không phát hiện bất thường</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>';
                 } else {
                     suspicious.slice(0, 50).forEach(s => {
                         const badge = s.level === 'high' ? '<span class="badge" style="background:#8b0000;">NGHIÊM TRỌNG</span>' : '<span class="badge" style="background:#ff9800;">CẢNH BÁO</span>';
@@ -1185,7 +1171,7 @@
                             <td><code>${s.uid.substring(0,12)}...</code></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>`;
                     });
                 }
-                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></td></thead><tbody>${html}</tbody>`;
+                document.getElementById('suspiciousTable').innerHTML = `<thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th><th></th></tr></thead><tbody>${html}</tbody>`;
                 console.log(`✅ Đã tải ${suspicious.length} tài khoản nghi ngờ`);
             } catch(e) { console.error('Lỗi load suspicious:', e); }
         }
@@ -1370,7 +1356,6 @@
             setTimeout(() => toast.remove(), 2500);
         }
 
-        // Auto login
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
