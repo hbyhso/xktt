@@ -759,135 +759,93 @@ async function createNewPlayer(){
   }catch(err){toast(err.message,'error')}hideLoad();
 }
 
-// ─── RECHARGE (từ node /transactions) ────────────────────────────────────────
+// ─── RECHARGE (Tự động gom từ transactionHistory của User) ───────────────────
 async function loadRecharge(){
   showLoad();
   try{
-    // Đọc node /transactions - chứa TẤT CẢ giao dịch
-    const txSnap=await db.ref('transactions').once('value');
-    const txNode=txSnap.val()||{};
+    rxAllTx = [];
+    rxUserMap = {};
 
-    // Cũng đọc gameData để lấy tên nhân vật theo UID
-    const usersSnap=await db.ref('users').once('value');
-    const users=usersSnap.val()||{};
-    const nameMap={};
-    for(const uid in users){nameMap[uid]=users[uid]?.gameData?.tenNhanVat||'Không tên'}
+    // 1. Đọc node /users (Chúng ta có quyền truy cập node này, không bị lỗi permission denied)
+    const usersSnap = await db.ref('users').once('value');
+    const users = usersSnap.val() || {};
 
-    rxAllTx=[];rxUserMap={};
+    // 2. Lặp qua tất cả user để lấy lịch sử nạp tiền
+    for(const uid in users){
+      const d = users[uid]?.gameData || {};
+      const name = d.tenNhanVat || 'Không tên';
+      const history = d.transactionHistory || [];
 
-    // /transactions có thể là flat {txId: {...}} hoặc nested {uid: {txId: {...}}}
-    // Thử detect cấu trúc
-    const firstKey=Object.keys(txNode)[0];
-    const firstVal=firstKey?txNode[firstKey]:null;
-
-    if(firstVal&&firstVal.transactionId!==undefined){
-      // Flat: /transactions/{txId}: {transactionId, productId, soLinhThach, thoiGianNap, daXacThuc, ...}
-      for(const txId in txNode){
-        const tx=txNode[txId];
-        const uid=tx.userId||tx.uid||'';
-        const name=nameMap[uid]||tx.playerName||tx.tenNhanVat||'Không tên';
-        pushTx(txId,tx,uid,name);
-      }
-    }else{
-      // Nested: /transactions/{uid}/{txId}: {...}
-      for(const uid in txNode){
-        const name=nameMap[uid]||'Không tên';
-        const userTxs=txNode[uid];
-        if(typeof userTxs==='object'){
-          for(const txId in userTxs){
-            pushTx(txId,userTxs[txId],uid,name);
-          }
-        }
-      }
+      // Duyệt qua từng giao dịch của user
+      history.forEach(tx => {
+        // Bỏ qua các giao dịch lỗi không có mã sản phẩm
+        if (!tx.productId) return; 
+        
+        // Dùng transactionId có sẵn, nếu không có thì tự tạo một id ngẫu nhiên để hiển thị
+        const txId = tx.transactionId || Math.random().toString(36).substring(2, 10);
+        pushTx(txId, tx, uid, name);
+      });
     }
 
-    // Nếu /transactions rỗng, fallback sang transactionHistory trong gameData
-    if(rxAllTx.length===0){
-      for(const uid in users){
-        const d=users[uid]?.gameData||{};
-        const name=d.tenNhanVat||'Không tên';
-        (d.transactionHistory||[]).forEach(tx=>{
-          pushTx(tx.transactionId||Math.random(),tx,uid,name);
-        });
-      }
-    }
+    // 3. Sắp xếp tất cả giao dịch theo thời gian mới nhất (timestamp giảm dần)
+    rxAllTx.sort((a,b) => b.timestamp - a.timestamp);
 
-    rxAllTx.sort((a,b)=>b.timestamp-a.timestamp);
+    // 4. Tính toán thống kê tổng
+    const totalVND = rxAllTx.reduce((s,t) => s + t.vnd, 0);
+    const totalLT = rxAllTx.reduce((s,t) => s + t.lt, 0);
 
-    // Stats
-    const totalVND=rxAllTx.reduce((s,t)=>s+t.vnd,0);
-    const totalLT=rxAllTx.reduce((s,t)=>s+t.lt,0);
-    $('rxTotal').innerText=rxAllTx.length.toLocaleString();
-    $('rxVND').innerText=(totalVND/1000000).toFixed(1)+'M';
-    $('rxLT').innerText=totalLT.toLocaleString();
-    $('rxUsers').innerText=Object.keys(rxUserMap).length;
-    $('totalRecharged').innerText=Object.keys(rxUserMap).length;
-    $('totalRevenue').innerText=(totalVND/1000000).toFixed(1)+'M';
+    // 5. Cập nhật các ô số liệu trên giao diện
+    $('rxTotal').innerText = rxAllTx.length.toLocaleString();
+    $('rxVND').innerText = (totalVND / 1000000).toFixed(1) + 'M';
+    $('rxLT').innerText = totalLT.toLocaleString();
+    $('rxUsers').innerText = Object.keys(rxUserMap).length;
+    $('totalRecharged').innerText = Object.keys(rxUserMap).length;
+    $('totalRevenue').innerText = (totalVND / 1000000).toFixed(1) + 'M';
 
+    // 6. Hiển thị bảng dữ liệu
     renderUserSummary();
     renderAllTx();
-  }catch(err){toast('Lỗi tải nạp: '+err.message,'error');log('Recharge err: '+err.message)}
+  } catch(err){
+    toast('Lỗi tải nạp: ' + err.message, 'error');
+    log('Recharge err: ' + err.message);
+  }
   hideLoad();
 }
 
-function pushTx(txId,tx,uid,name){
-  const vnd=PRICE_MAP[tx.productId]||0;
-  const lt=tx.soLinhThach||tx.soTien||0;
-  const ts=tx.timestamp||0;
-  rxAllTx.push({txId:String(txId),uid,name,productId:tx.productId||'',lt,vnd,vndStr:tx.giaTriVND||'',time:tx.thoiGianNap||'',verified:tx.daXacThuc!==false,timestamp:ts});
-  if(!rxUserMap[uid])rxUserMap[uid]={uid,name,totalVND:0,totalLT:0,count:0};
-  rxUserMap[uid].totalVND+=vnd;rxUserMap[uid].totalLT+=lt;rxUserMap[uid].count++;
-}
+// Hàm đẩy dữ liệu vào mảng tổng và gom nhóm theo User
+function pushTx(txId, tx, uid, name){
+  // Lấy giá trị VNĐ từ PRICE_MAP cấu hình sẵn ở trên
+  const vnd = PRICE_MAP[tx.productId] || 0;
+  const lt = tx.soLinhThach || tx.soTien || 0;
+  const ts = tx.timestamp || 0;
+  
+  // Format thời gian hiển thị (nếu user không có thoiGianNap thì tự convert từ timestamp)
+  let timeStr = tx.thoiGianNap || '';
+  if (!timeStr && ts > 0) {
+      timeStr = new Date(ts / 10000 - 62135596800000).toLocaleString('vi-VN');
+  }
 
-function sortRx(field){
-  rxSort.order=rxSort.field===field&&rxSort.order==='desc'?'asc':'desc';rxSort.field=field;renderUserSummary();
-}
-function renderUserSummary(){
-  const kw=nv($('rxSearch')?.value||'');
-  let data=Object.values(rxUserMap).filter(r=>!kw||nv(r.name).includes(kw)||r.uid.includes(kw));
-  data.sort((a,b)=>{const va=a[rxSort.field],vb=b[rxSort.field];return rxSort.order==='desc'?vb-va:va-vb});
-  $('rxUserBody').innerHTML=data.map(r=>`<tr>
-    <td><strong>${esc(r.name)}</strong><br><span style="font-size:9px;color:#666">${r.uid.substring(0,12)}...</span></td>
-    <td style="color:#ffd700">${r.totalVND.toLocaleString()}đ</td>
-    <td>${r.totalLT.toLocaleString()}</td>
-    <td>${r.count}</td>
-    <td><button class="btn btn-info btn-xs" onclick="showUserTx('${r.uid}','${esc(r.name)}')">📋 Xem ${r.count} GD</button></td>
-  </tr>`).join('')||'<tr><td colspan="5" style="color:#666">Chưa có dữ liệu</td></tr>';
-}
-function renderAllTx(){
-  const kw=nv($('txSearchAll')?.value||'');
-  const prod=$('txProdFilter')?.value||'';
-  const ver=$('txVerFilter')?.value||'';
-  let data=rxAllTx.filter(tx=>{
-    if(kw&&!nv(tx.name).includes(kw)&&!tx.uid.includes(kw)&&!tx.txId.includes(kw))return false;
-    if(prod&&tx.productId!==prod)return false;
-    if(ver==='1'&&!tx.verified)return false;
-    if(ver==='0'&&tx.verified)return false;
-    return true;
+  // Lưu vào mảng chứa TẤT CẢ giao dịch
+  rxAllTx.push({
+    txId: String(txId),
+    uid: uid,
+    name: name,
+    productId: tx.productId || '',
+    lt: lt,
+    vnd: vnd,
+    vndStr: tx.giaTriVND || vnd.toLocaleString(), 
+    time: timeStr,
+    verified: tx.daXacThuc !== false,
+    timestamp: ts
   });
-  $('txAllBody').innerHTML=data.slice(0,500).map(tx=>`<tr>
-    <td style="white-space:nowrap;font-size:10px">${esc(tx.time)}</td>
-    <td><strong>${esc(tx.name)}</strong></td>
-    <td>${esc(PROD_LABEL[tx.productId]||tx.productId)}</td>
-    <td style="color:#ffd700">${tx.lt.toLocaleString()}</td>
-    <td style="color:#28a745">${tx.vnd?tx.vnd.toLocaleString()+'đ':(tx.vndStr?esc(tx.vndStr)+'đ':'-')}</td>
-    <td>${tx.verified?'<span class="badge badge-ok">✅ OK</span>':'<span class="badge badge-pending">⏳ Chờ</span>'}</td>
-    <td style="font-size:9px;color:#888">${esc(tx.txId.substring(0,20))}…</td>
-  </tr>`).join('')||'<tr><td colspan="7" style="color:#666">Không có giao dịch</td></tr>';
-  $('txAllCount').innerText=`Hiển thị ${Math.min(data.length,500)}/${data.length} giao dịch`;
-}
-function showUserTx(uid,name){
-  const txs=rxAllTx.filter(t=>t.uid===uid);
-  $('txDetailTitle').innerText=`💳 Giao dịch của ${name}`;
-  $('txDetailBody').innerHTML=txs.map(tx=>`<tr>
-    <td style="font-size:10px;white-space:nowrap">${esc(tx.time)}</td>
-    <td>${esc(PROD_LABEL[tx.productId]||tx.productId)}</td>
-    <td style="color:#ffd700">${tx.lt.toLocaleString()}</td>
-    <td style="color:#28a745">${tx.vnd?tx.vnd.toLocaleString()+'đ':(tx.vndStr?esc(tx.vndStr)+'đ':'-')}</td>
-    <td>${tx.verified?'<span class="badge badge-ok">✅ OK</span>':'<span class="badge badge-pending">⏳</span>'}</td>
-    <td style="font-size:9px;color:#888">${esc(tx.txId.substring(0,24))}…</td>
-  </tr>`).join('')||'<tr><td colspan="6" style="color:#666">Không có</td></tr>';
-  $('txDetailOverlay').style.display='block';
+
+  // Gom nhóm tổng hợp theo từng UID (rxUserMap)
+  if(!rxUserMap[uid]) {
+      rxUserMap[uid] = {uid, name, totalVND: 0, totalLT: 0, count: 0};
+  }
+  rxUserMap[uid].totalVND += vnd;
+  rxUserMap[uid].totalLT += lt;
+  rxUserMap[uid].count++;
 }
 
 // ─── LEADERBOARD ─────────────────────────────────────────────────────────────
