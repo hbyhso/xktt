@@ -73,11 +73,7 @@
             align-items: center;
             flex-wrap: wrap;
         }
-        .sortable-header {
-            cursor: pointer;
-            user-select: none;
-            transition: color 0.2s;
-        }
+        .sortable-header { cursor: pointer; user-select: none; transition: color 0.2s; }
         .sortable-header:hover { color: #ffd700; }
         .sort-icon { font-size: 10px; margin-left: 4px; }
         
@@ -92,20 +88,12 @@
             color: #fff;
             font-size: 12px;
         }
-        textarea.form-control { font-family: monospace; }
+        textarea.form-control { font-family: monospace; white-space: pre; }
+        textarea.form-control:focus { outline: 1px solid #ffd700; }
         .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
         @media (min-width: 640px) { .form-row { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); } }
         
-        .btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-right: 6px;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
+        .btn { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; margin-right: 6px; margin-bottom: 6px; font-weight: 600; }
         .btn-primary { background: #ffd700; color: #1a1a2e; }
         .btn-danger { background: #dc3545; color: white; }
         .btn-success { background: #28a745; color: white; }
@@ -118,48 +106,17 @@
         .table th, .table td { padding: 6px 6px; text-align: left; border-bottom: 1px solid #333; }
         .table th { color: #ffd700; }
         
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 12px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px; }
         @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
-        .stat-card {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-        }
+        .stat-card { background: rgba(0, 0, 0, 0.5); border-radius: 8px; padding: 10px; text-align: center; }
         .stat-value { font-size: 18px; font-weight: bold; color: #ffd700; }
         .stat-label { font-size: 9px; color: #aaa; }
         
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
+        .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .spinner { width: 30px; height: 30px; border: 3px solid #333; border-top-color: #ffd700; border-radius: 50%; animation: spin 0.6s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .toast {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            background: #28a745;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            z-index: 1000;
-        }
+        .toast { position: fixed; bottom: 15px; right: 15px; background: #28a745; color: white; padding: 8px 12px; border-radius: 8px; font-size: 11px; z-index: 1000; }
         .toast.error { background: #dc3545; }
         .toast.warning { background: #ff9800; }
         
@@ -170,38 +127,16 @@
         .player-row { cursor: pointer; }
         .player-row:hover { background: rgba(255,215,0,0.1); }
         
-        .refresh-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid #ffd700;
-            border-radius: 20px;
-            padding: 3px 10px;
-            font-size: 10px;
-            color: #fff;
-            cursor: pointer;
-        }
+        .refresh-btn { background: rgba(255,255,255,0.1); border: 1px solid #ffd700; border-radius: 20px; padding: 3px 10px; font-size: 10px; color: #fff; cursor: pointer; }
         .refresh-btn:hover { background: #ffd700; color: #1a1a2e; }
-        
         .warning-text { color: #ff9800; font-size: 11px; margin-top: 5px; }
-        
-        .skill-item {
-            background: rgba(0,0,0,0.3);
-            padding: 8px;
-            margin-bottom: 6px;
-            border-radius: 6px;
-        }
+        .skill-item { background: rgba(0,0,0,0.3); padding: 8px; margin-bottom: 6px; border-radius: 6px; }
         .skill-name { font-weight: bold; color: #ffd700; }
-        
-        .debug-console {
-            background: #1a1a2e;
-            border: 1px solid #ffd700;
-            border-radius: 8px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 10px;
-            max-height: 150px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
+        .debug-console { background: #1a1a2e; border: 1px solid #ffd700; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 10px; max-height: 150px; overflow-y: auto; margin-top: 10px; }
+
+        /* Bảng Dynamic Editor */
+        #dynamicParamsTable td { vertical-align: middle; }
+        #dynamicParamsTable td.path-col { word-break: break-all; width: 35%; color: #82aaff; font-weight: bold; font-family: monospace; font-size: 12px;}
     </style>
 </head>
 <body>
@@ -275,118 +210,33 @@
             </div>
             
             <div id="fullEditor" style="display: none;">
-                <div class="warning-text" style="margin-bottom: 10px;">⚠️ HỆ THỐNG TỰ ĐỘNG NHẬN DIỆN: Chỉ cập nhật và gửi lên Firebase những trường dữ liệu bạn thực sự thay đổi!</div>
-                
-                <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>User ID (Không thể sửa)</label><input type="text" id="editUid" class="form-control" readonly></div>
-                        <div class="form-group"><label>Tên nhân vật</label><input type="text" id="editName" class="form-control"></div>
-                        <div class="form-group"><label>Email</label><input type="text" id="editEmail" class="form-control"></div>
+                <div class="card" style="background: rgba(0, 50, 0, 0.4); border: 1px solid #28a745;">
+                    <div class="card-title" style="color: #28a745;">💾 HỆ THỐNG GHI ĐÈ THÔNG MINH</div>
+                    <div class="warning-text" style="color: #fff;">
+                        Sửa thông số nào trong bảng dưới, hệ thống sẽ <b>CHỈ</b> gửi thông số đó lên Firebase (Sử dụng Multi-path Update). Các mảng như `danhSachPhapBao`, `transactions`... có thể sửa thẳng vào khung JSON.
                     </div>
-                </div>
-
-                <div class="card"><div class="card-title">⚙️ Hệ thống & Phiên bản</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Client Version</label><input type="text" id="editClientVersion" class="form-control"></div>
-                        <div class="form-group"><label>Data Version</label><input type="number" id="editDataVersion" class="form-control"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Đăng nhập cuối</label><input type="text" id="editLastLogin" class="form-control" readonly></div>
-                        <div class="form-group"><label>Đăng xuất cuối</label><input type="text" id="editLastLogout" class="form-control" readonly></div>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">🧘 Tu Vi</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Cảnh giới (0-9)</label><input type="number" id="editStage" class="form-control" min="0" max="9"></div>
-                        <div class="form-group"><label>Tầng (1-9)</label><input type="number" id="editTang" class="form-control" min="1" max="9"></div>
-                        <div class="form-group"><label>EXP</label><input type="number" id="editExp" class="form-control"></div>
-                        <div class="form-group"><label>Điểm thuộc tính chưa cộng</label><input type="number" id="editDiem" class="form-control"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>HP gốc</label><input type="number" id="editHp" class="form-control"></div>
-                        <div class="form-group"><label>ATK gốc</label><input type="number" id="editAtk" class="form-control"></div>
-                        <div class="form-group"><label>DEF gốc</label><input type="number" id="editDef" class="form-control"></div>
-                        <div class="form-group"><label>Luck gốc</label><input type="number" id="editLuck" class="form-control"></div>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">💰 Tài nguyên</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Vàng</label><input type="number" id="editGold" class="form-control"></div>
-                        <div class="form-group"><label>Linh thạch</label><input type="number" id="editLinhThach" class="form-control"></div>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">⚔️ Vũ Khí & Giáp (Đang mặc)</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Tên Vũ khí (vd: KiemNhapMon)</label><input type="text" id="editWeapon" class="form-control"></div>
-                        <div class="form-group"><label>Cấp vũ khí (+0 đến +8)</label><input type="number" id="editWeaponLevel" class="form-control" min="0" max="8"></div>
-                        <div class="form-group"><label>Tên Giáp (vd: GiapTanThu)</label><input type="text" id="editArmor" class="form-control"></div>
-                        <div class="form-group"><label>Cấp giáp (+0 đến +8)</label><input type="number" id="editArmorLevel" class="form-control" min="0" max="8"></div>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">🪬 Pháp Bảo & Thú Cưỡi (Đang mặc)</div>
-                    <div class="warning-text">Lưu ý: Bỏ đuôi (Clone) khi nhập tên. Vd: HuyenHaiThanLong</div>
-                    <div class="form-row" style="margin-top: 8px;">
-                        <div class="form-group"><label>Tên Pháp Bảo</label><input type="text" id="editPhapBao" class="form-control"></div>
-                        <div class="form-group"><label>Tên Thú Cưỡi</label><input type="text" id="editThuCuoi" class="form-control"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Dữ liệu Pháp Bảo (JSON) - Dành cho nâng cao</label>
-                        <textarea id="editPhapBaoObj" class="form-control" rows="6" placeholder="Bỏ trống nếu không có..."></textarea>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">🐾 Thú cưng (Pet)</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Cảnh giới pet</label><input type="number" id="editPetStage" class="form-control" min="0" max="9"></div>
-                        <div class="form-group"><label>Tầng pet</label><input type="number" id="editPetTang" class="form-control" min="1" max="9"></div>
-                        <div class="form-group"><label>EXP pet</label><input type="number" id="editPetExp" class="form-control"></div>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">👑 Trạng thái VIP</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Đã mua VIP</label><select id="editVip" class="form-control"><option value="true">Có</option><option value="false">Không</option></select></div>
-                        <div class="form-group"><label>Số ngày VIP còn lại</label><input type="number" id="editVipDays" class="form-control"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>VIP bắt đầu (Ticks) <span id="lblVipStart" style="color:#28a745; font-weight:bold;"></span></label>
-                            <input type="text" id="editVipStart" class="form-control" oninput="previewTicks('editVipStart', 'lblVipStart')">
-                        </div>
-                        <div class="form-group">
-                            <label>VIP kết thúc (Ticks) <span id="lblVipEnd" style="color:#28a745; font-weight:bold;"></span></label>
-                            <input type="text" id="editVipEnd" class="form-control" oninput="previewTicks('editVipEnd', 'lblVipEnd')">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">✨ Bùa Thiên phú</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Loại (exp/mau/atk/def/luck)</label><input type="text" id="editThienPhu" class="form-control"></div>
-                        <div class="form-group"><label>Hệ số phần trăm (0.2 = 20%)</label><input type="number" id="editThienPhuPercent" class="form-control" step="0.01"></div>
-                    </div>
-                </div>
-
-                <div class="card"><div class="card-title">📜 Nhiệm vụ</div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Nhiệm vụ Đang làm (Active)</label><input type="text" id="editActiveQuests" class="form-control" placeholder="vd: NAN_GA_LOI, TIM_KIEM"></div>
-                        <div class="form-group"><label>Nhiệm vụ Đã xong (Completed)</label><input type="text" id="editCompletedQuests" class="form-control" placeholder="vd: GapTruongLang"></div>
-                    </div>
-                    <div class="form-group" style="margin-top: 10px;">
-                        <label>Tiến độ chi tiết (JSON) - Dùng để gỡ kẹt quest</label>
-                        <textarea id="editQuestProgressObj" class="form-control" rows="4"></textarea>
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-success" onclick="saveFullPlayerData()">🚀 Ghi đè thay đổi lên Firebase</button>
+                        <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa tài khoản</button>
+                        <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm (Ban)</button>
+                        <button class="btn btn-danger" style="background:#8b0000; float:right;" onclick="deleteCurrentPlayer()">🗑️ Xóa vĩnh viễn User</button>
                     </div>
                 </div>
 
                 <div class="card">
-                    <button class="btn btn-success" onclick="saveFullPlayerData()">💾 Lưu thay đổi (Ghi đè thông minh)</button>
-                    <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa tài khoản</button>
-                    <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm (Ban)</button>
-                    <button class="btn btn-danger" style="background:#8b0000; float:right;" onclick="deleteCurrentPlayer()">🗑️ Xóa vĩnh viễn User</button>
+                    <div class="card-title">⚙️ TẤT CẢ THÔNG SỐ CỦA NGƯỜI CHƠI (BẢNG ĐẦY ĐỦ)</div>
+                    <div class="table-container">
+                        <table class="table" id="dynamicParamsTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%">Đường dẫn (Database Path)</th>
+                                    <th>Giá trị hiện tại (Value)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -529,7 +379,7 @@
 
         let currentUser = null;
         let currentEditUid = null;
-        let currentOriginalData = null; // Biến giữ dữ liệu gốc để so sánh Patch
+        let currentOriginalData = null; // Biến giữ dữ liệu gốc để so sánh khi gởi đi
         let playersCache = null;
         let inventoryData = null;
         let currentSkillsData = null;
@@ -554,20 +404,6 @@
         }
         function escapeHtml(text) { if (!text) return ''; return text.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
         
-        // 🆕 HIỂN THỊ TICKS SANG NGÀY THÁNG DỄ NHÌN
-        const tickToDateString = (ticks) => {
-            if(!ticks || isNaN(ticks) || ticks === 0) return 'Chưa có dữ liệu';
-            return new Date(ticks / 10000 - 62135596800000).toLocaleString('vi-VN');
-        };
-
-        function previewTicks(inputId, labelId) {
-            const ticks = parseInt(document.getElementById(inputId).value);
-            const lbl = document.getElementById(labelId);
-            if (!ticks || isNaN(ticks) || ticks === 0) { lbl.innerText = ''; return; }
-            lbl.innerText = '(⏰ ' + new Date(ticks / 10000 - 62135596800000).toLocaleString('vi-VN') + ')';
-        }
-
-        // Bỏ dấu tiếng Việt để tìm kiếm thông minh
         function removeVietnameseTones(str) {
             if(!str) return "";
             return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
@@ -583,19 +419,10 @@
             if (tabId === 'debug') { testFirebase(); checkAuth(); }
         }
 
-        // ==================== FIREBASE DATA HANDLING ====================
-        async function readGameData(uid) {
-            const snap = await db.ref(`users/${uid}/gameData`).once('value');
-            return snap.val();
-        }
-
-        // GỬI CHÍNH XÁC NHỮNG TRƯỜNG BỊ THAY ĐỔI
-        async function patchGameData(uid, updates) {
-            if (Object.keys(updates).length === 0) return false;
-            updates.timestamp = Date.now() * 10000 + 62135596800000; 
-            await db.ref(`users/${uid}/gameData`).update(updates);
-            logToDebug(`✅ Patch DB: ${Object.keys(updates).join(', ')}`);
-            return true;
+        // Đọc Toàn bộ Users Info (chứ không chỉ gameData)
+        async function readUserNodeData(uid) {
+            const snap = await db.ref(`users/${uid}`).once('value');
+            return snap.val() || {};
         }
 
         // ==================== AUTH ====================
@@ -793,7 +620,206 @@
             showTab('edit_player');
         }
 
-        // ==================== ADD / DELETE USER ====================
+        // ==================== BẢNG EDIT THÔNG SỐ ĐẦY ĐỦ VÀ GHI ĐÈ ====================
+        
+        async function loadFullPlayerData() {
+            const uid = document.getElementById('playerSelect').value;
+            if (!uid) return;
+            showLoading();
+            try {
+                // Đọc nguyên User root node -> Lấy được gameData, stats, transactions
+                const data = await readUserNodeData(uid);
+                if (!data || Object.keys(data).length === 0) { 
+                    showToast('Không tìm thấy dữ liệu hoặc cấu trúc trống', 'error'); 
+                    hideLoading(); return; 
+                }
+                
+                // Deep copy để so sánh
+                currentOriginalData = JSON.parse(JSON.stringify(data));
+                currentEditUid = uid;
+
+                document.getElementById('fullEditor').style.display = 'block';
+                
+                // Xây dựng Bảng Dynamic Editor
+                buildDynamicTable(data);
+
+            } catch(e) { showToast('Lỗi nạp form: ' + e.message, 'error'); }
+            hideLoading();
+        }
+
+        function buildDynamicTable(data) {
+            const tbody = document.querySelector('#dynamicParamsTable tbody');
+            let html = '';
+            
+            const pathsToDisplay = {};
+            
+            // Hàm Duyệt Cấu Trúc Json phẳng hóa
+            const processNode = (basePath, obj) => {
+                if (obj === null || obj === undefined) return;
+                
+                for (let key in obj) {
+                    const val = obj[key];
+                    const fullPath = basePath ? `${basePath}/${key}` : key;
+                    
+                    // Mở rộng sâu các object: Root (''), gameData, stats, và các transaction bên trong `transactions`
+                    if (val !== null && typeof val === 'object') {
+                        if (
+                            basePath === '' || 
+                            basePath === 'gameData' || 
+                            basePath === 'stats' || 
+                            basePath === 'transactions'
+                        ) {
+                            processNode(fullPath, val);
+                        } else {
+                            // Nếu gặp một array như danhSachPhapBao, hoặc Object lạ -> Biến thành string JSON
+                            pathsToDisplay[fullPath] = JSON.stringify(val, null, 4);
+                        }
+                    } else {
+                        // primitive value (Number, Boolean, String)
+                        pathsToDisplay[fullPath] = val;
+                    }
+                }
+            };
+            
+            processNode('', data);
+            
+            // Sắp xếp các Key cho dễ nhìn
+            const sortedKeys = Object.keys(pathsToDisplay).sort();
+            
+            sortedKeys.forEach(path => {
+                const val = pathsToDisplay[path];
+                
+                // Phát hiện xem String có phải dạng Object/Array không
+                let isJsonStr = false;
+                if (typeof val === 'string') {
+                    const trimmed = val.trim();
+                    if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+                        isJsonStr = true;
+                    }
+                }
+                
+                const isLongText = typeof val === 'string' && val.length > 60;
+                
+                let inputHtml = '';
+                
+                if (typeof val === 'boolean') {
+                    inputHtml = `<select class="form-control edit-dynamic" data-path="${path}" data-type="boolean">
+                        <option value="true" ${val ? 'selected' : ''}>true</option>
+                        <option value="false" ${!val ? 'selected' : ''}>false</option>
+                    </select>`;
+                } else if (typeof val === 'number') {
+                    inputHtml = `<input type="number" step="any" class="form-control edit-dynamic" data-path="${path}" data-type="number" value="${val}">`;
+                } else if (isJsonStr || isLongText) {
+                    const rows = isJsonStr ? 8 : 3;
+                    inputHtml = `<textarea class="form-control edit-dynamic" data-path="${path}" data-type="json" rows="${rows}">${escapeHtml(val)}</textarea>`;
+                } else {
+                    inputHtml = `<input type="text" class="form-control edit-dynamic" data-path="${path}" data-type="string" value="${escapeHtml(String(val))}">`;
+                }
+                
+                html += `<tr>
+                    <td class="path-col">${path}</td>
+                    <td>${inputHtml}</td>
+                </tr>`;
+            });
+            
+            tbody.innerHTML = html;
+        }
+
+        async function saveFullPlayerData() {
+            if (!currentEditUid || !currentOriginalData) { showToast('Chọn người chơi trước', 'error'); return; }
+            showLoading();
+            
+            try {
+                const updates = {};
+                const inputs = document.querySelectorAll('.edit-dynamic');
+                
+                // Quét qua các thông số của Dynamic table
+                for (let input of inputs) {
+                    const path = input.getAttribute('data-path');
+                    const type = input.getAttribute('data-type');
+                    let newValue = input.value;
+                    
+                    // Chuyển kiểu dữ liệu tương ứng
+                    if (type === 'number') {
+                        newValue = newValue.includes('.') ? parseFloat(newValue) : parseInt(newValue);
+                        if (isNaN(newValue)) newValue = 0;
+                    } else if (type === 'boolean') {
+                        newValue = newValue === 'true';
+                    } else if (type === 'json') {
+                        try {
+                            // Thử parse JSON, nếu fail thì giữ String
+                            if (newValue.trim() !== '') {
+                                newValue = JSON.parse(newValue);
+                            } else {
+                                newValue = null; // Hoặc [] tùy context, nhưng null sẽ xóa
+                            }
+                        } catch(e) {
+                            // Nếu nó bắt buộc phải là Array/Object (vì ban đầu là JSON)
+                            if (newValue.trim().startsWith('{') || newValue.trim().startsWith('[')) {
+                                alert(`Lỗi cú pháp JSON tại: ${path}. Vui lòng kiểm tra lại!`);
+                                hideLoading();
+                                return;
+                            }
+                        }
+                    }
+                    
+                    // Lấy ra dữ liệu gốc tương ứng từ Object currentOriginalData
+                    const originalValue = getDescendantProp(currentOriginalData, path);
+                    
+                    // So sánh, nếu là object thì stringify
+                    let isDifferent = false;
+                    if (typeof newValue === 'object' && newValue !== null) {
+                        isDifferent = JSON.stringify(newValue) !== JSON.stringify(originalValue);
+                    } else {
+                        isDifferent = newValue !== originalValue;
+                    }
+                        
+                    if (isDifferent) {
+                        updates[path] = newValue; // Lưu với Key chính là Path! Cực kì hợp cho Firebase MultiPath.
+                    }
+                }
+                
+                if (Object.keys(updates).length === 0) {
+                    showToast('Không có dữ liệu nào bị thay đổi!', 'warning');
+                    hideLoading(); return;
+                }
+                
+                // Luôn set lại timestamp mới cho người chơi
+                updates['gameData/timestamp'] = Date.now() * 10000 + 62135596800000;
+                
+                console.log("Sẽ Patch các key sau: ", updates);
+                
+                // Lệnh DUY NHẤT để update chuẩn xác những file bị thay đổi (Kể cả Root, Stats, Transactions)
+                await db.ref(`users/${currentEditUid}`).update(updates);
+                
+                // Đồng bộ cập nhật luôn Leaderboard nếu có thông số cốt lõi thay đổi
+                if (updates['gameData/chiSoCanhGio'] !== undefined || updates['gameData/tang'] !== undefined || updates['gameData/tenNhanVat'] !== undefined || updates['gameData/linhThach'] !== undefined) {
+                    const nS = updates['gameData/chiSoCanhGio'] ?? currentOriginalData.gameData?.chiSoCanhGio ?? 0;
+                    const nT = updates['gameData/tang'] ?? currentOriginalData.gameData?.tang ?? 1;
+                    const nN = updates['gameData/tenNhanVat'] ?? currentOriginalData.gameData?.tenNhanVat ?? "Đạo Hữu";
+                    const nL = updates['gameData/linhThach'] ?? currentOriginalData.gameData?.linhThach ?? 0;
+                    
+                    await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: nN, score: nS * 10000 + nT * 1000 });
+                    await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: nN, score: nL });
+                }
+                
+                showToast(`Đã ghi đè thông minh ${Object.keys(updates).length} trường thông số!`, 'success');
+                
+                playersCache = null;
+                await loadPlayers(true);
+                await loadFullPlayerData(); // Load lại form cho đồng bộ ngay lập tức
+                
+            } catch(e) { showToast('Lỗi lưu Data: ' + e.message, 'error'); }
+            
+            hideLoading();
+        }
+
+        // Lấy giá trị lồng nhau từ string path. Vd: 'gameData/danhSachPhapBao/0'
+        function getDescendantProp(obj, path) {
+            return path.split('/').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj);
+        }
+
+        // Tạo User Mới và Xóa 
         async function createNewPlayer() {
             const name = prompt('Nhập tên nhân vật mới (Hệ thống sẽ tự sinh UID):');
             if (!name) return;
@@ -805,7 +831,7 @@
                     tenNhanVat: name, chiSoCanhGio: 0, tang: 1,
                     vang: 500, linhThach: 20,
                     hpGoc: 100, atkGoc: 20, defGoc: 10, luckGoc: 5,
-                    clientVersion: "6.6", dataVersion: 2,
+                    clientVersion: "8.2", dataVersion: 2,
                     timestamp: Date.now() * 10000 + 62135596800000
                 };
                 await db.ref(`users/${newUid}/gameData`).set(defaultData);
@@ -819,9 +845,9 @@
         }
 
         async function deleteCurrentPlayer() {
-            if (!currentEditUid || !currentOriginalData) return;
-            const confirmName = prompt(`⚠️ CẢNH BÁO NGUY HIỂM\nHành động này không thể hoàn tác.\nNhập đúng tên "${currentOriginalData.tenNhanVat}" để xác nhận xóa:`);
-            if (confirmName !== currentOriginalData.tenNhanVat) {
+            if (!currentEditUid || !currentOriginalData || !currentOriginalData.gameData) return;
+            const confirmName = prompt(`⚠️ CẢNH BÁO NGUY HIỂM\nHành động này không thể hoàn tác.\nNhập đúng tên "${currentOriginalData.gameData.tenNhanVat}" để xác nhận xóa:`);
+            if (confirmName !== currentOriginalData.gameData.tenNhanVat) {
                 showToast('Nhập sai tên, hủy thao tác xóa.', 'warning');
                 return;
             }
@@ -842,180 +868,6 @@
                 await loadPlayers(true);
                 showTab('players');
             } catch(e) { showToast('Lỗi xóa User: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        // ==================== FULL PLAYER EDITOR ====================
-        async function loadFullPlayerData() {
-            const uid = document.getElementById('playerSelect').value;
-            if (!uid) return;
-            showLoading();
-            try {
-                const data = await readGameData(uid);
-                if (!data) { showToast('Không tìm thấy dữ liệu', 'error'); return; }
-                
-                currentOriginalData = JSON.parse(JSON.stringify(data));
-                currentEditUid = uid;
-
-                document.getElementById('fullEditor').style.display = 'block';
-                document.getElementById('editUid').value = uid;
-                document.getElementById('editName').value = data.tenNhanVat || '';
-                document.getElementById('editEmail').value = data.email || '';
-                document.getElementById('editClientVersion').value = data.clientVersion || '';
-                document.getElementById('editDataVersion').value = data.dataVersion || 2;
-                document.getElementById('editLastLogin').value = tickToDateString(data.lastLoginTime);
-                document.getElementById('editLastLogout').value = tickToDateString(data.lastLogoutTime);
-
-                document.getElementById('editStage').value = data.chiSoCanhGio || 0;
-                document.getElementById('editTang').value = data.tang || 1;
-                document.getElementById('editExp').value = data.expHienTai || 0;
-                document.getElementById('editDiem').value = data.diemThuocTinhChuaCong || 0;
-                document.getElementById('editHp').value = data.hpGoc || 100;
-                document.getElementById('editAtk').value = data.atkGoc || 20;
-                document.getElementById('editDef').value = data.defGoc || 10;
-                document.getElementById('editLuck').value = data.luckGoc || 5;
-                
-                document.getElementById('editGold').value = data.vang || 0;
-                document.getElementById('editLinhThach').value = data.linhThach || 0;
-                
-                document.getElementById('editWeapon').value = data.vuKhiDangMac || '';
-                document.getElementById('editWeaponLevel').value = data.vuKhiCapDo || 0;
-                document.getElementById('editArmor').value = data.giapDangMac || '';
-                document.getElementById('editArmorLevel').value = data.giapCapDo || 0;
-                
-                document.getElementById('editPhapBao').value = data.phapBaoDangMac || '';
-                document.getElementById('editThuCuoi').value = data.thuCuoiDangDung || '';
-                document.getElementById('editPhapBaoObj').value = data.phapBaoDangMacObj ? JSON.stringify(data.phapBaoDangMacObj, null, 4) : '';
-
-                document.getElementById('editPetStage').value = data.petCanhGio || 0;
-                document.getElementById('editPetTang').value = data.petCapDo || 1;
-                document.getElementById('editPetExp').value = data.petExp || 0;
-                
-                // 🆕 CẬP NHẬT VIP: Load thêm ô Số Ngày VIP Còn Lại
-                document.getElementById('editVip').value = data.daMuaVip ? 'true' : 'false';
-                document.getElementById('editVipDays').value = data.vipSoNgayConLai || 0;
-                document.getElementById('editVipStart').value = data.vipStartTicks || 0;
-                document.getElementById('editVipEnd').value = data.vipEndTicks || 0;
-                
-                previewTicks('editVipStart', 'lblVipStart');
-                previewTicks('editVipEnd', 'lblVipEnd');
-                
-                document.getElementById('editThienPhu').value = data.loaiThienPhu || '';
-                document.getElementById('editThienPhuPercent').value = data.phanTramThienPhu || 0;
-                
-                document.getElementById('editActiveQuests').value = (data.activeQuestIDs || []).join(', ');
-                document.getElementById('editCompletedQuests').value = (data.completedQuestIDs || []).join(', ');
-                
-                // 🆕 CẬP NHẬT NHIỆM VỤ: Load tiến độ JSON
-                document.getElementById('editQuestProgressObj').value = data.questProgress ? JSON.stringify(data.questProgress, null, 4) : '[]';
-
-            } catch(e) { showToast('Lỗi nạp form: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        async function saveFullPlayerData() {
-            if (!currentEditUid || !currentOriginalData) { showToast('Chọn người chơi trước', 'error'); return; }
-            showLoading();
-            try {
-                const updates = {};
-                
-                // Thu thập giá trị (Bảo vệ lỗi NaN)
-                const fields = {
-                    tenNhanVat: document.getElementById('editName').value,
-                    email: document.getElementById('editEmail').value,
-                    clientVersion: document.getElementById('editClientVersion').value,
-                    dataVersion: parseInt(document.getElementById('editDataVersion').value) || 2,
-                    chiSoCanhGio: parseInt(document.getElementById('editStage').value) || 0,
-                    tang: parseInt(document.getElementById('editTang').value) || 1,
-                    expHienTai: parseFloat(document.getElementById('editExp').value) || 0,
-                    diemThuocTinhChuaCong: parseInt(document.getElementById('editDiem').value) || 0,
-                    hpGoc: parseInt(document.getElementById('editHp').value) || 100,
-                    atkGoc: parseInt(document.getElementById('editAtk').value) || 20,
-                    defGoc: parseInt(document.getElementById('editDef').value) || 10,
-                    luckGoc: parseInt(document.getElementById('editLuck').value) || 5,
-                    vang: parseInt(document.getElementById('editGold').value) || 0,
-                    linhThach: parseInt(document.getElementById('editLinhThach').value) || 0,
-                    vuKhiDangMac: document.getElementById('editWeapon').value,
-                    vuKhiCapDo: parseInt(document.getElementById('editWeaponLevel').value) || 0,
-                    giapDangMac: document.getElementById('editArmor').value,
-                    giapCapDo: parseInt(document.getElementById('editArmorLevel').value) || 0,
-                    phapBaoDangMac: document.getElementById('editPhapBao').value,
-                    thuCuoiDangDung: document.getElementById('editThuCuoi').value,
-                    petCanhGio: parseInt(document.getElementById('editPetStage').value) || 0,
-                    petCapDo: parseInt(document.getElementById('editPetTang').value) || 1,
-                    petExp: parseInt(document.getElementById('editPetExp').value) || 0,
-                    daMuaVip: document.getElementById('editVip').value === 'true',
-                    vipSoNgayConLai: parseInt(document.getElementById('editVipDays').value) || 0,
-                    vipStartTicks: parseInt(document.getElementById('editVipStart').value) || 0,
-                    vipEndTicks: parseInt(document.getElementById('editVipEnd').value) || 0,
-                    loaiThienPhu: document.getElementById('editThienPhu').value,
-                    phanTramThienPhu: parseFloat(document.getElementById('editThienPhuPercent').value) || 0
-                };
-
-                // So sánh tự động thông minh
-                for (let key in fields) {
-                    if (fields[key] !== currentOriginalData[key]) {
-                        updates[key] = fields[key];
-                    }
-                }
-
-                // Xử lý riêng Mảng Quest
-                const activeQ = document.getElementById('editActiveQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
-                if (JSON.stringify(activeQ) !== JSON.stringify(currentOriginalData.activeQuestIDs || [])) updates.activeQuestIDs = activeQ;
-                
-                const completedQ = document.getElementById('editCompletedQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
-                if (JSON.stringify(completedQ) !== JSON.stringify(currentOriginalData.completedQuestIDs || [])) updates.completedQuestIDs = completedQ;
-
-                // 🆕 CẬP NHẬT: Xử lý Tiến độ nhiệm vụ (Quest Progress JSON)
-                const qpStr = document.getElementById('editQuestProgressObj').value.trim();
-                try {
-                    const qpObj = JSON.parse(qpStr);
-                    if (JSON.stringify(qpObj) !== JSON.stringify(currentOriginalData.questProgress || [])) {
-                        updates.questProgress = qpObj;
-                    }
-                } catch(e) {
-                    showToast('LỖI CÚ PHÁP JSON TIẾN ĐỘ NHIỆM VỤ. Từ chối lưu!', 'error');
-                    hideLoading(); return;
-                }
-
-                // Xử lý JSON Pháp Bảo
-                const pbObjStr = document.getElementById('editPhapBaoObj').value.trim();
-                try {
-                    if (pbObjStr) {
-                        const pbObj = JSON.parse(pbObjStr);
-                        if (JSON.stringify(pbObj) !== JSON.stringify(currentOriginalData.phapBaoDangMacObj)) updates.phapBaoDangMacObj = pbObj;
-                    } else if (currentOriginalData.phapBaoDangMacObj) {
-                        updates.phapBaoDangMacObj = null;
-                    }
-                } catch(e) {
-                    showToast('LỖI CÚ PHÁP JSON PHÁP BẢO. Từ chối lưu!', 'error');
-                    hideLoading(); return;
-                }
-                
-                if (Object.keys(updates).length === 0) {
-                    showToast('Không có dữ liệu nào bị thay đổi!', 'warning');
-                    hideLoading(); return;
-                }
-                
-                await patchGameData(currentEditUid, updates);
-                
-                // Cập nhật BXH nếu đụng đến
-                if (updates.chiSoCanhGio !== undefined || updates.tang !== undefined || updates.tenNhanVat !== undefined || updates.linhThach !== undefined) {
-                    const nS = updates.chiSoCanhGio ?? currentOriginalData.chiSoCanhGio;
-                    const nT = updates.tang ?? currentOriginalData.tang;
-                    const nN = updates.tenNhanVat ?? currentOriginalData.tenNhanVat;
-                    const nL = updates.linhThach ?? currentOriginalData.linhThach;
-                    await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: nN, score: nS * 10000 + nT * 1000 });
-                    await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: nN, score: nL });
-                }
-                
-                showToast(`Đã ghi đè ${Object.keys(updates).length} trường!`, 'success');
-                
-                playersCache = null;
-                await loadPlayers(true);
-                await loadFullPlayerData(); // Load lại form cho đồng bộ
-                
-            } catch(e) { showToast('Lỗi lưu Data: ' + e.message, 'error'); }
             hideLoading();
         }
 
@@ -1043,13 +895,14 @@
             hideLoading();
         }
 
-        // ==================== SKILLS ====================
+        // ==================== SKILLS & INVENTORY ====================
+        // (Vẫn giữ nguyên chức năng cũ do chúng nằm tab riêng)
         async function loadPlayerSkills() {
             const uid = document.getElementById('skillPlayerSelect').value;
             if (!uid) return;
             showLoading();
             try {
-                const data = await readGameData(uid);
+                const data = (await db.ref(`users/${uid}/gameData`).once('value')).val();
                 if (!data) return;
                 
                 document.getElementById('skillsEditor').style.display = 'block';
@@ -1084,37 +937,35 @@
         }
 
         async function savePlayerSkills() {
-            if (!currentEditUid || !currentSkillsData) { showToast('Chọn người chơi trước', 'error'); return; }
+            if (!currentEditUid) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
                 const updates = {};
-                
-                updates.skillSlot_0 = document.getElementById('skillSlot0').value;
-                updates.skillSlot_1 = document.getElementById('skillSlot1').value;
-                updates.skillSlot_2 = document.getElementById('skillSlot2').value;
-                updates.skillSlot_3 = document.getElementById('skillSlot3').value;
+                updates['gameData/skillSlot_0'] = document.getElementById('skillSlot0').value;
+                updates['gameData/skillSlot_1'] = document.getElementById('skillSlot1').value;
+                updates['gameData/skillSlot_2'] = document.getElementById('skillSlot2').value;
+                updates['gameData/skillSlot_3'] = document.getElementById('skillSlot3').value;
                 
                 const checkboxes = document.querySelectorAll('#skillsList input[type="checkbox"]');
                 checkboxes.forEach(cb => {
                     const key = cb.id.replace('_daHoc', '');
                     const capDoInput = document.getElementById(`${key}_capDo`);
-                    updates[`${key}_daHoc`] = cb.checked;
-                    updates[`${key}_capDo`] = parseInt(capDoInput?.value) || 0;
+                    updates[`gameData/${key}_daHoc`] = cb.checked;
+                    updates[`gameData/${key}_capDo`] = parseInt(capDoInput?.value) || 0;
                 });
                 
-                await patchGameData(currentEditUid, updates);
+                await db.ref(`users/${currentEditUid}`).update(updates);
                 showToast('Lưu kỹ năng thành công!', 'success');
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
 
-        // ==================== INVENTORY ====================
         async function loadPlayerInventory() {
             const uid = document.getElementById('invPlayerSelect').value;
             if (!uid) return;
             showLoading();
             try {
-                const data = await readGameData(uid);
+                const data = (await db.ref(`users/${uid}/gameData`).once('value')).val();
                 if (!data) return;
                 
                 document.getElementById('inventoryEditor').style.display = 'block';
@@ -1127,7 +978,6 @@
 
         function refreshInventoryDisplay() {
             if (!inventoryData) return;
-            
             let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th><tr></thead><tbody>';
             (inventoryData.danhSachTrangBi || []).forEach((item, idx) => {
                 tbHtml += `<tr>
@@ -1150,19 +1000,8 @@
             document.getElementById('danList').innerHTML = danHtml;
         }
 
-        function removeTrangBi(idx) {
-            if (inventoryData && inventoryData.danhSachTrangBi) {
-                inventoryData.danhSachTrangBi.splice(idx, 1);
-                refreshInventoryDisplay();
-            }
-        }
-
-        function removeDan(idx) {
-            if (inventoryData && inventoryData.danhSachDan) {
-                inventoryData.danhSachDan.splice(idx, 1);
-                refreshInventoryDisplay();
-            }
-        }
+        function removeTrangBi(idx) { if (inventoryData && inventoryData.danhSachTrangBi) { inventoryData.danhSachTrangBi.splice(idx, 1); refreshInventoryDisplay(); } }
+        function removeDan(idx) { if (inventoryData && inventoryData.danhSachDan) { inventoryData.danhSachDan.splice(idx, 1); refreshInventoryDisplay(); } }
 
         function addTrangBi() {
             const name = document.getElementById('addTrangBiName').value.trim();
@@ -1171,8 +1010,7 @@
             if (!inventoryData.danhSachTrangBi) inventoryData.danhSachTrangBi = [];
             inventoryData.danhSachTrangBi.push({ tenItem: name, capDo: level });
             document.getElementById('addTrangBiName').value = '';
-            refreshInventoryDisplay();
-            showToast('Đã thêm ' + name, 'success');
+            refreshInventoryDisplay(); showToast('Đã thêm ' + name, 'success');
         }
 
         function addDan() {
@@ -1181,24 +1019,23 @@
             if (!inventoryData.danhSachDan) inventoryData.danhSachDan = [];
             inventoryData.danhSachDan.push({ tenDan: name });
             document.getElementById('addDanName').value = '';
-            refreshInventoryDisplay();
-            showToast('Đã thêm ' + name, 'success');
+            refreshInventoryDisplay(); showToast('Đã thêm ' + name, 'success');
         }
 
         async function savePlayerInventory() {
-            if (!currentEditUid || !inventoryData) { showToast('Chọn người chơi trước', 'error'); return; }
+            if (!currentEditUid) { showToast('Chọn người chơi trước', 'error'); return; }
             showLoading();
             try {
-                await patchGameData(currentEditUid, {
-                    danhSachTrangBi: inventoryData.danhSachTrangBi || [],
-                    danhSachDan: inventoryData.danhSachDan || []
+                await db.ref(`users/${currentEditUid}`).update({
+                    'gameData/danhSachTrangBi': inventoryData.danhSachTrangBi || [],
+                    'gameData/danhSachDan': inventoryData.danhSachDan || []
                 });
                 showToast('Lưu kho đồ thành công!', 'success');
             } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
             hideLoading();
         }
 
-        // ==================== CÁC HÀM KHÁC GIỮ NGUYÊN ====================
+        // ==================== CÁC HÀM KHÁC ====================
         async function loadLeaderboard() {
             try {
                 const tuVi = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
@@ -1271,6 +1108,7 @@
                 document.querySelector('#giftCodeList tbody').innerHTML = html || '<tr><td colspan="4">Trống</td></tr>';
             } catch(e) {}
         }
+        
         async function createGiftCode() {
             const code = document.getElementById('giftCode').value.toUpperCase().trim();
             if (!code) return;
@@ -1293,6 +1131,7 @@
                 document.getElementById('currentEventInfo').innerHTML = `<p><b>${ev.tieuDe}</b>: ${ev.noiDung}</p>`;
             }
         }
+        
         async function createEvent() {
             await db.ref('sukien/current').set({
                 tieuDe: document.getElementById('eventTitle').value,
