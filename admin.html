@@ -13,7 +13,7 @@
             min-height: 100vh;
         }
         .header {
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0,0,0,0.9);
             padding: 10px 15px;
             display: flex;
             justify-content: space-between;
@@ -32,9 +32,9 @@
         .login-form { display: flex; gap: 6px; flex-wrap: wrap; }
         .login-form input { padding: 5px 8px; border-radius: 5px; border: none; font-size: 11px; }
         .btn-login { background: #ffd700; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 11px; color: #1a1a2e; }
-        
+
         .sidebar {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             padding: 10px;
             overflow-x: auto;
             white-space: nowrap;
@@ -50,13 +50,13 @@
             cursor: pointer;
         }
         .sidebar-menu a:hover, .sidebar-menu a.active { background: #ffd700; color: #1a1a2e; font-weight: bold; }
-        
+
         .main-content { padding: 15px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
+
         .card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 12px;
@@ -76,9 +76,9 @@
         .sortable-header { cursor: pointer; user-select: none; transition: color 0.2s; }
         .sortable-header:hover { color: #ffd700; }
         .sort-icon { font-size: 10px; margin-left: 4px; }
-        
+
         .form-group { margin-bottom: 10px; }
-        .form-group label { font-size: 11px; display: block; margin-bottom: 3px; color: #aaa;}
+        .form-group label { font-size: 11px; display: block; margin-bottom: 3px; color: #aaa; }
         .form-control {
             width: 100%;
             padding: 6px 8px;
@@ -88,1073 +88,1542 @@
             color: #fff;
             font-size: 12px;
         }
-        textarea.form-control { font-family: monospace; white-space: pre; }
-        textarea.form-control:focus { outline: 1px solid #ffd700; }
+        textarea.form-control { font-family: monospace; }
         .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
         @media (min-width: 640px) { .form-row { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); } }
-        
-        .btn { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; margin-right: 6px; margin-bottom: 6px; font-weight: 600; }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
         .btn-primary { background: #ffd700; color: #1a1a2e; }
         .btn-danger { background: #dc3545; color: white; }
         .btn-success { background: #28a745; color: white; }
         .btn-warning { background: #ffc107; color: #1a1a2e; }
         .btn-info { background: #17a2b8; color: white; }
         .btn-sm { padding: 3px 6px; font-size: 10px; }
-        
+        .btn-xs { padding: 2px 5px; font-size: 9px; border-radius: 4px; }
+
         .table-container { overflow-x: auto; }
         .table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 500px; }
         .table th, .table td { padding: 6px 6px; text-align: left; border-bottom: 1px solid #333; }
         .table th { color: #ffd700; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
         @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
-        .stat-card { background: rgba(0, 0, 0, 0.5); border-radius: 8px; padding: 10px; text-align: center; }
+        .stat-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
         .stat-value { font-size: 18px; font-weight: bold; color: #ffd700; }
         .stat-label { font-size: 9px; color: #aaa; }
-        
-        .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
         .spinner { width: 30px; height: 30px; border: 3px solid #333; border-top-color: #ffd700; border-radius: 50%; animation: spin 0.6s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .toast { position: fixed; bottom: 15px; right: 15px; background: #28a745; color: white; padding: 8px 12px; border-radius: 8px; font-size: 11px; z-index: 1000; }
+
+        .toast {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            z-index: 1000;
+        }
         .toast.error { background: #dc3545; }
         .toast.warning { background: #ff9800; }
-        
+
         .badge { display: inline-block; padding: 2px 5px; border-radius: 8px; font-size: 9px; font-weight: bold; }
         .badge-vip { background: #ffd700; color: #1a1a2e; }
         .badge-ban { background: #dc3545; color: white; }
-        
+        .badge-ok { background: #28a745; color: white; }
+        .badge-pending { background: #ff9800; color: white; }
+
         .player-row { cursor: pointer; }
         .player-row:hover { background: rgba(255,215,0,0.1); }
-        
-        .refresh-btn { background: rgba(255,255,255,0.1); border: 1px solid #ffd700; border-radius: 20px; padding: 3px 10px; font-size: 10px; color: #fff; cursor: pointer; }
+
+        .refresh-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #ffd700;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
         .refresh-btn:hover { background: #ffd700; color: #1a1a2e; }
+
         .warning-text { color: #ff9800; font-size: 11px; margin-top: 5px; }
+
+        /* ===== FULL STATS TABLE ===== */
+        .stats-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .stats-table th { background: rgba(255,215,0,0.15); color: #ffd700; padding: 7px 8px; text-align: left; }
+        .stats-table td { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.07); vertical-align: middle; }
+        .stats-table tr:hover td { background: rgba(255,215,0,0.05); }
+        .stats-table .field-label { color: #bbb; font-size: 10px; width: 180px; }
+        .stats-table .field-value { font-weight: 600; }
+        .stats-table .field-edit { width: 200px; }
+        .stats-table .field-edit input,
+        .stats-table .field-edit select,
+        .stats-table .field-edit textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #fff;
+            padding: 3px 6px;
+            font-size: 11px;
+        }
+        .stats-table .field-actions { width: 60px; text-align: right; }
+        .save-field-btn {
+            background: #28a745;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            padding: 3px 7px;
+            font-size: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .save-field-btn:hover { background: #218838; }
+        .section-header td {
+            background: rgba(255,215,0,0.08);
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 8px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== PLAYER DETAIL PANEL ===== */
+        .player-detail-panel {
+            margin-top: 12px;
+            border: 1px solid #ffd700;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .detail-header {
+            background: rgba(255,215,0,0.15);
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .detail-header h3 { font-size: 14px; color: #ffd700; }
+
+        /* ===== RECHARGE TAB ===== */
+        .recharge-stats { display: grid; grid-template-columns: repeat(2,1fr); gap:10px; margin-bottom:12px; }
+        @media(min-width:640px) { .recharge-stats { grid-template-columns: repeat(4,1fr); } }
+
+        .tx-table th { position: sticky; top: 0; background: #16213e; z-index: 2; }
+
+        /* filter bar */
+        .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+        .filter-bar input, .filter-bar select {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #fff;
+            padding: 5px 8px;
+            font-size: 11px;
+        }
+
         .skill-item { background: rgba(0,0,0,0.3); padding: 8px; margin-bottom: 6px; border-radius: 6px; }
         .skill-name { font-weight: bold; color: #ffd700; }
-        .debug-console { background: #1a1a2e; border: 1px solid #ffd700; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 10px; max-height: 150px; overflow-y: auto; margin-top: 10px; }
+        .debug-console {
+            background: #1a1a2e;
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
 
-        /* Bảng Dynamic Editor */
-        #dynamicParamsTable td { vertical-align: middle; }
-        #dynamicParamsTable td.path-col { word-break: break-all; width: 35%; color: #82aaff; font-weight: bold; font-family: monospace; font-size: 12px;}
+        .json-badge { background: rgba(23,162,184,0.3); color: #17a2b8; border-radius: 3px; padding: 1px 4px; font-size: 9px; cursor: pointer; }
+        .json-badge:hover { background: rgba(23,162,184,0.6); }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo"><h1>🏮 Admin Panel</h1></div>
-        <div class="user-info">
-            <div id="loginForm" class="login-form">
-                <input type="email" id="loginEmail" placeholder="Email" value="hoangnv.vnpt@gmail.com">
-                <input type="password" id="loginPassword" placeholder="Mật khẩu">
-                <button class="btn-login" onclick="loginWithEmail()">Đăng nhập</button>
-                <button class="btn-login" onclick="loginWithGoogle()" style="background:#4285f4; color:white;">Google</button>
-            </div>
-            <span id="userEmail">Chưa đăng nhập</span>
-            <button class="btn-logout" onclick="logout()">Đăng xuất</button>
+<div class="header">
+    <div class="logo"><h1>🏮 Admin Panel</h1></div>
+    <div class="user-info">
+        <div id="loginForm" class="login-form">
+            <input type="email" id="loginEmail" placeholder="Email" value="hoangnv.vnpt@gmail.com">
+            <input type="password" id="loginPassword" placeholder="Mật khẩu">
+            <button class="btn-login" onclick="loginWithEmail()">Đăng nhập</button>
+            <button class="btn-login" onclick="loginWithGoogle()" style="background:#4285f4;color:white;">Google</button>
+        </div>
+        <span id="userEmail">Chưa đăng nhập</span>
+        <button class="btn-logout" onclick="logout()">Đăng xuất</button>
+    </div>
+</div>
+
+<div class="sidebar">
+    <ul class="sidebar-menu">
+        <li><a onclick="showTab('dashboard')" data-tab="dashboard" class="active">📊 Dashboard</a></li>
+        <li><a onclick="showTab('players')" data-tab="players">🔍 Tìm kiếm</a></li>
+        <li><a onclick="showTab('edit_player')" data-tab="edit_player">✏️ Sửa chi tiết</a></li>
+        <li><a onclick="showTab('skills')" data-tab="skills">✨ Kỹ năng</a></li>
+        <li><a onclick="showTab('inventory')" data-tab="inventory">📦 Kho đồ</a></li>
+        <li><a onclick="showTab('recharge')" data-tab="recharge">💰 Nạp tiền</a></li>
+        <li><a onclick="showTab('suspicious')" data-tab="suspicious">⚠️ Nghi ngờ</a></li>
+        <li><a onclick="showTab('giftcode')" data-tab="giftcode">🎁 Giftcode</a></li>
+        <li><a onclick="showTab('events')" data-tab="events">🎉 Sự kiện</a></li>
+        <li><a onclick="showTab('cache')" data-tab="cache">💾 Cache</a></li>
+        <li><a onclick="showTab('debug')" data-tab="debug">🐛 Debug</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="tab-content active">
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-value" id="totalPlayers">-</div><div class="stat-label">Người chơi</div></div>
+            <div class="stat-card"><div class="stat-value" id="totalVip">-</div><div class="stat-label">VIP</div></div>
+            <div class="stat-card"><div class="stat-value" id="totalRecharged">-</div><div class="stat-label">Đã nạp</div></div>
+            <div class="stat-card"><div class="stat-value" id="totalLinhThach">-</div><div class="stat-label">Tổng linh thạch</div></div>
+        </div>
+        <div class="card">
+            <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
+            <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...</td></tr></tbody></table></div>
+        </div>
+        <div class="card">
+            <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
+            <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...</td></tr></tbody></table></div>
         </div>
     </div>
 
-    <div class="sidebar">
-        <ul class="sidebar-menu">
-            <li><a onclick="showTab('dashboard')" data-tab="dashboard" class="active">📊 Dashboard</a></li>
-            <li><a onclick="showTab('players')" data-tab="players">👤 Người chơi</a></li>
-            <li><a onclick="showTab('edit_player')" data-tab="edit_player">✏️ Sửa chi tiết</a></li>
-            <li><a onclick="showTab('skills')" data-tab="skills">✨ Kỹ năng</a></li>
-            <li><a onclick="showTab('inventory')" data-tab="inventory">📦 Kho đồ</a></li>
-            <li><a onclick="showTab('recharge')" data-tab="recharge">💰 Đã nạp</a></li>
-            <li><a onclick="showTab('suspicious')" data-tab="suspicious">⚠️ Nghi ngờ</a></li>
-            <li><a onclick="showTab('giftcode')" data-tab="giftcode">🎁 Giftcode</a></li>
-            <li><a onclick="showTab('events')" data-tab="events">🎉 Sự kiện</a></li>
-            <li><a onclick="showTab('cache')" data-tab="cache">💾 Cache</a></li>
-            <li><a onclick="showTab('debug')" data-tab="debug">🐛 Debug</a></li>
-        </ul>
-    </div>
-
-    <div class="main-content">
-        <div id="dashboard" class="tab-content active">
-            <div class="stats-grid">
-                <div class="stat-card"><div class="stat-value" id="totalPlayers">-</div><div class="stat-label">Người chơi</div></div>
-                <div class="stat-card"><div class="stat-value" id="totalVip">-</div><div class="stat-label">VIP</div></div>
-                <div class="stat-card"><div class="stat-value" id="totalRecharged">-</div><div class="stat-label">Đã nạp</div></div>
-                <div class="stat-card"><div class="stat-value" id="totalLinhThach">-</div><div class="stat-label">Tổng linh thạch</div></div>
-            </div>
-            <div class="card">
-                <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardTuVi"><thead><tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
-            </div>
-            <div class="card">
-                <div class="card-title">💰 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
-                <div class="table-container"><table class="table" id="leaderboardLinhThach"><thead><tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
-            </div>
-        </div>
-
-        <div id="players" class="tab-content">
-            <div class="card">
-                <div class="card-title">👤 Danh sách người chơi 
-                    <div>
-                        <button class="btn btn-success btn-sm" onclick="createNewPlayer()">+ Tạo User Mới</button>
-                        <button class="refresh-btn" onclick="loadPlayers(true)">🔄 Refresh</button>
-                    </div>
+    <!-- PLAYERS / SEARCH TAB -->
+    <div id="players" class="tab-content">
+        <div class="card">
+            <div class="card-title">🔍 Tìm kiếm người chơi
+                <div>
+                    <button class="btn btn-success btn-sm" onclick="createNewPlayer()">+ Tạo User mới</button>
+                    <button class="refresh-btn" onclick="loadPlayers(true)">🔄 Refresh</button>
                 </div>
-                <div class="form-row"><div class="form-group"><input type="text" id="searchInput" class="form-control" placeholder="🔍 Gõ tiếng Việt không dấu để tìm tên hoặc ID..."></div></div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;">
+                <div style="flex:1;min-width:200px;">
+                    <input type="text" id="searchInput" class="form-control" placeholder="🔍 Tên hoặc UID..." onkeyup="if(event.key==='Enter') searchPlayer()">
+                </div>
                 <button class="btn btn-primary" onclick="searchPlayer()">Tìm kiếm</button>
                 <button class="btn btn-warning" onclick="clearSearch()">Xóa lọc</button>
-                <div id="playerListContainer" style="margin-top: 12px;">Đang tải dữ liệu...</div>
             </div>
         </div>
 
-        <div id="edit_player" class="tab-content">
-            <div class="card">
-                <div class="card-title">✏️ Chọn người chơi để sửa</div>
-                <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
-            </div>
-            
-            <div id="fullEditor" style="display: none;">
-                <div class="card" style="background: rgba(0, 50, 0, 0.4); border: 1px solid #28a745;">
-                    <div class="card-title" style="color: #28a745;">💾 HỆ THỐNG GHI ĐÈ THÔNG MINH</div>
-                    <div class="warning-text" style="color: #fff;">
-                        Sửa thông số nào trong bảng dưới, hệ thống sẽ <b>CHỈ</b> gửi thông số đó lên Firebase (Sử dụng Multi-path Update). Các mảng như `danhSachPhapBao`, `transactions`... có thể sửa thẳng vào khung JSON.
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-success" onclick="saveFullPlayerData()">🚀 Ghi đè thay đổi lên Firebase</button>
-                        <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa tài khoản</button>
-                        <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm (Ban)</button>
-                        <button class="btn btn-danger" style="background:#8b0000; float:right;" onclick="deleteCurrentPlayer()">🗑️ Xóa vĩnh viễn User</button>
-                    </div>
-                </div>
+        <!-- Search result list -->
+        <div id="playerListContainer" style="margin-top:4px;">Đang tải dữ liệu...</div>
 
-                <div class="card">
-                    <div class="card-title">⚙️ TẤT CẢ THÔNG SỐ CỦA NGƯỜI CHƠI (BẢNG ĐẦY ĐỦ)</div>
-                    <div class="table-container">
-                        <table class="table" id="dynamicParamsTable">
-                            <thead>
-                                <tr>
-                                    <th style="width: 35%">Đường dẫn (Database Path)</th>
-                                    <th>Giá trị hiện tại (Value)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <!-- Full detail panel shown after selecting a player from results -->
+        <div id="playerDetailContainer" style="display:none; margin-top:12px;"></div>
+    </div>
+
+    <!-- EDIT PLAYER (legacy full form) -->
+    <div id="edit_player" class="tab-content">
+        <div class="card">
+            <div class="card-title">✏️ Chọn người chơi để sửa</div>
+            <div class="form-row"><div class="form-group"><select id="playerSelect" class="form-control" onchange="loadFullPlayerData()"><option value="">-- Chọn người chơi --</option></select></div></div>
         </div>
-
-        <div id="skills" class="tab-content">
-            <div class="card">
-                <div class="card-title">✨ Quản lý kỹ năng</div>
-                <div class="form-row"><div class="form-group"><select id="skillPlayerSelect" class="form-control" onchange="loadPlayerSkills()"><option value="">-- Chọn người chơi --</option></select></div></div>
-                <div id="skillsEditor" style="display: none;">
-                    <div class="card"><div class="card-title">📌 Kỹ năng đã gắn vào khung (4 ô)</div>
-                        <div class="form-row">
-                            <div class="form-group"><label>Ô 1</label><input type="text" id="skillSlot0" class="form-control"></div>
-                            <div class="form-group"><label>Ô 2</label><input type="text" id="skillSlot1" class="form-control"></div>
-                            <div class="form-group"><label>Ô 3</label><input type="text" id="skillSlot2" class="form-control"></div>
-                            <div class="form-group"><label>Ô 4</label><input type="text" id="skillSlot3" class="form-control"></div>
-                        </div>
-                    </div>
-                    <div class="card"><div class="card-title">📚 Danh sách cấp độ kỹ năng</div><div id="skillsList"></div></div>
-                    <button class="btn btn-success" onclick="savePlayerSkills()">💾 Lưu kỹ năng</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="inventory" class="tab-content">
-            <div class="card">
-                <div class="card-title">📦 Quản lý kho đồ</div>
-                <div class="form-row"><div class="form-group"><select id="invPlayerSelect" class="form-control" onchange="loadPlayerInventory()"><option value="">-- Chọn người chơi --</option></select></div></div>
-                <div id="inventoryEditor" style="display: none;">
-                    <div class="card"><div class="card-title">🗡️ Trang bị trong kho</div><div id="trangBiList"></div>
-                        <div class="form-row">
-                            <div class="form-group"><input type="text" id="addTrangBiName" class="form-control" placeholder="Tên trang bị"></div>
-                            <div class="form-group"><input type="number" id="addTrangBiCapDo" class="form-control" placeholder="Cấp độ" value="0"></div>
-                            <button class="btn btn-primary" onclick="addTrangBi()">+ Thêm Vũ khí/Giáp</button>
-                        </div>
-                    </div>
-                    <div class="card"><div class="card-title">💊 Đan dược trong kho</div><div id="danList"></div>
-                        <div class="form-row"><div class="form-group"><input type="text" id="addDanName" class="form-control" placeholder="Tên đan"></div>
-                        <button class="btn btn-primary" onclick="addDan()">+ Thêm Đan</button></div>
-                    </div>
-                    <button class="btn btn-success" onclick="savePlayerInventory()">💾 Lưu thay đổi kho đồ</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="recharge" class="tab-content">
-            <div class="card">
-                <div class="card-title">💰 Người chơi đã nạp <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="rechargeTable"><thead><tr><th>User ID</th><th>Tên</th><th>Số lần nạp</th><th>Tổng tiền (VND)</th><th>Linh thạch nhận</th></tr></thead><tbody><tr><td colspan="5">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
-            </div>
-        </div>
-
-        <div id="suspicious" class="tab-content">
-            <div class="card">
-                <div class="card-title">⚠️ Nghi ngờ Hack/Mod <button class="refresh-btn" onclick="loadSuspicious()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="suspiciousTable"><thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th></tr></thead><tbody><tr><td colspan="5">Đang phân tích...<span class="loading-status"></span></td></tr></tbody></table></div>
-            </div>
-        </div>
-
-        <div id="giftcode" class="tab-content">
-            <div class="card">
-                <div class="card-title">🎁 Tạo Giftcode</div>
+        <div id="fullEditor" style="display:none;">
+            <div class="warning-text" style="margin-bottom:10px;">⚠️ Chỉ cập nhật những trường bạn thực sự thay đổi!</div>
+            <div class="card"><div class="card-title">📝 Thông tin cơ bản</div>
                 <div class="form-row">
-                    <div class="form-group"><label>Mã (Code)</label><input type="text" id="giftCode" class="form-control"></div>
-                    <div class="form-group"><label>Vàng</label><input type="number" id="giftGold" class="form-control" value="1000"></div>
-                    <div class="form-group"><label>Linh thạch</label><input type="number" id="giftLinhThach" class="form-control" value="100"></div>
+                    <div class="form-group"><label>User ID (Không sửa được)</label><input type="text" id="editUid" class="form-control" readonly></div>
+                    <div class="form-group"><label>Tên nhân vật</label><input type="text" id="editName" class="form-control"></div>
+                    <div class="form-group"><label>Email</label><input type="text" id="editEmail" class="form-control"></div>
+                </div>
+            </div>
+            <div class="card"><div class="card-title">⚙️ Hệ thống & Phiên bản</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Client Version</label><input type="text" id="editClientVersion" class="form-control"></div>
+                    <div class="form-group"><label>Data Version</label><input type="number" id="editDataVersion" class="form-control"></div>
+                    <div class="form-group"><label>Đăng nhập cuối</label><input type="text" id="editLastLogin" class="form-control" readonly></div>
+                    <div class="form-group"><label>Đăng xuất cuối</label><input type="text" id="editLastLogout" class="form-control" readonly></div>
+                </div>
+            </div>
+            <div class="card"><div class="card-title">🧘 Tu Vi</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Cảnh giới (0-9)</label><input type="number" id="editStage" class="form-control" min="0" max="9"></div>
+                    <div class="form-group"><label>Tầng (1-9)</label><input type="number" id="editTang" class="form-control" min="1" max="9"></div>
+                    <div class="form-group"><label>EXP</label><input type="number" id="editExp" class="form-control"></div>
+                    <div class="form-group"><label>Điểm thuộc tính chưa cộng</label><input type="number" id="editDiem" class="form-control"></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>Trang bị (Tên, cách nhau dấu phẩy)</label><input type="text" id="giftItem" class="form-control" placeholder="KiemNhapMon, GiapTanThu"></div>
-                    <div class="form-group"><label>Số lần nhập tối đa</label><input type="number" id="giftMaxUses" class="form-control" value="999"></div>
+                    <div class="form-group"><label>HP gốc</label><input type="number" id="editHp" class="form-control"></div>
+                    <div class="form-group"><label>ATK gốc</label><input type="number" id="editAtk" class="form-control"></div>
+                    <div class="form-group"><label>DEF gốc</label><input type="number" id="editDef" class="form-control"></div>
+                    <div class="form-group"><label>Luck gốc</label><input type="number" id="editLuck" class="form-control"></div>
                 </div>
-                <button class="btn btn-primary" onclick="createGiftCode()">✨ Tạo Giftcode</button>
             </div>
-            <div class="card">
-                <div class="card-title">📋 Danh sách Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄 Refresh</button></div>
-                <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th>Thao tác</th></tr></thead><tbody><tr><td colspan="4">Đang tải...<span class="loading-status"></span></td></tr></tbody></table></div>
-            </div>
-        </div>
-
-        <div id="events" class="tab-content">
-            <div class="card">
-                <div class="card-title">🎉 Cài đặt Sự kiện nổi bật</div>
+            <div class="card"><div class="card-title">💰 Tài nguyên</div>
                 <div class="form-row">
-                    <div class="form-group"><label>Tiêu đề</label><input type="text" id="eventTitle" class="form-control"></div>
-                    <div class="form-group"><label>Nội dung thông báo</label><input type="text" id="eventContent" class="form-control"></div>
+                    <div class="form-group"><label>Vàng</label><input type="number" id="editGold" class="form-control"></div>
+                    <div class="form-group"><label>Linh thạch</label><input type="number" id="editLinhThach" class="form-control"></div>
+                </div>
+            </div>
+            <div class="card"><div class="card-title">⚔️ Vũ Khí & Giáp</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Tên Vũ khí</label><input type="text" id="editWeapon" class="form-control"></div>
+                    <div class="form-group"><label>Cấp vũ khí</label><input type="number" id="editWeaponLevel" class="form-control" min="0" max="8"></div>
+                    <div class="form-group"><label>Tên Giáp</label><input type="text" id="editArmor" class="form-control"></div>
+                    <div class="form-group"><label>Cấp giáp</label><input type="number" id="editArmorLevel" class="form-control" min="0" max="8"></div>
+                </div>
+            </div>
+            <div class="card"><div class="card-title">🪬 Pháp Bảo & Thú Cưỡi</div>
+                <div class="warning-text">Bỏ đuôi (Clone) khi nhập tên.</div>
+                <div class="form-row" style="margin-top:8px;">
+                    <div class="form-group"><label>Tên Pháp Bảo</label><input type="text" id="editPhapBao" class="form-control"></div>
+                    <div class="form-group"><label>Tên Thú Cưỡi</label><input type="text" id="editThuCuoi" class="form-control"></div>
+                </div>
+                <div class="form-group"><label>Dữ liệu Pháp Bảo (JSON)</label><textarea id="editPhapBaoObj" class="form-control" rows="6"></textarea></div>
+            </div>
+            <div class="card"><div class="card-title">🐾 Thú cưng (Pet)</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Cảnh giới pet</label><input type="number" id="editPetStage" class="form-control" min="0" max="9"></div>
+                    <div class="form-group"><label>Cấp độ pet</label><input type="number" id="editPetTang" class="form-control" min="1"></div>
+                    <div class="form-group"><label>EXP pet</label><input type="number" id="editPetExp" class="form-control"></div>
+                </div>
+            </div>
+            <div class="card"><div class="card-title">👑 Trạng thái VIP</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Đã mua VIP</label><select id="editVip" class="form-control"><option value="true">Có</option><option value="false">Không</option></select></div>
+                    <div class="form-group"><label>Số ngày VIP còn lại</label><input type="number" id="editVipDays" class="form-control"></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>Thưởng linh thạch đăng nhập</label><input type="number" id="eventReward" class="form-control" value="100"></div>
-                    <div class="form-group"><label>Trạng thái</label><select id="eventStatus" class="form-control"><option value="true">Đang diễn ra</option><option value="false">Tạm dừng</option></select></div>
+                    <div class="form-group"><label>VIP bắt đầu (Ticks) <span id="lblVipStart" style="color:#28a745;font-weight:bold;"></span></label><input type="text" id="editVipStart" class="form-control" oninput="previewTicks('editVipStart','lblVipStart')"></div>
+                    <div class="form-group"><label>VIP kết thúc (Ticks) <span id="lblVipEnd" style="color:#28a745;font-weight:bold;"></span></label><input type="text" id="editVipEnd" class="form-control" oninput="previewTicks('editVipEnd','lblVipEnd')"></div>
                 </div>
-                <button class="btn btn-primary" onclick="createEvent()">📌 Cập nhật Sự kiện</button>
-                <button class="btn btn-danger" onclick="deleteEvent()">🗑️ Xóa Sự kiện</button>
             </div>
-            <div class="card"><div class="card-title">📋 Thông tin sự kiện hiện tại <button class="refresh-btn" onclick="loadEvent()">🔄 Refresh</button></div><div id="currentEventInfo">Đang tải...</div></div>
-        </div>
-
-        <div id="cache" class="tab-content">
-            <div class="card">
-                <div class="card-title">💾 Quản lý Bộ nhớ đệm (Cache)</div>
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-value" id="cachePlayersCount">0</div><div class="stat-label">Cache người chơi</div></div>
-                    <div class="stat-card"><div class="stat-value" id="cacheSize">0</div><div class="stat-label">Kích thước (KB)</div></div>
-                    <div class="stat-card"><div class="stat-value" id="lastUpdate">-</div><div class="stat-label">Cập nhật lần cuối</div></div>
+            <div class="card"><div class="card-title">✨ Thiên phú</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Loại</label><input type="text" id="editThienPhu" class="form-control"></div>
+                    <div class="form-group"><label>Hệ số %</label><input type="number" id="editThienPhuPercent" class="form-control" step="0.01"></div>
                 </div>
-                <button class="btn btn-warning" onclick="clearAllCache()">🗑️ Dọn dẹp Cache</button>
-                <button class="btn btn-primary" onclick="forceRefreshAll()">🔄 Ép tải lại toàn bộ Database</button>
             </div>
-        </div>
-
-        <div id="debug" class="tab-content">
+            <div class="card"><div class="card-title">📜 Nhiệm vụ</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Active Quest IDs</label><input type="text" id="editActiveQuests" class="form-control"></div>
+                    <div class="form-group"><label>Completed Quest IDs</label><input type="text" id="editCompletedQuests" class="form-control"></div>
+                </div>
+                <div class="form-group" style="margin-top:10px;"><label>Tiến độ nhiệm vụ (JSON)</label><textarea id="editQuestProgressObj" class="form-control" rows="4"></textarea></div>
+            </div>
             <div class="card">
-                <div class="card-title">🐛 Debug Console</div>
-                <div class="debug-console" id="debugConsole"></div>
-                <button class="btn btn-primary" onclick="testFirebase()" style="margin-top: 10px;">🔌 Test Kết nối Firebase</button>
-                <button class="btn btn-info" onclick="checkAuth()" style="margin-top: 10px;">🔐 Check Phân quyền Admin</button>
+                <button class="btn btn-success" onclick="saveFullPlayerData()">💾 Lưu thay đổi (Ghi đè thông minh)</button>
+                <button class="btn btn-warning" onclick="unbanCurrentPlayer()">🔓 Mở khóa</button>
+                <button class="btn btn-danger" onclick="banCurrentPlayer()">🚫 Cấm (Ban)</button>
+                <button class="btn btn-danger" style="background:#8b0000;float:right;" onclick="deleteCurrentPlayer()">🗑️ Xóa vĩnh viễn</button>
             </div>
         </div>
     </div>
 
-    <div id="loading" class="loading" style="display: none;"><div class="spinner"></div></div>
+    <!-- SKILLS -->
+    <div id="skills" class="tab-content">
+        <div class="card">
+            <div class="card-title">✨ Quản lý kỹ năng</div>
+            <div class="form-row"><div class="form-group"><select id="skillPlayerSelect" class="form-control" onchange="loadPlayerSkills()"><option value="">-- Chọn người chơi --</option></select></div></div>
+            <div id="skillsEditor" style="display:none;">
+                <div class="card"><div class="card-title">📌 Kỹ năng gắn vào khung</div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Ô 1</label><input type="text" id="skillSlot0" class="form-control"></div>
+                        <div class="form-group"><label>Ô 2</label><input type="text" id="skillSlot1" class="form-control"></div>
+                        <div class="form-group"><label>Ô 3</label><input type="text" id="skillSlot2" class="form-control"></div>
+                        <div class="form-group"><label>Ô 4</label><input type="text" id="skillSlot3" class="form-control"></div>
+                    </div>
+                </div>
+                <div class="card"><div class="card-title">📚 Danh sách cấp độ kỹ năng</div><div id="skillsList"></div></div>
+                <button class="btn btn-success" onclick="savePlayerSkills()">💾 Lưu kỹ năng</button>
+            </div>
+        </div>
+    </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
-    <script>
-        // CẤU HÌNH FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyAJ6kiQEfXZA7wlTKTX3dsKBMQTHidYX3c",
-            authDomain: "custom-utility-490109-j1.firebaseapp.com",
-            databaseURL: "https://custom-utility-490109-j1-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            projectId: "custom-utility-490109-j1",
-            storageBucket: "custom-utility-490109-j1.appspot.com",
-            messagingSenderId: "626113784056",
-            appId: "1:626113784056:android:193990ae1ce494634f730d"
-        };
+    <!-- INVENTORY -->
+    <div id="inventory" class="tab-content">
+        <div class="card">
+            <div class="card-title">📦 Quản lý kho đồ</div>
+            <div class="form-row"><div class="form-group"><select id="invPlayerSelect" class="form-control" onchange="loadPlayerInventory()"><option value="">-- Chọn người chơi --</option></select></div></div>
+            <div id="inventoryEditor" style="display:none;">
+                <div class="card"><div class="card-title">🗡️ Trang bị trong kho</div><div id="trangBiList"></div>
+                    <div class="form-row">
+                        <div class="form-group"><input type="text" id="addTrangBiName" class="form-control" placeholder="Tên trang bị"></div>
+                        <div class="form-group"><input type="number" id="addTrangBiCapDo" class="form-control" placeholder="Cấp độ" value="0"></div>
+                        <button class="btn btn-primary" onclick="addTrangBi()">+ Thêm</button>
+                    </div>
+                </div>
+                <div class="card"><div class="card-title">💊 Đan dược</div><div id="danList"></div>
+                    <div class="form-row">
+                        <div class="form-group"><input type="text" id="addDanName" class="form-control" placeholder="Tên đan"></div>
+                        <button class="btn btn-primary" onclick="addDan()">+ Thêm Đan</button>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="savePlayerInventory()">💾 Lưu kho đồ</button>
+            </div>
+        </div>
+    </div>
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
+    <!-- RECHARGE TAB - FULL TRANSACTION LIST -->
+    <div id="recharge" class="tab-content">
+        <div class="card">
+            <div class="card-title">💰 Tổng hợp Nạp Tiền <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button></div>
+            <div class="recharge-stats">
+                <div class="stat-card"><div class="stat-value" id="txTotalCount">-</div><div class="stat-label">Tổng giao dịch</div></div>
+                <div class="stat-card"><div class="stat-value" id="txTotalVND">-</div><div class="stat-label">Tổng VND</div></div>
+                <div class="stat-card"><div class="stat-value" id="txTotalLT">-</div><div class="stat-label">Tổng Linh Thạch</div></div>
+                <div class="stat-card"><div class="stat-value" id="txUniqueUsers">-</div><div class="stat-label">Người đã nạp</div></div>
+            </div>
+        </div>
 
-        let currentUser = null;
-        let currentEditUid = null;
-        let currentOriginalData = null; // Biến giữ dữ liệu gốc để so sánh khi gởi đi
-        let playersCache = null;
-        let inventoryData = null;
-        let currentSkillsData = null;
-        let currentSort = { field: 'name', order: 'asc' };
+        <!-- Per-user summary -->
+        <div class="card">
+            <div class="card-title">👤 Tổng theo người chơi</div>
+            <div class="filter-bar">
+                <input type="text" id="rechargeSearch" placeholder="🔍 Tìm theo tên..." oninput="filterRechargeTable()">
+            </div>
+            <div class="table-container">
+                <table class="table" id="rechargeUserTable">
+                    <thead><tr>
+                        <th class="sortable-header" onclick="sortRecharge('name')">Tên ▲</th>
+                        <th class="sortable-header" onclick="sortRecharge('totalVND')">Tổng VND ▲</th>
+                        <th class="sortable-header" onclick="sortRecharge('totalLT')">Tổng LT ▲</th>
+                        <th class="sortable-header" onclick="sortRecharge('txCount')">Số lần ▲</th>
+                        <th>UID</th>
+                        <th>Xem giao dịch</th>
+                    </tr></thead>
+                    <tbody id="rechargeUserBody"><tr><td colspan="6">Đang tải...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
 
-        // ==================== UTILS ====================
-        function logToDebug(msg) {
-            const debugDiv = document.getElementById('debugConsole');
-            const time = new Date().toLocaleTimeString();
-            debugDiv.innerHTML += `<div>[${time}] ${msg}</div>`;
-            debugDiv.scrollTop = debugDiv.scrollHeight;
-            console.log(msg);
-        }
-        function showLoading() { document.getElementById('loading').style.display = 'flex'; }
-        function hideLoading() { document.getElementById('loading').style.display = 'none'; }
-        function showToast(msg, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerText = msg;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2500);
-        }
-        function escapeHtml(text) { if (!text) return ''; return text.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-        
-        function removeVietnameseTones(str) {
-            if(!str) return "";
-            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
-        }
+        <!-- All transactions -->
+        <div class="card">
+            <div class="card-title">📋 Tất cả giao dịch chi tiết</div>
+            <div class="filter-bar">
+                <input type="text" id="txSearch" placeholder="🔍 Tìm tên / Transaction ID..." oninput="filterTxTable()">
+                <select id="txProductFilter" onchange="filterTxTable()">
+                    <option value="">Tất cả sản phẩm</option>
+                    <option value="linhthach_1000">1,000 LT (19K)</option>
+                    <option value="linhthach_5000">5,000 LT (89K)</option>
+                    <option value="linhthach_10000">10,000 LT (169K)</option>
+                    <option value="linhthach_100000">100,000 LT</option>
+                    <option value="vip_package">VIP</option>
+                </select>
+                <select id="txVerifiedFilter" onchange="filterTxTable()">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="verified">Đã xác thực</option>
+                    <option value="pending">Chưa xác thực</option>
+                </select>
+            </div>
+            <div class="table-container" style="max-height:500px;overflow-y:auto;">
+                <table class="table tx-table" id="txTable">
+                    <thead><tr>
+                        <th>Thời gian</th>
+                        <th>Người chơi</th>
+                        <th>Sản phẩm</th>
+                        <th>Linh Thạch</th>
+                        <th>Giá trị VND</th>
+                        <th>Xác thực</th>
+                        <th>Transaction ID</th>
+                    </tr></thead>
+                    <tbody id="txBody"><tr><td colspan="7">Đang tải...</td></tr></tbody>
+                </table>
+            </div>
+            <p id="txCount" style="font-size:10px;color:#aaa;margin-top:6px;"></p>
+        </div>
+    </div>
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
-            const activeLink = document.querySelector(`[data-tab="${tabId}"]`);
-            if (activeLink) activeLink.classList.add('active');
-            if (tabId === 'cache') updateCacheUI();
-            if (tabId === 'debug') { testFirebase(); checkAuth(); }
-        }
+    <!-- SUSPICIOUS -->
+    <div id="suspicious" class="tab-content">
+        <div class="card">
+            <div class="card-title">⚠️ Nghi ngờ Hack/Mod <button class="refresh-btn" onclick="loadSuspicious()">🔄 Refresh</button></div>
+            <div class="table-container"><table class="table" id="suspiciousTable"><thead><tr><th>User ID</th><th>Tên</th><th>Linh thạch</th><th>Lý do</th><th>Mức</th></tr></thead><tbody><tr><td colspan="5">Đang phân tích...</td></tr></tbody></table></div>
+        </div>
+    </div>
 
-        // Đọc Toàn bộ Users Info (chứ không chỉ gameData)
-        async function readUserNodeData(uid) {
-            const snap = await db.ref(`users/${uid}`).once('value');
-            return snap.val() || {};
-        }
+    <!-- GIFTCODE -->
+    <div id="giftcode" class="tab-content">
+        <div class="card">
+            <div class="card-title">🎁 Tạo Giftcode</div>
+            <div class="form-row">
+                <div class="form-group"><label>Mã</label><input type="text" id="giftCode" class="form-control"></div>
+                <div class="form-group"><label>Vàng</label><input type="number" id="giftGold" class="form-control" value="1000"></div>
+                <div class="form-group"><label>Linh thạch</label><input type="number" id="giftLinhThach" class="form-control" value="100"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Trang bị</label><input type="text" id="giftItem" class="form-control" placeholder="KiemNhapMon, GiapTanThu"></div>
+                <div class="form-group"><label>Số lần nhập tối đa</label><input type="number" id="giftMaxUses" class="form-control" value="999"></div>
+            </div>
+            <button class="btn btn-primary" onclick="createGiftCode()">✨ Tạo Giftcode</button>
+        </div>
+        <div class="card">
+            <div class="card-title">📋 Danh sách Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄</button></div>
+            <div class="table-container"><table class="table" id="giftCodeList"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th>Thao tác</th></tr></thead><tbody><tr><td colspan="4">Đang tải...</td></tr></tbody></table></div>
+        </div>
+    </div>
 
-        // ==================== AUTH ====================
-        async function loginWithEmail() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            if (!email || !password) { showToast('Nhập email và mật khẩu', 'error'); return; }
-            showLoading();
-            try {
-                const result = await auth.signInWithEmailAndPassword(email, password);
-                currentUser = result.user;
-                await afterLogin();
-            } catch (error) { 
-                showToast('Lỗi: ' + error.message, 'error'); 
-                hideLoading();
-            }
-        }
+    <!-- EVENTS -->
+    <div id="events" class="tab-content">
+        <div class="card">
+            <div class="card-title">🎉 Sự kiện</div>
+            <div class="form-row">
+                <div class="form-group"><label>Tiêu đề</label><input type="text" id="eventTitle" class="form-control"></div>
+                <div class="form-group"><label>Nội dung</label><input type="text" id="eventContent" class="form-control"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Thưởng linh thạch</label><input type="number" id="eventReward" class="form-control" value="100"></div>
+                <div class="form-group"><label>Trạng thái</label><select id="eventStatus" class="form-control"><option value="true">Đang diễn ra</option><option value="false">Tạm dừng</option></select></div>
+            </div>
+            <button class="btn btn-primary" onclick="createEvent()">📌 Cập nhật</button>
+            <button class="btn btn-danger" onclick="deleteEvent()">🗑️ Xóa</button>
+        </div>
+        <div class="card"><div class="card-title">📋 Sự kiện hiện tại <button class="refresh-btn" onclick="loadEvent()">🔄</button></div><div id="currentEventInfo">Đang tải...</div></div>
+    </div>
 
-        async function loginWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            showLoading();
-            try {
-                const result = await auth.signInWithPopup(provider);
-                currentUser = result.user;
-                await afterLogin();
-            } catch (error) { 
-                showToast('Lỗi: ' + error.message, 'error'); 
-                hideLoading();
-            }
-        }
+    <!-- CACHE -->
+    <div id="cache" class="tab-content">
+        <div class="card">
+            <div class="card-title">💾 Cache</div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-value" id="cachePlayersCount">0</div><div class="stat-label">Cache người chơi</div></div>
+                <div class="stat-card"><div class="stat-value" id="cacheSize">0</div><div class="stat-label">Kích thước (KB)</div></div>
+                <div class="stat-card"><div class="stat-value" id="lastUpdate">-</div><div class="stat-label">Cập nhật lần cuối</div></div>
+            </div>
+            <button class="btn btn-warning" onclick="clearAllCache()">🗑️ Dọn Cache</button>
+            <button class="btn btn-primary" onclick="forceRefreshAll()">🔄 Reload toàn bộ DB</button>
+        </div>
+    </div>
 
-        async function afterLogin() {
-            document.getElementById('userEmail').innerText = currentUser.email;
-            document.getElementById('loginForm').style.display = 'none';
-            try {
-                const adminSnap = await db.ref(`admins/${currentUser.uid}`).once('value');
-                if (!adminSnap.exists()) { 
-                    showToast('Không có quyền Admin!', 'error'); 
-                    logout(); 
-                    return; 
+    <!-- DEBUG -->
+    <div id="debug" class="tab-content">
+        <div class="card">
+            <div class="card-title">🐛 Debug Console</div>
+            <div class="debug-console" id="debugConsole"></div>
+            <button class="btn btn-primary" onclick="testFirebase()" style="margin-top:10px;">🔌 Test Firebase</button>
+            <button class="btn btn-info" onclick="checkAuth()" style="margin-top:10px;">🔐 Check Admin</button>
+        </div>
+    </div>
+</div>
+
+<div id="loading" class="loading" style="display:none;"><div class="spinner"></div></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+// ==================== FIREBASE CONFIG ====================
+const firebaseConfig = {
+    apiKey: "AIzaSyAJ6kiQEfXZA7wlTKTX3dsKBMQTHidYX3c",
+    authDomain: "custom-utility-490109-j1.firebaseapp.com",
+    databaseURL: "https://custom-utility-490109-j1-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "custom-utility-490109-j1",
+    storageBucket: "custom-utility-490109-j1.appspot.com",
+    messagingSenderId: "626113784056",
+    appId: "1:626113784056:android:193990ae1ce494634f730d"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+let currentUser = null;
+let currentEditUid = null;
+let currentOriginalData = null;
+let playersCache = null;
+let inventoryData = null;
+let currentSkillsData = null;
+let currentSort = { field: 'name', order: 'asc' };
+let allRechargeData = []; // for recharge tab
+let allTxData = [];       // all individual transactions
+let rechargeSort = { field: 'totalVND', order: 'desc' };
+
+const PRICE_MAP = {
+    'linhthach_1000': 19000,
+    'linhthach_5000': 89000,
+    'linhthach_10000': 169000,
+    'linhthach_100000': 900000,
+    'vip_package': 39000
+};
+
+const STAGES = ['Luyện Khí','Trúc Cơ','Kim Đan','Nguyên Anh','Hóa Thần','Phàm Tiên','Địa Tiên','Thiên Tiên','Chân Tiên','Kim Tiên'];
+
+// ==================== UTILS ====================
+function logToDebug(msg) {
+    const d = document.getElementById('debugConsole');
+    d.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+    d.scrollTop = d.scrollHeight;
+    console.log(msg);
+}
+function showLoading() { document.getElementById('loading').style.display = 'flex'; }
+function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+function showToast(msg, type = 'success') {
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerText = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+}
+function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+}
+function removeVietnameseTones(str) {
+    if (!str) return '';
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+}
+const tickToDateString = (ticks) => {
+    if (!ticks || isNaN(ticks) || ticks === 0) return 'Chưa có';
+    return new Date(ticks / 10000 - 62135596800000).toLocaleString('vi-VN');
+};
+function previewTicks(inputId, labelId) {
+    const ticks = parseInt(document.getElementById(inputId).value);
+    const lbl = document.getElementById(labelId);
+    if (!ticks || isNaN(ticks)) { lbl.innerText = ''; return; }
+    lbl.innerText = '(⏰ ' + new Date(ticks / 10000 - 62135596800000).toLocaleString('vi-VN') + ')';
+}
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+    const lnk = document.querySelector(`[data-tab="${tabId}"]`);
+    if (lnk) lnk.classList.add('active');
+    if (tabId === 'cache') updateCacheUI();
+    if (tabId === 'debug') { testFirebase(); checkAuth(); }
+}
+
+// ==================== FIREBASE DATA ====================
+async function readGameData(uid) {
+    const snap = await db.ref(`users/${uid}/gameData`).once('value');
+    return snap.val();
+}
+async function patchGameData(uid, updates) {
+    if (Object.keys(updates).length === 0) return false;
+    updates.timestamp = Date.now() * 10000 + 62135596800000;
+    await db.ref(`users/${uid}/gameData`).update(updates);
+    logToDebug(`✅ Patch: ${Object.keys(updates).join(', ')}`);
+    return true;
+}
+
+// ==================== AUTH ====================
+async function loginWithEmail() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) { showToast('Nhập email và mật khẩu', 'error'); return; }
+    showLoading();
+    try {
+        const result = await auth.signInWithEmailAndPassword(email, password);
+        currentUser = result.user;
+        await afterLogin();
+    } catch (e) { showToast('Lỗi: ' + e.message, 'error'); hideLoading(); }
+}
+async function loginWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    showLoading();
+    try {
+        const result = await auth.signInWithPopup(provider);
+        currentUser = result.user;
+        await afterLogin();
+    } catch (e) { showToast('Lỗi: ' + e.message, 'error'); hideLoading(); }
+}
+async function afterLogin() {
+    document.getElementById('userEmail').innerText = currentUser.email;
+    document.getElementById('loginForm').style.display = 'none';
+    try {
+        const adminSnap = await db.ref(`admins/${currentUser.uid}`).once('value');
+        if (!adminSnap.exists()) { showToast('Không có quyền Admin!', 'error'); logout(); return; }
+        showToast('Đăng nhập Admin thành công!', 'success');
+        await Promise.all([loadPlayers(), loadLeaderboard(), loadRecharge(), loadSuspicious(), loadGiftcodes(), loadEvent()]);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+function logout() {
+    auth.signOut(); currentUser = null;
+    document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
+    document.getElementById('loginForm').style.display = 'flex';
+    showToast('Đã đăng xuất', 'success');
+}
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        currentUser = user;
+        document.getElementById('userEmail').innerText = user.email;
+        document.getElementById('loginForm').style.display = 'none';
+        const adminSnap = await db.ref(`admins/${user.uid}`).once('value');
+        if (!adminSnap.exists()) { logout(); return; }
+        await afterLogin();
+    } else {
+        document.getElementById('loginForm').style.display = 'flex';
+        document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
+    }
+});
+
+// ==================== LOAD PLAYERS ====================
+async function loadPlayers(force = false) {
+    if (!force && playersCache) { displayPlayers(); updateStats(); return; }
+    showLoading();
+    try {
+        const usersSnap = await db.ref('users').once('value');
+        const users = usersSnap.val();
+        const players = [];
+        if (users) {
+            const banSnap = await db.ref('banned').once('value');
+            const banned = banSnap.val() || {};
+            for (let uid in users) {
+                const data = users[uid]?.gameData;
+                if (data) {
+                    players.push({
+                        uid, name: data.tenNhanVat || 'Không tên',
+                        stage: data.chiSoCanhGio || 0, tang: data.tang || 1,
+                        gold: data.vang || 0, linhThach: data.linhThach || 0,
+                        isVip: data.daMuaVip || false, isBanned: !!banned[uid]
+                    });
                 }
-                showToast('Đăng nhập Admin thành công!', 'success');
-                await Promise.all([
-                    loadPlayers(), loadLeaderboard(), loadRecharge(), 
-                    loadSuspicious(), loadGiftcodes(), loadEvent()
-                ]);
-            } catch(e) { 
-                showToast('Lỗi nạp dữ liệu: ' + e.message, 'error');
             }
-            hideLoading();
+        }
+        playersCache = players;
+        displayPlayers(); updateStats(); updateSelects();
+        localStorage.setItem('admin_players_v2', JSON.stringify(playersCache));
+        localStorage.setItem('admin_players_time', Date.now().toString());
+    } catch(e) { showToast('Lỗi tải Users: ' + e.message, 'error'); }
+    hideLoading();
+}
+
+function searchPlayer() { displayPlayers(); document.getElementById('playerDetailContainer').style.display = 'none'; }
+function clearSearch() { document.getElementById('searchInput').value = ''; displayPlayers(); document.getElementById('playerDetailContainer').style.display = 'none'; }
+
+function displayPlayers() {
+    if (!playersCache) {
+        document.getElementById('playerListContainer').innerHTML = '<div class="card"><p>Chưa có dữ liệu</p></div>';
+        return;
+    }
+    const keyword = removeVietnameseTones(document.getElementById('searchInput')?.value.trim() || '');
+    let filtered = keyword.length > 0
+        ? playersCache.filter(p => removeVietnameseTones(p.name).includes(keyword) || p.uid.toLowerCase().includes(keyword))
+        : playersCache;
+    // Sort
+    filtered = [...filtered].sort((a, b) => {
+        let vA = a[currentSort.field], vB = b[currentSort.field];
+        if (currentSort.field === 'name') { vA = removeVietnameseTones(vA || ''); vB = removeVietnameseTones(vB || ''); }
+        if (vA < vB) return currentSort.order === 'asc' ? -1 : 1;
+        if (vA > vB) return currentSort.order === 'asc' ? 1 : -1;
+        return 0;
+    });
+    if (filtered.length === 0) {
+        document.getElementById('playerListContainer').innerHTML = '<div class="card"><p>Không tìm thấy người chơi</p></div>';
+        return;
+    }
+    const si = (f) => currentSort.field === f ? (currentSort.order === 'asc' ? '▲' : '▼') : '⇅';
+    let html = `<div class="card"><div class="table-container"><table class="table"><thead>
+        <tr>
+            <th class="sortable-header" onclick="sortPlayers('name')">Tên ${si('name')}</th>
+            <th class="sortable-header" onclick="sortPlayers('stage')">Cảnh giới ${si('stage')}</th>
+            <th class="sortable-header" onclick="sortPlayers('gold')">Vàng ${si('gold')}</th>
+            <th class="sortable-header" onclick="sortPlayers('linhThach')">Linh thạch ${si('linhThach')}</th>
+            <th>VIP</th><th>Ban</th><th>Sửa</th>
+        </tr></thead><tbody>`;
+    filtered.slice(0, 200).forEach(p => {
+        html += `<tr class="player-row">
+            <td onclick="showPlayerDetail('${p.uid}')"><strong>${escapeHtml(p.name)}</strong></td>
+            <td onclick="showPlayerDetail('${p.uid}')">${STAGES[p.stage] || '???'} tầng ${p.tang}</td>
+            <td onclick="showPlayerDetail('${p.uid}')">${(p.gold || 0).toLocaleString()}</td>
+            <td onclick="showPlayerDetail('${p.uid}')">${(p.linhThach || 0).toLocaleString()}</td>
+            <td>${p.isVip ? '<span class="badge badge-vip">VIP</span>' : '-'}</td>
+            <td>${p.isBanned ? '<span class="badge badge-ban">BAN</span>' : '-'}</td>
+            <td><button class="btn btn-primary btn-xs" onclick="showPlayerDetail('${p.uid}')">📋 Chi tiết</button></td>
+        </tr>`;
+    });
+    html += `</tbody></table></div><p style="font-size:10px;color:#aaa;margin-top:6px;">Hiển thị ${Math.min(filtered.length,200)}/${filtered.length} · Click hàng hoặc nút Chi tiết để sửa từng thông số</p></div>`;
+    document.getElementById('playerListContainer').innerHTML = html;
+}
+
+function sortPlayers(field) {
+    if (currentSort.field === field) currentSort.order = currentSort.order === 'asc' ? 'desc' : 'asc';
+    else { currentSort.field = field; currentSort.order = 'desc'; }
+    displayPlayers();
+}
+function updateStats() {
+    if (playersCache) {
+        document.getElementById('totalPlayers').innerText = playersCache.length;
+        document.getElementById('totalVip').innerText = playersCache.filter(p => p.isVip).length;
+    }
+}
+function updateSelects() {
+    if (!playersCache) return;
+    const opts = '<option value="">-- Chọn người chơi --</option>' +
+        playersCache.map(p => `<option value="${p.uid}">${escapeHtml(p.name)} (${p.uid.substring(0,8)}...)</option>`).join('');
+    ['playerSelect','skillPlayerSelect','invPlayerSelect'].forEach(id => document.getElementById(id).innerHTML = opts);
+}
+async function selectPlayer(uid) {
+    document.getElementById('playerSelect').value = uid;
+    await loadFullPlayerData();
+    showTab('edit_player');
+}
+
+// ==================== PLAYER DETAIL (inline per-field edit) ====================
+async function showPlayerDetail(uid) {
+    const container = document.getElementById('playerDetailContainer');
+    container.style.display = 'block';
+    container.innerHTML = '<div class="card" style="text-align:center;padding:20px;">⏳ Đang tải dữ liệu...</div>';
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    try {
+        const data = await readGameData(uid);
+        if (!data) { container.innerHTML = '<div class="card"><p>Không có dữ liệu gameData</p></div>'; return; }
+
+        const playerInfo = playersCache?.find(p => p.uid === uid) || {};
+
+        // Helper: render one editable row
+        function row(label, fieldKey, type, value, extra = '') {
+            const displayVal = (value === null || value === undefined) ? '<em style="color:#666">null</em>' : escapeHtml(String(value));
+            let input = '';
+            if (type === 'text') {
+                input = `<input type="text" id="df_${fieldKey}" value="${escapeHtml(String(value||''))}" ${extra} style="width:100%;background:rgba(0,0,0,0.6);border:1px solid #555;border-radius:4px;color:#fff;padding:3px 6px;font-size:11px;">`;
+            } else if (type === 'number') {
+                input = `<input type="number" id="df_${fieldKey}" value="${value||0}" ${extra} style="width:100%;background:rgba(0,0,0,0.6);border:1px solid #555;border-radius:4px;color:#fff;padding:3px 6px;font-size:11px;">`;
+            } else if (type === 'float') {
+                input = `<input type="number" id="df_${fieldKey}" value="${value||0}" step="0.01" ${extra} style="width:100%;background:rgba(0,0,0,0.6);border:1px solid #555;border-radius:4px;color:#fff;padding:3px 6px;font-size:11px;">`;
+            } else if (type === 'bool') {
+                input = `<select id="df_${fieldKey}" style="width:100%;background:rgba(0,0,0,0.6);border:1px solid #555;border-radius:4px;color:#fff;padding:3px 6px;font-size:11px;">
+                    <option value="true" ${value===true?'selected':''}>✅ Có (true)</option>
+                    <option value="false" ${value===false?'selected':''}>❌ Không (false)</option></select>`;
+            } else if (type === 'json') {
+                const jsonStr = escapeHtml(JSON.stringify(value, null, 2));
+                input = `<textarea id="df_${fieldKey}" rows="4" style="width:100%;background:rgba(0,0,0,0.6);border:1px solid #555;border-radius:4px;color:#fff;padding:3px 6px;font-size:10px;font-family:monospace;">${jsonStr}</textarea>`;
+            } else if (type === 'ticks') {
+                const dateStr = value ? tickToDateString(value) : 'Chưa có';
+                input = `<input type="text" id="df_${fieldKey}" value="${value||0}" ${extra} style="width:100%;background:rgba(0,0,0,0.6);border:1px solid #555;border-radius:4px;color:#fff;padding:3px 6px;font-size:11px;">
+                    <span style="font-size:9px;color:#28a745;">${dateStr}</span>`;
+            } else if (type === 'readonly') {
+                input = `<input type="text" value="${escapeHtml(String(value||''))}" readonly style="width:100%;background:rgba(0,0,0,0.3);border:1px solid #333;border-radius:4px;color:#aaa;padding:3px 6px;font-size:11px;">`;
+                return `<tr><td class="field-label">${label}</td><td class="field-value">${displayVal}</td><td class="field-edit">${input}</td><td></td></tr>`;
+            }
+            return `<tr>
+                <td class="field-label">${label}</td>
+                <td class="field-value" id="dv_${fieldKey}">${displayVal}</td>
+                <td class="field-edit">${input}</td>
+                <td class="field-actions"><button class="save-field-btn" onclick="saveOneField('${uid}','${fieldKey}','${type}')">💾</button></td>
+            </tr>`;
         }
 
-        function logout() {
-            auth.signOut();
-            currentUser = null;
-            document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
-            document.getElementById('loginForm').style.display = 'flex';
-            showToast('Đã đăng xuất', 'success');
+        function sectionRow(title, icon = '') {
+            return `<tr class="section-header"><td colspan="4">${icon} ${title}</td></tr>`;
         }
 
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('userEmail').innerText = user.email;
-                document.getElementById('loginForm').style.display = 'none';
-                const adminSnap = await db.ref(`admins/${user.uid}`).once('value');
-                if (!adminSnap.exists()) { logout(); return; }
-                await afterLogin();
-            } else {
-                document.getElementById('loginForm').style.display = 'flex';
-                document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
+        const html = `
+        <div class="player-detail-panel">
+            <div class="detail-header">
+                <h3>📋 Chi tiết: ${escapeHtml(data.tenNhanVat || uid)} <span style="font-size:10px;color:#aaa;">(${uid})</span></h3>
+                <div>
+                    <button class="btn btn-warning btn-sm" onclick="banCurrentPlayerById('${uid}')">🚫 Ban</button>
+                    <button class="btn btn-success btn-sm" onclick="unbanById('${uid}')">🔓 Unban</button>
+                    <button class="btn btn-info btn-sm" onclick="selectPlayer('${uid}')">✏️ Form đầy đủ</button>
+                    <button class="btn btn-danger btn-sm" onclick="document.getElementById('playerDetailContainer').style.display='none'">✕ Đóng</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+            <table class="stats-table" style="width:100%;">
+                <thead><tr><th style="width:180px;">Thông số</th><th>Giá trị hiện tại</th><th style="width:220px;">Sửa giá trị</th><th style="width:60px;">Lưu</th></tr></thead>
+                <tbody>
+                ${sectionRow('THÔNG TIN CƠ BẢN', '📝')}
+                ${row('Tên nhân vật', 'tenNhanVat', 'text', data.tenNhanVat)}
+                ${row('User ID', '_uid', 'readonly', uid)}
+                ${row('Client Version', 'clientVersion', 'text', data.clientVersion)}
+                ${row('Data Version', 'dataVersion', 'number', data.dataVersion)}
+                ${row('Đăng nhập cuối', '_lastLogin', 'readonly', tickToDateString(data.lastLoginTime))}
+                ${row('Đăng xuất cuối', '_lastLogout', 'readonly', tickToDateString(data.lastLogoutTime))}
+
+                ${sectionRow('TU VI & CHỈ SỐ', '🧘')}
+                ${row('Cảnh giới (chiSoCanhGio)', 'chiSoCanhGio', 'number', data.chiSoCanhGio, 'min="0" max="9"')}
+                ${row('Tầng (tang)', 'tang', 'number', data.tang, 'min="1" max="9"')}
+                ${row('EXP hiện tại', 'expHienTai', 'float', data.expHienTai)}
+                ${row('Điểm thuộc tính chưa cộng', 'diemThuocTinhChuaCong', 'number', data.diemThuocTinhChuaCong)}
+                ${row('HP gốc', 'hpGoc', 'number', data.hpGoc)}
+                ${row('ATK gốc', 'atkGoc', 'number', data.atkGoc)}
+                ${row('DEF gốc', 'defGoc', 'number', data.defGoc)}
+                ${row('Luck gốc', 'luckGoc', 'number', data.luckGoc)}
+
+                ${sectionRow('TÀI NGUYÊN', '💰')}
+                ${row('Vàng (vang)', 'vang', 'number', data.vang)}
+                ${row('Linh thạch (linhThach)', 'linhThach', 'number', data.linhThach)}
+
+                ${sectionRow('VŨ KHÍ & GIÁP ĐANG MẶC', '⚔️')}
+                ${row('Tên vũ khí (vuKhiDangMac)', 'vuKhiDangMac', 'text', data.vuKhiDangMac)}
+                ${row('Cấp vũ khí (vuKhiCapDo)', 'vuKhiCapDo', 'number', data.vuKhiCapDo, 'min="0" max="8"')}
+                ${row('Tên giáp (giapDangMac)', 'giapDangMac', 'text', data.giapDangMac)}
+                ${row('Cấp giáp (giapCapDo)', 'giapCapDo', 'number', data.giapCapDo, 'min="0" max="8"')}
+
+                ${sectionRow('PHÁP BẢO & THÚ CƯỠI', '🪬')}
+                ${row('Pháp bảo đang mặc', 'phapBaoDangMac', 'text', data.phapBaoDangMac)}
+                ${row('Thú cưỡi đang dùng', 'thuCuoiDangDung', 'text', data.thuCuoiDangDung)}
+                ${row('Pháp bảo đang mặc (JSON object)', 'phapBaoDangMacObj', 'json', data.phapBaoDangMacObj)}
+
+                ${sectionRow('THÚ CƯNG (PET)', '🐾')}
+                ${row('Pet cảnh giới (petCanhGio)', 'petCanhGio', 'number', data.petCanhGio, 'min="0" max="9"')}
+                ${row('Pet cấp độ (petCapDo)', 'petCapDo', 'number', data.petCapDo)}
+                ${row('Pet EXP (petExp)', 'petExp', 'number', data.petExp)}
+
+                ${sectionRow('VIP', '👑')}
+                ${row('Đã mua VIP (daMuaVip)', 'daMuaVip', 'bool', data.daMuaVip)}
+                ${row('Số ngày VIP còn lại', 'vipSoNgayConLai', 'number', data.vipSoNgayConLai)}
+                ${row('VIP bắt đầu (Ticks)', 'vipStartTicks', 'ticks', data.vipStartTicks)}
+                ${row('VIP kết thúc (Ticks)', 'vipEndTicks', 'ticks', data.vipEndTicks)}
+
+                ${sectionRow('THIÊN PHÚ', '✨')}
+                ${row('Loại thiên phú (loaiThienPhu)', 'loaiThienPhu', 'text', data.loaiThienPhu)}
+                ${row('Hệ số % (phanTramThienPhu)', 'phanTramThienPhu', 'float', data.phanTramThienPhu)}
+
+                ${sectionRow('KỸ NĂNG (SLOT)', '🎯')}
+                ${row('Slot 1 (skillSlot_0)', 'skillSlot_0', 'text', data.skillSlot_0)}
+                ${row('Slot 2 (skillSlot_1)', 'skillSlot_1', 'text', data.skillSlot_1)}
+                ${row('Slot 3 (skillSlot_2)', 'skillSlot_2', 'text', data.skillSlot_2)}
+                ${row('Slot 4 (skillSlot_3)', 'skillSlot_3', 'text', data.skillSlot_3)}
+
+                ${sectionRow('NHIỆM VỤ', '📜')}
+                ${row('Active Quest IDs (JSON)', 'activeQuestIDs', 'json', data.activeQuestIDs)}
+                ${row('Completed Quest IDs (JSON)', 'completedQuestIDs', 'json', data.completedQuestIDs)}
+                ${row('Quest Progress (JSON)', 'questProgress', 'json', data.questProgress)}
+
+                ${sectionRow('DANH SÁCH TRANG BỊ TRONG KHO', '📦')}
+                ${row('danhSachTrangBi (JSON)', 'danhSachTrangBi', 'json', data.danhSachTrangBi)}
+
+                ${sectionRow('DANH SÁCH PHÁP BẢO', '📿')}
+                ${row('danhSachPhapBao (JSON)', 'danhSachPhapBao', 'json', data.danhSachPhapBao)}
+
+                ${sectionRow('DANH SÁCH THÚ CƯỠI', '🐉')}
+                ${row('danhSachThuCuoi (JSON)', 'danhSachThuCuoi', 'json', data.danhSachThuCuoi)}
+
+                ${sectionRow('LỊCH SỬ GIAO DỊCH', '💳')}
+                ${row('transactionHistory (JSON)', 'transactionHistory', 'json', data.transactionHistory)}
+                </tbody>
+            </table>
+            </div>
+            <div style="padding:10px;background:rgba(0,0,0,0.3);font-size:10px;color:#aaa;">
+                💡 Nhấn 💾 ở mỗi hàng để lưu riêng từng thông số lên Firebase. Chỉ gửi đúng trường bạn thay đổi.
+            </div>
+        </div>`;
+        container.innerHTML = html;
+    } catch(e) {
+        container.innerHTML = `<div class="card"><p style="color:#dc3545;">Lỗi: ${e.message}</p></div>`;
+    }
+}
+
+// Save a single field to Firebase
+async function saveOneField(uid, fieldKey, type) {
+    const inputEl = document.getElementById('df_' + fieldKey);
+    if (!inputEl) return;
+    let value;
+    try {
+        if (type === 'number') value = parseFloat(inputEl.value) || 0;
+        else if (type === 'float') value = parseFloat(inputEl.value) || 0;
+        else if (type === 'bool') value = inputEl.value === 'true';
+        else if (type === 'json') value = JSON.parse(inputEl.value);
+        else if (type === 'ticks') value = parseFloat(inputEl.value) || 0;
+        else value = inputEl.value;
+    } catch(e) {
+        showToast('Lỗi JSON không hợp lệ! Kiểm tra lại.', 'error'); return;
+    }
+    showLoading();
+    try {
+        const update = {};
+        update[fieldKey] = value;
+        await patchGameData(uid, update);
+
+        // Update display cell
+        const displayEl = document.getElementById('dv_' + fieldKey);
+        if (displayEl) {
+            let displayStr = (value === null || value === undefined) ? 'null' : String(value);
+            if (type === 'json') displayStr = JSON.stringify(value).substring(0, 60) + '...';
+            if (type === 'ticks') displayStr = String(value) + ' → ' + tickToDateString(value);
+            displayEl.innerHTML = escapeHtml(displayStr);
+        }
+
+        // Update leaderboard if needed
+        if (['chiSoCanhGio','tang','tenNhanVat','linhThach'].includes(fieldKey)) {
+            const current = await readGameData(uid);
+            if (current) {
+                await db.ref(`leaderboard/tuvi/${uid}`).set({ name: current.tenNhanVat, score: (current.chiSoCanhGio||0) * 10000 + (current.tang||1) * 1000 });
+                await db.ref(`leaderboard/linhthach/${uid}`).set({ name: current.tenNhanVat, score: current.linhThach||0 });
             }
+        }
+
+        showToast(`✅ Đã lưu [${fieldKey}]`, 'success');
+        // Update cache
+        if (playersCache) {
+            const p = playersCache.find(x => x.uid === uid);
+            if (p) {
+                if (fieldKey === 'tenNhanVat') p.name = value;
+                if (fieldKey === 'chiSoCanhGio') p.stage = value;
+                if (fieldKey === 'tang') p.tang = value;
+                if (fieldKey === 'vang') p.gold = value;
+                if (fieldKey === 'linhThach') p.linhThach = value;
+                if (fieldKey === 'daMuaVip') p.isVip = value;
+            }
+        }
+    } catch(e) { showToast('Lỗi lưu: ' + e.message, 'error'); }
+    hideLoading();
+}
+
+async function banCurrentPlayerById(uid) {
+    const reason = prompt('Lý do cấm:');
+    if (!reason) return;
+    showLoading();
+    try {
+        await db.ref(`banned/${uid}`).set({ reason, timestamp: Date.now(), bannedBy: currentUser?.email });
+        showToast('Đã ban!', 'success');
+        playersCache = null; await loadPlayers(true);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+async function unbanById(uid) {
+    showLoading();
+    try {
+        await db.ref(`banned/${uid}`).remove();
+        showToast('Đã mở khóa!', 'success');
+        playersCache = null; await loadPlayers(true);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+
+// ==================== ADD/DELETE USER ====================
+async function createNewPlayer() {
+    const name = prompt('Tên nhân vật mới:');
+    if (!name) return;
+    showLoading();
+    try {
+        const newRef = db.ref('users').push();
+        const newUid = newRef.key;
+        await db.ref(`users/${newUid}/gameData`).set({
+            tenNhanVat: name, chiSoCanhGio: 0, tang: 1,
+            vang: 500, linhThach: 20, hpGoc: 100, atkGoc: 20, defGoc: 10, luckGoc: 5,
+            clientVersion: '8.2', dataVersion: 2,
+            timestamp: Date.now() * 10000 + 62135596800000
         });
+        showToast('Tạo User thành công!', 'success');
+        playersCache = null; await loadPlayers(true);
+        await showPlayerDetail(newUid);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
 
-        // ==================== LOAD PLAYERS & SEARCH ====================
-        async function loadPlayers(force = false) {
-            if (!force && playersCache) {
-                displayPlayers(); updateStats(); return;
-            }
-            showLoading();
-            try {
-                const usersSnap = await db.ref('users').once('value');
-                const users = usersSnap.val();
-                const players = [];
-                if (users) {
-                    const banSnap = await db.ref('banned').once('value');
-                    const banned = banSnap.val() || {};
-                    for (let uid in users) {
-                        const data = users[uid]?.gameData;
-                        if (data) {
-                            players.push({
-                                uid: uid,
-                                name: data.tenNhanVat || 'Không tên',
-                                stage: data.chiSoCanhGio || 0,
-                                tang: data.tang || 1,
-                                gold: data.vang || 0,
-                                linhThach: data.linhThach || 0,
-                                isVip: data.daMuaVip || false,
-                                isBanned: !!banned[uid]
-                            });
-                        }
-                    }
-                }
-                playersCache = players;
-                displayPlayers();
-                updateStats();
-                updateSelects();
-                localStorage.setItem('admin_players_v2', JSON.stringify(playersCache));
-                localStorage.setItem('admin_players_time', Date.now().toString());
-            } catch(e) { showToast('Lỗi tải Users: ' + e.message, 'error'); }
-            hideLoading();
+// ==================== FULL FORM (edit_player tab) ====================
+async function loadFullPlayerData() {
+    const uid = document.getElementById('playerSelect').value;
+    if (!uid) return;
+    currentEditUid = uid;
+    showLoading();
+    try {
+        const data = await readGameData(uid);
+        if (!data) { showToast('Không có dữ liệu', 'error'); hideLoading(); return; }
+        currentOriginalData = JSON.parse(JSON.stringify(data));
+        document.getElementById('fullEditor').style.display = 'block';
+        document.getElementById('editUid').value = uid;
+        document.getElementById('editName').value = data.tenNhanVat || '';
+        document.getElementById('editEmail').value = data.email || '';
+        document.getElementById('editClientVersion').value = data.clientVersion || '';
+        document.getElementById('editDataVersion').value = data.dataVersion || 2;
+        document.getElementById('editLastLogin').value = tickToDateString(data.lastLoginTime);
+        document.getElementById('editLastLogout').value = tickToDateString(data.lastLogoutTime);
+        document.getElementById('editStage').value = data.chiSoCanhGio || 0;
+        document.getElementById('editTang').value = data.tang || 1;
+        document.getElementById('editExp').value = data.expHienTai || 0;
+        document.getElementById('editDiem').value = data.diemThuocTinhChuaCong || 0;
+        document.getElementById('editHp').value = data.hpGoc || 100;
+        document.getElementById('editAtk').value = data.atkGoc || 20;
+        document.getElementById('editDef').value = data.defGoc || 10;
+        document.getElementById('editLuck').value = data.luckGoc || 5;
+        document.getElementById('editGold').value = data.vang || 0;
+        document.getElementById('editLinhThach').value = data.linhThach || 0;
+        document.getElementById('editWeapon').value = data.vuKhiDangMac || '';
+        document.getElementById('editWeaponLevel').value = data.vuKhiCapDo || 0;
+        document.getElementById('editArmor').value = data.giapDangMac || '';
+        document.getElementById('editArmorLevel').value = data.giapCapDo || 0;
+        document.getElementById('editPhapBao').value = data.phapBaoDangMac || '';
+        document.getElementById('editThuCuoi').value = data.thuCuoiDangDung || '';
+        document.getElementById('editPhapBaoObj').value = data.phapBaoDangMacObj ? JSON.stringify(data.phapBaoDangMacObj, null, 4) : '';
+        document.getElementById('editPetStage').value = data.petCanhGio || 0;
+        document.getElementById('editPetTang').value = data.petCapDo || 1;
+        document.getElementById('editPetExp').value = data.petExp || 0;
+        document.getElementById('editVip').value = data.daMuaVip ? 'true' : 'false';
+        document.getElementById('editVipDays').value = data.vipSoNgayConLai || 0;
+        document.getElementById('editVipStart').value = data.vipStartTicks || 0;
+        document.getElementById('editVipEnd').value = data.vipEndTicks || 0;
+        previewTicks('editVipStart', 'lblVipStart'); previewTicks('editVipEnd', 'lblVipEnd');
+        document.getElementById('editThienPhu').value = data.loaiThienPhu || '';
+        document.getElementById('editThienPhuPercent').value = data.phanTramThienPhu || 0;
+        document.getElementById('editActiveQuests').value = (data.activeQuestIDs || []).join(', ');
+        document.getElementById('editCompletedQuests').value = (data.completedQuestIDs || []).join(', ');
+        document.getElementById('editQuestProgressObj').value = JSON.stringify(data.questProgress || [], null, 4);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+
+async function saveFullPlayerData() {
+    if (!currentEditUid || !currentOriginalData) { showToast('Chọn người chơi trước', 'error'); return; }
+    showLoading();
+    try {
+        const updates = {};
+        const fields = {
+            tenNhanVat: document.getElementById('editName').value,
+            email: document.getElementById('editEmail').value,
+            clientVersion: document.getElementById('editClientVersion').value,
+            dataVersion: parseInt(document.getElementById('editDataVersion').value) || 2,
+            chiSoCanhGio: parseInt(document.getElementById('editStage').value) || 0,
+            tang: parseInt(document.getElementById('editTang').value) || 1,
+            expHienTai: parseFloat(document.getElementById('editExp').value) || 0,
+            diemThuocTinhChuaCong: parseInt(document.getElementById('editDiem').value) || 0,
+            hpGoc: parseInt(document.getElementById('editHp').value) || 100,
+            atkGoc: parseInt(document.getElementById('editAtk').value) || 20,
+            defGoc: parseInt(document.getElementById('editDef').value) || 10,
+            luckGoc: parseInt(document.getElementById('editLuck').value) || 5,
+            vang: parseInt(document.getElementById('editGold').value) || 0,
+            linhThach: parseInt(document.getElementById('editLinhThach').value) || 0,
+            vuKhiDangMac: document.getElementById('editWeapon').value,
+            vuKhiCapDo: parseInt(document.getElementById('editWeaponLevel').value) || 0,
+            giapDangMac: document.getElementById('editArmor').value,
+            giapCapDo: parseInt(document.getElementById('editArmorLevel').value) || 0,
+            phapBaoDangMac: document.getElementById('editPhapBao').value,
+            thuCuoiDangDung: document.getElementById('editThuCuoi').value,
+            petCanhGio: parseInt(document.getElementById('editPetStage').value) || 0,
+            petCapDo: parseInt(document.getElementById('editPetTang').value) || 1,
+            petExp: parseInt(document.getElementById('editPetExp').value) || 0,
+            daMuaVip: document.getElementById('editVip').value === 'true',
+            vipSoNgayConLai: parseInt(document.getElementById('editVipDays').value) || 0,
+            vipStartTicks: parseFloat(document.getElementById('editVipStart').value) || 0,
+            vipEndTicks: parseFloat(document.getElementById('editVipEnd').value) || 0,
+            loaiThienPhu: document.getElementById('editThienPhu').value,
+            phanTramThienPhu: parseFloat(document.getElementById('editThienPhuPercent').value) || 0
+        };
+        for (let key in fields) { if (fields[key] !== currentOriginalData[key]) updates[key] = fields[key]; }
+        const activeQ = document.getElementById('editActiveQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
+        if (JSON.stringify(activeQ) !== JSON.stringify(currentOriginalData.activeQuestIDs || [])) updates.activeQuestIDs = activeQ;
+        const completedQ = document.getElementById('editCompletedQuests').value.split(',').map(s=>s.trim()).filter(s=>s);
+        if (JSON.stringify(completedQ) !== JSON.stringify(currentOriginalData.completedQuestIDs || [])) updates.completedQuestIDs = completedQ;
+        try {
+            const qp = JSON.parse(document.getElementById('editQuestProgressObj').value);
+            if (JSON.stringify(qp) !== JSON.stringify(currentOriginalData.questProgress || [])) updates.questProgress = qp;
+        } catch(e) { showToast('Lỗi JSON tiến độ nhiệm vụ!', 'error'); hideLoading(); return; }
+        const pbStr = document.getElementById('editPhapBaoObj').value.trim();
+        try {
+            if (pbStr) { const pb = JSON.parse(pbStr); if (JSON.stringify(pb) !== JSON.stringify(currentOriginalData.phapBaoDangMacObj)) updates.phapBaoDangMacObj = pb; }
+            else if (currentOriginalData.phapBaoDangMacObj) updates.phapBaoDangMacObj = null;
+        } catch(e) { showToast('Lỗi JSON Pháp Bảo!', 'error'); hideLoading(); return; }
+        if (Object.keys(updates).length === 0) { showToast('Không có thay đổi!', 'warning'); hideLoading(); return; }
+        await patchGameData(currentEditUid, updates);
+        if (updates.chiSoCanhGio !== undefined || updates.tang !== undefined || updates.tenNhanVat !== undefined || updates.linhThach !== undefined) {
+            const nS = updates.chiSoCanhGio ?? currentOriginalData.chiSoCanhGio;
+            const nT = updates.tang ?? currentOriginalData.tang;
+            const nN = updates.tenNhanVat ?? currentOriginalData.tenNhanVat;
+            const nL = updates.linhThach ?? currentOriginalData.linhThach;
+            await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: nN, score: nS * 10000 + nT * 1000 });
+            await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: nN, score: nL });
         }
+        showToast(`✅ Đã ghi ${Object.keys(updates).length} trường!`, 'success');
+        playersCache = null; await loadPlayers(true); await loadFullPlayerData();
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
 
-        function searchPlayer() { displayPlayers(); }
-        function clearSearch() { document.getElementById('searchInput').value = ''; displayPlayers(); }
+async function deleteCurrentPlayer() {
+    if (!currentEditUid || !currentOriginalData) return;
+    const confirmName = prompt(`⚠️ Nhập đúng tên "${currentOriginalData.tenNhanVat}" để xác nhận xóa:`);
+    if (confirmName !== currentOriginalData.tenNhanVat) { showToast('Sai tên, hủy thao tác.', 'warning'); return; }
+    showLoading();
+    try {
+        await db.ref(`users/${currentEditUid}`).remove();
+        await db.ref(`leaderboard/tuvi/${currentEditUid}`).remove();
+        await db.ref(`leaderboard/linhthach/${currentEditUid}`).remove();
+        await db.ref(`banned/${currentEditUid}`).remove();
+        showToast('Đã xóa vĩnh viễn!', 'success');
+        currentEditUid = null; currentOriginalData = null;
+        document.getElementById('fullEditor').style.display = 'none';
+        document.getElementById('playerSelect').value = '';
+        playersCache = null; await loadPlayers(true);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+async function banCurrentPlayer() {
+    if (!currentEditUid) return;
+    const reason = prompt('Lý do cấm:');
+    if (!reason) return;
+    showLoading();
+    try {
+        await db.ref(`banned/${currentEditUid}`).set({ reason, timestamp: Date.now(), bannedBy: currentUser?.email });
+        showToast('Đã ban!', 'success'); playersCache = null; await loadPlayers(true);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+async function unbanCurrentPlayer() {
+    if (!currentEditUid) return;
+    showLoading();
+    try {
+        await db.ref(`banned/${currentEditUid}`).remove();
+        showToast('Đã mở khóa!', 'success'); playersCache = null; await loadPlayers(true);
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
 
-        function displayPlayers() {
-            if (!playersCache) {
-                document.getElementById('playerListContainer').innerHTML = '<div class="card"><p>Chưa có dữ liệu</p></div>';
-                return;
-            }
-            const rawKeyword = document.getElementById('searchInput')?.value.trim() || '';
-            const keyword = removeVietnameseTones(rawKeyword);
-            let filtered = playersCache;
-            
-            if (keyword.length > 0) {
-                filtered = playersCache.filter(p => 
-                    removeVietnameseTones(p.name).includes(keyword) || 
-                    p.uid.toLowerCase().includes(keyword)
-                );
-            }
-            
-            if (filtered.length === 0) {
-                document.getElementById('playerListContainer').innerHTML = '<div class="card"><p>Không tìm thấy người chơi khớp với bộ lọc</p></div>';
-                return;
-            }
-            
-            const sortIcon = (f) => currentSort.field === f ? (currentSort.order === 'asc' ? '▲' : '▼') : '⇅';
-            const stages = ['Luyện Khí', 'Trúc Cơ', 'Kim Đan', 'Nguyên Anh', 'Hóa Thần', 'Phàm Tiên', 'Địa Tiên', 'Thiên Tiên', 'Chân Tiên', 'Kim Tiên'];
-            
-            let html = `<div class="table-container"><table class="table"><thead>
-                <tr><th class="sortable-header" onclick="sortPlayers('name')">Tên <span class="sort-icon">${sortIcon('name')}</span></th>
-                <th class="sortable-header" onclick="sortPlayers('stage')">Cảnh giới <span class="sort-icon">${sortIcon('stage')}</span></th>
-                <th class="sortable-header" onclick="sortPlayers('gold')">Vàng <span class="sort-icon">${sortIcon('gold')}</span></th>
-                <th class="sortable-header" onclick="sortPlayers('linhThach')">Linh thạch <span class="sort-icon">${sortIcon('linhThach')}</span></th>
-                <th class="sortable-header" onclick="sortPlayers('isVip')">VIP <span class="sort-icon">${sortIcon('isVip')}</span></th>
-                <th>Ban</th>
-                </thead><tbody>`;
-            
-            filtered.slice(0, 150).forEach(p => {
-                html += `<tr class="player-row" onclick="selectPlayer('${p.uid}')">
-                    <td><strong>${escapeHtml(p.name)}</strong></td>
-                    <td>${stages[p.stage] || '???'} tầng ${p.tang}</td>
-                    <td>${(p.gold || 0).toLocaleString()}</td>
-                    <td>${(p.linhThach || 0).toLocaleString()}</td>
-                    <td>${p.isVip ? '<span class="badge badge-vip">VIP</span>' : '-'}</td>
-                    <td>${p.isBanned ? '<span class="badge badge-ban">BANNED</span>' : '-'}</td>
-                </tr>`;
-            });
-            html += `</tbody></table></div><p style="margin-top:8px;font-size:10px;color:#aaa;">Hiển thị ${Math.min(filtered.length, 150)}/${filtered.length} kết quả</p>`;
-            document.getElementById('playerListContainer').innerHTML = html;
+// ==================== SKILLS ====================
+async function loadPlayerSkills() {
+    const uid = document.getElementById('skillPlayerSelect').value;
+    if (!uid) return;
+    showLoading();
+    try {
+        const data = await readGameData(uid);
+        if (!data) return;
+        document.getElementById('skillsEditor').style.display = 'block';
+        currentSkillsData = JSON.parse(JSON.stringify(data));
+        currentEditUid = uid;
+        ['skillSlot0','skillSlot1','skillSlot2','skillSlot3'].forEach((id, i) => document.getElementById(id).value = data[`skillSlot_${i}`] || '');
+        const skillKeys = Object.keys(data).filter(k => k.startsWith('skill_') && (k.endsWith('_daHoc') || k.endsWith('_capDo')));
+        const skillMap = {};
+        skillKeys.forEach(k => {
+            const base = k.replace(/_daHoc$|_capDo$/, '');
+            if (!skillMap[base]) skillMap[base] = {};
+            if (k.endsWith('_daHoc')) skillMap[base].daHoc = data[k];
+            if (k.endsWith('_capDo')) skillMap[base].capDo = data[k];
+        });
+        let html = '';
+        for (let key in skillMap) {
+            html += `<div class="skill-item"><span class="skill-name">${key}</span><br>
+                Đã học: <input type="checkbox" id="skill_${key}_daHoc" ${skillMap[key].daHoc ? 'checked' : ''}>
+                Cấp độ: <input type="number" id="skill_${key}_capDo" value="${skillMap[key].capDo || 0}" min="0" max="20" style="width:60px;"></div>`;
         }
+        document.getElementById('skillsList').innerHTML = html;
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+async function savePlayerSkills() {
+    if (!currentEditUid || !currentSkillsData) { showToast('Chọn người chơi trước', 'error'); return; }
+    showLoading();
+    try {
+        const updates = {};
+        for (let i = 0; i < 4; i++) updates[`skillSlot_${i}`] = document.getElementById(`skillSlot${i}`).value;
+        document.querySelectorAll('#skillsList input[type="checkbox"]').forEach(cb => {
+            const key = cb.id.replace('_daHoc', '');
+            updates[`${key}_daHoc`] = cb.checked;
+            updates[`${key}_capDo`] = parseInt(document.getElementById(`${key}_capDo`)?.value) || 0;
+        });
+        await patchGameData(currentEditUid, updates);
+        showToast('Lưu kỹ năng thành công!', 'success');
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
 
-        function sortPlayers(field) {
-            if (currentSort.field === field) currentSort.order = currentSort.order === 'asc' ? 'desc' : 'asc';
-            else { currentSort.field = field; currentSort.order = 'desc'; }
-            playersCache.sort((a, b) => {
-                let valA = a[field], valB = b[field];
-                if (field === 'name') { valA = removeVietnameseTones(valA||''); valB = removeVietnameseTones(valB||''); }
-                if (valA < valB) return currentSort.order === 'asc' ? -1 : 1;
-                if (valA > valB) return currentSort.order === 'asc' ? 1 : -1;
-                return 0;
-            });
-            displayPlayers();
-        }
+// ==================== INVENTORY ====================
+async function loadPlayerInventory() {
+    const uid = document.getElementById('invPlayerSelect').value;
+    if (!uid) return;
+    showLoading();
+    try {
+        const data = await readGameData(uid);
+        if (!data) return;
+        document.getElementById('inventoryEditor').style.display = 'block';
+        inventoryData = JSON.parse(JSON.stringify(data));
+        currentEditUid = uid;
+        refreshInventoryDisplay();
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
+function refreshInventoryDisplay() {
+    if (!inventoryData) return;
+    let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th>UID</th><th></th></tr></thead><tbody>';
+    (inventoryData.danhSachTrangBi || []).forEach((item, idx) => {
+        tbHtml += `<tr><td>${item.tenItem}</td><td>${item.capDo||0}</td><td style="font-size:9px;color:#888;">${item.uid||''}</td>
+            <td><button class="btn btn-danger btn-sm" onclick="removeTrangBi(${idx})">Xóa</button></td></tr>`;
+    });
+    tbHtml += '</tbody></table>';
+    document.getElementById('trangBiList').innerHTML = tbHtml;
+    let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>';
+    (inventoryData.danhSachDan || []).forEach((item, idx) => {
+        danHtml += `<tr><td>${item.tenDan}</td><td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td></tr>`;
+    });
+    danHtml += '</tbody></table>';
+    document.getElementById('danList').innerHTML = danHtml;
+}
+function removeTrangBi(idx) { if (inventoryData?.danhSachTrangBi) { inventoryData.danhSachTrangBi.splice(idx,1); refreshInventoryDisplay(); } }
+function removeDan(idx) { if (inventoryData?.danhSachDan) { inventoryData.danhSachDan.splice(idx,1); refreshInventoryDisplay(); } }
+function addTrangBi() {
+    const name = document.getElementById('addTrangBiName').value.trim();
+    const level = parseInt(document.getElementById('addTrangBiCapDo').value) || 0;
+    if (!name) { showToast('Nhập tên', 'error'); return; }
+    if (!inventoryData.danhSachTrangBi) inventoryData.danhSachTrangBi = [];
+    inventoryData.danhSachTrangBi.push({ tenItem: name, capDo: level });
+    document.getElementById('addTrangBiName').value = '';
+    refreshInventoryDisplay(); showToast('Đã thêm', 'success');
+}
+function addDan() {
+    const name = document.getElementById('addDanName').value.trim();
+    if (!name) { showToast('Nhập tên', 'error'); return; }
+    if (!inventoryData.danhSachDan) inventoryData.danhSachDan = [];
+    inventoryData.danhSachDan.push({ tenDan: name });
+    document.getElementById('addDanName').value = '';
+    refreshInventoryDisplay(); showToast('Đã thêm', 'success');
+}
+async function savePlayerInventory() {
+    if (!currentEditUid || !inventoryData) { showToast('Chọn người chơi trước', 'error'); return; }
+    showLoading();
+    try {
+        await patchGameData(currentEditUid, { danhSachTrangBi: inventoryData.danhSachTrangBi || [], danhSachDan: inventoryData.danhSachDan || [] });
+        showToast('Lưu kho đồ thành công!', 'success');
+    } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+    hideLoading();
+}
 
-        function updateStats() {
-            if (playersCache) {
-                document.getElementById('totalPlayers').innerText = playersCache.length;
-                document.getElementById('totalVip').innerText = playersCache.filter(p => p.isVip).length;
-            }
-        }
+// ==================== RECHARGE (FULL TRANSACTION LIST) ====================
+async function loadRecharge() {
+    showLoading();
+    try {
+        const users = (await db.ref('users').once('value')).val() || {};
+        allRechargeData = [];
+        allTxData = [];
 
-        function updateSelects() {
-            if (!playersCache) return;
-            const options = '<option value="">-- Chọn người chơi --</option>' + playersCache.map(p => `<option value="${p.uid}">${escapeHtml(p.name)} (${p.uid.substring(0,8)}...)</option>`).join('');
-            document.getElementById('playerSelect').innerHTML = options;
-            document.getElementById('skillPlayerSelect').innerHTML = options;
-            document.getElementById('invPlayerSelect').innerHTML = options;
-        }
+        for (let uid in users) {
+            const data = users[uid]?.gameData;
+            if (!data) continue;
+            const txHistory = data.transactionHistory || [];
+            let totalVND = 0, totalLT = 0, txCount = 0;
 
-        async function selectPlayer(uid) {
-            document.getElementById('playerSelect').value = uid;
-            await loadFullPlayerData();
-            showTab('edit_player');
-        }
-
-        // ==================== BẢNG EDIT THÔNG SỐ ĐẦY ĐỦ VÀ GHI ĐÈ ====================
-        
-        async function loadFullPlayerData() {
-            const uid = document.getElementById('playerSelect').value;
-            if (!uid) return;
-            showLoading();
-            try {
-                // Đọc nguyên User root node -> Lấy được gameData, stats, transactions
-                const data = await readUserNodeData(uid);
-                if (!data || Object.keys(data).length === 0) { 
-                    showToast('Không tìm thấy dữ liệu hoặc cấu trúc trống', 'error'); 
-                    hideLoading(); return; 
-                }
-                
-                // Deep copy để so sánh
-                currentOriginalData = JSON.parse(JSON.stringify(data));
-                currentEditUid = uid;
-
-                document.getElementById('fullEditor').style.display = 'block';
-                
-                // Xây dựng Bảng Dynamic Editor
-                buildDynamicTable(data);
-
-            } catch(e) { showToast('Lỗi nạp form: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        function buildDynamicTable(data) {
-            const tbody = document.querySelector('#dynamicParamsTable tbody');
-            let html = '';
-            
-            const pathsToDisplay = {};
-            
-            // Hàm Duyệt Cấu Trúc Json phẳng hóa
-            const processNode = (basePath, obj) => {
-                if (obj === null || obj === undefined) return;
-                
-                for (let key in obj) {
-                    const val = obj[key];
-                    const fullPath = basePath ? `${basePath}/${key}` : key;
-                    
-                    // Mở rộng sâu các object: Root (''), gameData, stats, và các transaction bên trong `transactions`
-                    if (val !== null && typeof val === 'object') {
-                        if (
-                            basePath === '' || 
-                            basePath === 'gameData' || 
-                            basePath === 'stats' || 
-                            basePath === 'transactions'
-                        ) {
-                            processNode(fullPath, val);
-                        } else {
-                            // Nếu gặp một array như danhSachPhapBao, hoặc Object lạ -> Biến thành string JSON
-                            pathsToDisplay[fullPath] = JSON.stringify(val, null, 4);
-                        }
-                    } else {
-                        // primitive value (Number, Boolean, String)
-                        pathsToDisplay[fullPath] = val;
-                    }
-                }
-            };
-            
-            processNode('', data);
-            
-            // Sắp xếp các Key cho dễ nhìn
-            const sortedKeys = Object.keys(pathsToDisplay).sort();
-            
-            sortedKeys.forEach(path => {
-                const val = pathsToDisplay[path];
-                
-                // Phát hiện xem String có phải dạng Object/Array không
-                let isJsonStr = false;
-                if (typeof val === 'string') {
-                    const trimmed = val.trim();
-                    if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
-                        isJsonStr = true;
-                    }
-                }
-                
-                const isLongText = typeof val === 'string' && val.length > 60;
-                
-                let inputHtml = '';
-                
-                if (typeof val === 'boolean') {
-                    inputHtml = `<select class="form-control edit-dynamic" data-path="${path}" data-type="boolean">
-                        <option value="true" ${val ? 'selected' : ''}>true</option>
-                        <option value="false" ${!val ? 'selected' : ''}>false</option>
-                    </select>`;
-                } else if (typeof val === 'number') {
-                    inputHtml = `<input type="number" step="any" class="form-control edit-dynamic" data-path="${path}" data-type="number" value="${val}">`;
-                } else if (isJsonStr || isLongText) {
-                    const rows = isJsonStr ? 8 : 3;
-                    inputHtml = `<textarea class="form-control edit-dynamic" data-path="${path}" data-type="json" rows="${rows}">${escapeHtml(val)}</textarea>`;
-                } else {
-                    inputHtml = `<input type="text" class="form-control edit-dynamic" data-path="${path}" data-type="string" value="${escapeHtml(String(val))}">`;
-                }
-                
-                html += `<tr>
-                    <td class="path-col">${path}</td>
-                    <td>${inputHtml}</td>
-                </tr>`;
-            });
-            
-            tbody.innerHTML = html;
-        }
-
-        async function saveFullPlayerData() {
-            if (!currentEditUid || !currentOriginalData) { showToast('Chọn người chơi trước', 'error'); return; }
-            showLoading();
-            
-            try {
-                const updates = {};
-                const inputs = document.querySelectorAll('.edit-dynamic');
-                
-                // Quét qua các thông số của Dynamic table
-                for (let input of inputs) {
-                    const path = input.getAttribute('data-path');
-                    const type = input.getAttribute('data-type');
-                    let newValue = input.value;
-                    
-                    // Chuyển kiểu dữ liệu tương ứng
-                    if (type === 'number') {
-                        newValue = newValue.includes('.') ? parseFloat(newValue) : parseInt(newValue);
-                        if (isNaN(newValue)) newValue = 0;
-                    } else if (type === 'boolean') {
-                        newValue = newValue === 'true';
-                    } else if (type === 'json') {
-                        try {
-                            // Thử parse JSON, nếu fail thì giữ String
-                            if (newValue.trim() !== '') {
-                                newValue = JSON.parse(newValue);
-                            } else {
-                                newValue = null; // Hoặc [] tùy context, nhưng null sẽ xóa
-                            }
-                        } catch(e) {
-                            // Nếu nó bắt buộc phải là Array/Object (vì ban đầu là JSON)
-                            if (newValue.trim().startsWith('{') || newValue.trim().startsWith('[')) {
-                                alert(`Lỗi cú pháp JSON tại: ${path}. Vui lòng kiểm tra lại!`);
-                                hideLoading();
-                                return;
-                            }
-                        }
-                    }
-                    
-                    // Lấy ra dữ liệu gốc tương ứng từ Object currentOriginalData
-                    const originalValue = getDescendantProp(currentOriginalData, path);
-                    
-                    // So sánh, nếu là object thì stringify
-                    let isDifferent = false;
-                    if (typeof newValue === 'object' && newValue !== null) {
-                        isDifferent = JSON.stringify(newValue) !== JSON.stringify(originalValue);
-                    } else {
-                        isDifferent = newValue !== originalValue;
-                    }
-                        
-                    if (isDifferent) {
-                        updates[path] = newValue; // Lưu với Key chính là Path! Cực kì hợp cho Firebase MultiPath.
-                    }
-                }
-                
-                if (Object.keys(updates).length === 0) {
-                    showToast('Không có dữ liệu nào bị thay đổi!', 'warning');
-                    hideLoading(); return;
-                }
-                
-                // Luôn set lại timestamp mới cho người chơi
-                updates['gameData/timestamp'] = Date.now() * 10000 + 62135596800000;
-                
-                console.log("Sẽ Patch các key sau: ", updates);
-                
-                // Lệnh DUY NHẤT để update chuẩn xác những file bị thay đổi (Kể cả Root, Stats, Transactions)
-                await db.ref(`users/${currentEditUid}`).update(updates);
-                
-                // Đồng bộ cập nhật luôn Leaderboard nếu có thông số cốt lõi thay đổi
-                if (updates['gameData/chiSoCanhGio'] !== undefined || updates['gameData/tang'] !== undefined || updates['gameData/tenNhanVat'] !== undefined || updates['gameData/linhThach'] !== undefined) {
-                    const nS = updates['gameData/chiSoCanhGio'] ?? currentOriginalData.gameData?.chiSoCanhGio ?? 0;
-                    const nT = updates['gameData/tang'] ?? currentOriginalData.gameData?.tang ?? 1;
-                    const nN = updates['gameData/tenNhanVat'] ?? currentOriginalData.gameData?.tenNhanVat ?? "Đạo Hữu";
-                    const nL = updates['gameData/linhThach'] ?? currentOriginalData.gameData?.linhThach ?? 0;
-                    
-                    await db.ref(`leaderboard/tuvi/${currentEditUid}`).set({ name: nN, score: nS * 10000 + nT * 1000 });
-                    await db.ref(`leaderboard/linhthach/${currentEditUid}`).set({ name: nN, score: nL });
-                }
-                
-                showToast(`Đã ghi đè thông minh ${Object.keys(updates).length} trường thông số!`, 'success');
-                
-                playersCache = null;
-                await loadPlayers(true);
-                await loadFullPlayerData(); // Load lại form cho đồng bộ ngay lập tức
-                
-            } catch(e) { showToast('Lỗi lưu Data: ' + e.message, 'error'); }
-            
-            hideLoading();
-        }
-
-        // Lấy giá trị lồng nhau từ string path. Vd: 'gameData/danhSachPhapBao/0'
-        function getDescendantProp(obj, path) {
-            return path.split('/').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj);
-        }
-
-        // Tạo User Mới và Xóa 
-        async function createNewPlayer() {
-            const name = prompt('Nhập tên nhân vật mới (Hệ thống sẽ tự sinh UID):');
-            if (!name) return;
-            showLoading();
-            try {
-                const newRef = db.ref('users').push(); 
-                const newUid = newRef.key;
-                const defaultData = {
-                    tenNhanVat: name, chiSoCanhGio: 0, tang: 1,
-                    vang: 500, linhThach: 20,
-                    hpGoc: 100, atkGoc: 20, defGoc: 10, luckGoc: 5,
-                    clientVersion: "8.2", dataVersion: 2,
-                    timestamp: Date.now() * 10000 + 62135596800000
-                };
-                await db.ref(`users/${newUid}/gameData`).set(defaultData);
-                showToast('Tạo User thành công!', 'success');
-                
-                playersCache = null; 
-                await loadPlayers(true);
-                await selectPlayer(newUid);
-            } catch(e) { showToast('Lỗi tạo User: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        async function deleteCurrentPlayer() {
-            if (!currentEditUid || !currentOriginalData || !currentOriginalData.gameData) return;
-            const confirmName = prompt(`⚠️ CẢNH BÁO NGUY HIỂM\nHành động này không thể hoàn tác.\nNhập đúng tên "${currentOriginalData.gameData.tenNhanVat}" để xác nhận xóa:`);
-            if (confirmName !== currentOriginalData.gameData.tenNhanVat) {
-                showToast('Nhập sai tên, hủy thao tác xóa.', 'warning');
-                return;
-            }
-            
-            showLoading();
-            try {
-                await db.ref(`users/${currentEditUid}`).remove();
-                await db.ref(`leaderboard/tuvi/${currentEditUid}`).remove();
-                await db.ref(`leaderboard/linhthach/${currentEditUid}`).remove();
-                await db.ref(`leaderboard/lucchien/${currentEditUid}`).remove();
-                await db.ref(`banned/${currentEditUid}`).remove();
-                
-                showToast('Đã xóa vĩnh viễn dữ liệu người chơi!', 'success');
-                document.getElementById('fullEditor').style.display = 'none';
-                currentEditUid = null; currentOriginalData = null;
-                
-                playersCache = null;
-                await loadPlayers(true);
-                showTab('players');
-            } catch(e) { showToast('Lỗi xóa User: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        async function banCurrentPlayer() {
-            if (!currentEditUid) return;
-            const reason = prompt('Lý do cấm (Người dùng sẽ thấy lý do này):');
-            if (!reason) return;
-            showLoading();
-            try {
-                await db.ref(`banned/${currentEditUid}`).set({ reason, timestamp: Date.now(), bannedBy: currentUser?.email });
-                showToast('Đã ban tài khoản!', 'success');
-                playersCache = null; await loadPlayers(true);
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        async function unbanCurrentPlayer() {
-            if (!currentEditUid) return;
-            showLoading();
-            try {
-                await db.ref(`banned/${currentEditUid}`).remove();
-                showToast('Đã gỡ Ban!', 'success');
-                playersCache = null; await loadPlayers(true);
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        // ==================== SKILLS & INVENTORY ====================
-        // (Vẫn giữ nguyên chức năng cũ do chúng nằm tab riêng)
-        async function loadPlayerSkills() {
-            const uid = document.getElementById('skillPlayerSelect').value;
-            if (!uid) return;
-            showLoading();
-            try {
-                const data = (await db.ref(`users/${uid}/gameData`).once('value')).val();
-                if (!data) return;
-                
-                document.getElementById('skillsEditor').style.display = 'block';
-                currentSkillsData = JSON.parse(JSON.stringify(data));
-                currentEditUid = uid;
-                
-                document.getElementById('skillSlot0').value = data.skillSlot_0 || '';
-                document.getElementById('skillSlot1').value = data.skillSlot_1 || '';
-                document.getElementById('skillSlot2').value = data.skillSlot_2 || '';
-                document.getElementById('skillSlot3').value = data.skillSlot_3 || '';
-                
-                const skillKeys = Object.keys(data).filter(k => k.startsWith('skill_') && (k.endsWith('_daHoc') || k.endsWith('_capDo')));
-                const skillMap = {};
-                skillKeys.forEach(k => {
-                    const baseKey = k.replace(/_daHoc$|_capDo$/, '');
-                    if (!skillMap[baseKey]) skillMap[baseKey] = {};
-                    if (k.endsWith('_daHoc')) skillMap[baseKey].daHoc = data[k];
-                    if (k.endsWith('_capDo')) skillMap[baseKey].capDo = data[k];
+            txHistory.forEach(tx => {
+                if (!tx.productId) return;
+                const vnd = PRICE_MAP[tx.productId] || 0;
+                const lt = tx.soLinhThach || tx.soTien || 0;
+                totalVND += vnd; totalLT += lt; txCount++;
+                allTxData.push({
+                    uid,
+                    playerName: data.tenNhanVat || 'Không tên',
+                    transactionId: tx.transactionId || '',
+                    productId: tx.productId || '',
+                    soLinhThach: lt,
+                    giaTriVND: vnd,
+                    giaTriVNDStr: tx.giaTriVND || '',
+                    thoiGianNap: tx.thoiGianNap || '',
+                    daXacThuc: tx.daXacThuc !== false,
+                    timestamp: tx.timestamp || 0
                 });
-                
-                let html = '';
-                for (let key in skillMap) {
-                    html += `<div class="skill-item">
-                        <span class="skill-name">${key}</span><br>
-                        Đã học: <input type="checkbox" id="skill_${key}_daHoc" ${skillMap[key].daHoc ? 'checked' : ''}>
-                        Cấp độ: <input type="number" id="skill_${key}_capDo" value="${skillMap[key].capDo || 0}" min="0" max="20" style="width:60px">
-                    </div>`;
-                }
-                document.getElementById('skillsList').innerHTML = html;
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        async function savePlayerSkills() {
-            if (!currentEditUid) { showToast('Chọn người chơi trước', 'error'); return; }
-            showLoading();
-            try {
-                const updates = {};
-                updates['gameData/skillSlot_0'] = document.getElementById('skillSlot0').value;
-                updates['gameData/skillSlot_1'] = document.getElementById('skillSlot1').value;
-                updates['gameData/skillSlot_2'] = document.getElementById('skillSlot2').value;
-                updates['gameData/skillSlot_3'] = document.getElementById('skillSlot3').value;
-                
-                const checkboxes = document.querySelectorAll('#skillsList input[type="checkbox"]');
-                checkboxes.forEach(cb => {
-                    const key = cb.id.replace('_daHoc', '');
-                    const capDoInput = document.getElementById(`${key}_capDo`);
-                    updates[`gameData/${key}_daHoc`] = cb.checked;
-                    updates[`gameData/${key}_capDo`] = parseInt(capDoInput?.value) || 0;
-                });
-                
-                await db.ref(`users/${currentEditUid}`).update(updates);
-                showToast('Lưu kỹ năng thành công!', 'success');
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        async function loadPlayerInventory() {
-            const uid = document.getElementById('invPlayerSelect').value;
-            if (!uid) return;
-            showLoading();
-            try {
-                const data = (await db.ref(`users/${uid}/gameData`).once('value')).val();
-                if (!data) return;
-                
-                document.getElementById('inventoryEditor').style.display = 'block';
-                inventoryData = JSON.parse(JSON.stringify(data));
-                currentEditUid = uid;
-                refreshInventoryDisplay();
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        function refreshInventoryDisplay() {
-            if (!inventoryData) return;
-            let tbHtml = '<table class="table"><thead><tr><th>Tên</th><th>Cấp</th><th></th><tr></thead><tbody>';
-            (inventoryData.danhSachTrangBi || []).forEach((item, idx) => {
-                tbHtml += `<tr>
-                    <td>${item.tenItem}</td>
-                    <td>${item.capDo || 0}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="removeTrangBi(${idx})">Xóa</button></td>
-                </tr>`;
             });
-            tbHtml += '</tbody></table>';
-            document.getElementById('trangBiList').innerHTML = tbHtml;
-            
-            let danHtml = '<table class="table"><thead><tr><th>Tên</th><th></th></td></thead><tbody>';
-            (inventoryData.danhSachDan || []).forEach((item, idx) => {
-                danHtml += `<tr>
-                    <td>${item.tenDan}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="removeDan(${idx})">Xóa</button></td>
-                </tr>`;
-            });
-            danHtml += '</tbody></table>';
-            document.getElementById('danList').innerHTML = danHtml;
-        }
 
-        function removeTrangBi(idx) { if (inventoryData && inventoryData.danhSachTrangBi) { inventoryData.danhSachTrangBi.splice(idx, 1); refreshInventoryDisplay(); } }
-        function removeDan(idx) { if (inventoryData && inventoryData.danhSachDan) { inventoryData.danhSachDan.splice(idx, 1); refreshInventoryDisplay(); } }
-
-        function addTrangBi() {
-            const name = document.getElementById('addTrangBiName').value.trim();
-            const level = parseInt(document.getElementById('addTrangBiCapDo').value) || 0;
-            if (!name) { showToast('Nhập tên trang bị', 'error'); return; }
-            if (!inventoryData.danhSachTrangBi) inventoryData.danhSachTrangBi = [];
-            inventoryData.danhSachTrangBi.push({ tenItem: name, capDo: level });
-            document.getElementById('addTrangBiName').value = '';
-            refreshInventoryDisplay(); showToast('Đã thêm ' + name, 'success');
-        }
-
-        function addDan() {
-            const name = document.getElementById('addDanName').value.trim();
-            if (!name) { showToast('Nhập tên đan', 'error'); return; }
-            if (!inventoryData.danhSachDan) inventoryData.danhSachDan = [];
-            inventoryData.danhSachDan.push({ tenDan: name });
-            document.getElementById('addDanName').value = '';
-            refreshInventoryDisplay(); showToast('Đã thêm ' + name, 'success');
-        }
-
-        async function savePlayerInventory() {
-            if (!currentEditUid) { showToast('Chọn người chơi trước', 'error'); return; }
-            showLoading();
-            try {
-                await db.ref(`users/${currentEditUid}`).update({
-                    'gameData/danhSachTrangBi': inventoryData.danhSachTrangBi || [],
-                    'gameData/danhSachDan': inventoryData.danhSachDan || []
-                });
-                showToast('Lưu kho đồ thành công!', 'success');
-            } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
-            hideLoading();
-        }
-
-        // ==================== CÁC HÀM KHÁC ====================
-        async function loadLeaderboard() {
-            try {
-                const tuVi = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
-                let html = '', rank = 1; const list = [];
-                tuVi.forEach(c => list.push({ name: c.val().name, score: c.val().score }));
-                list.reverse().forEach(e => {
-                    const stage = Math.floor(e.score / 10000);
-                    const tang = Math.floor((e.score % 10000) / 1000);
-                    html += `<tr><td>${rank++}</td><td>${escapeHtml(e.name)}</td><td>Bậc ${stage}</td><td>${e.score}</td></tr>`;
-                });
-                document.querySelector('#leaderboardTuVi tbody').innerHTML = html || '<tr><td colspan="4">Trống</td></tr>';
-                
-                const lt = await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
-                html = ''; rank = 1; const ltList = [];
-                lt.forEach(c => ltList.push({ name: c.val().name, score: c.val().score }));
-                ltList.reverse().forEach(e => html += `<tr><td>${rank++}</td><td>${escapeHtml(e.name)}</td><td>${e.score.toLocaleString()}</td></tr>`);
-                document.querySelector('#leaderboardLinhThach tbody').innerHTML = html || '<tr><td colspan="3">Trống</td></tr>';
-                
-                document.getElementById('totalLinhThach').innerText = ltList.reduce((s,e) => s + e.score, 0).toLocaleString();
-            } catch(e) { console.error(e); }
-        }
-
-        async function loadRecharge() {
-            try {
-                const users = (await db.ref('users').once('value')).val() || {};
-                const priceMap = { 'linhthach_1000': 19000, 'linhthach_5000': 89000, 'linhthach_10000': 169000, 'vip_package': 39000 };
-                const rechargers = [];
-                for (let uid in users) {
-                    const data = users[uid]?.gameData;
-                    if (data && data.transactionHistory) {
-                        let totalVND = 0, count = 0, totalLT = 0;
-                        data.transactionHistory.forEach(tx => {
-                            if (tx.productId && tx.daXacThuc !== false) {
-                                count++; totalVND += (priceMap[tx.productId] || 0); totalLT += (tx.soTien || 0);
-                            }
-                        });
-                        if (count > 0) rechargers.push({ uid, name: data.tenNhanVat, count, totalVND, totalLT });
-                    }
-                }
-                rechargers.sort((a, b) => b.totalVND - a.totalVND);
-                let html = rechargers.map(r => `<tr><td>${r.uid.substring(0,8)}..</td><td>${r.name}</td><td>${r.count}</td><td>${r.totalVND.toLocaleString()}đ</td><td>${r.totalLT}</td></tr>`).join('');
-                document.querySelector('#rechargeTable tbody').innerHTML = html || '<tr><td colspan="5">Chưa có ai nạp</td></tr>';
-                document.getElementById('totalRecharged').innerText = rechargers.length;
-            } catch(e) {}
-        }
-
-        async function loadSuspicious() {
-            try {
-                const users = (await db.ref('users').once('value')).val() || {};
-                const suspicious = [];
-                for (let uid in users) {
-                    const d = users[uid]?.gameData;
-                    if (d) {
-                        let rs = [], lvl = 'normal';
-                        if (d.linhThach > 1000000) { rs.push('LT > 1M'); lvl = 'high'; }
-                        if (d.vang > 10000000) { rs.push('Vàng > 10M'); if(lvl=='normal') lvl='medium'; }
-                        if (rs.length > 0) suspicious.push({ uid, name: d.tenNhanVat, lt: d.linhThach, rs, lvl });
-                    }
-                }
-                suspicious.sort((a,b) => b.lt - a.lt);
-                let html = suspicious.map(s => `<tr><td>${s.uid.substring(0,8)}..</td><td>${s.name}</td><td>${s.lt}</td><td>${s.rs.join(', ')}</td><td>${s.lvl}</td></tr>`).join('');
-                document.querySelector('#suspiciousTable tbody').innerHTML = html || '<tr><td colspan="5">Không có nghi ngờ</td></tr>';
-            } catch(e) {}
-        }
-
-        async function loadGiftcodes() {
-            try {
-                const codes = (await db.ref('giftcodes').once('value')).val() || {};
-                let html = Object.keys(codes).map(c => `<tr><td>${c}</td><td>${codes[c].gold}V + ${codes[c].linhThach}LT</td><td>${codes[c].used}/${codes[c].maxUses}</td><td><button class="btn btn-danger btn-sm" onclick="db.ref('giftcodes/${c}').remove(); loadGiftcodes()">Xóa</button></td></tr>`).join('');
-                document.querySelector('#giftCodeList tbody').innerHTML = html || '<tr><td colspan="4">Trống</td></tr>';
-            } catch(e) {}
-        }
-        
-        async function createGiftCode() {
-            const code = document.getElementById('giftCode').value.toUpperCase().trim();
-            if (!code) return;
-            await db.ref(`giftcodes/${code}`).set({
-                code, gold: parseInt(document.getElementById('giftGold').value) || 0,
-                linhThach: parseInt(document.getElementById('giftLinhThach').value) || 0,
-                items: document.getElementById('giftItem').value.split(',').map(s=>s.trim()).filter(s=>s),
-                maxUses: parseInt(document.getElementById('giftMaxUses').value) || 999, used: 0, createdAt: Date.now()
-            });
-            showToast('Tạo Code thành công!'); loadGiftcodes();
-        }
-
-        async function loadEvent() {
-            const ev = (await db.ref('sukien/current').once('value')).val();
-            if (ev) {
-                document.getElementById('eventTitle').value = ev.tieuDe || '';
-                document.getElementById('eventContent').value = ev.noiDung || '';
-                document.getElementById('eventReward').value = ev.phanThuongLinhThach || 0;
-                document.getElementById('eventStatus').value = ev.dangHoatDong ? 'true' : 'false';
-                document.getElementById('currentEventInfo').innerHTML = `<p><b>${ev.tieuDe}</b>: ${ev.noiDung}</p>`;
+            // Also check /transactions node for this user
+            if (txCount > 0 || totalVND > 0) {
+                allRechargeData.push({ uid, name: data.tenNhanVat || 'Không tên', totalVND, totalLT, txCount });
             }
         }
-        
-        async function createEvent() {
-            await db.ref('sukien/current').set({
-                tieuDe: document.getElementById('eventTitle').value,
-                noiDung: document.getElementById('eventContent').value,
-                phanThuongLinhThach: parseInt(document.getElementById('eventReward').value) || 0,
-                dangHoatDong: document.getElementById('eventStatus').value === 'true', updatedAt: Date.now()
-            });
-            showToast('Lưu sự kiện thành công!'); loadEvent();
-        }
-        async function deleteEvent() { await db.ref('sukien/current').remove(); showToast('Đã xóa sự kiện'); loadEvent(); }
 
-        function updateCacheUI() {
-            const c = localStorage.getItem('admin_players_v2');
-            if (c) {
-                document.getElementById('cachePlayersCount').innerHTML = JSON.parse(c).length;
-                document.getElementById('cacheSize').innerHTML = Math.round(c.length/1024);
-                document.getElementById('lastUpdate').innerHTML = new Date(parseInt(localStorage.getItem('admin_players_time'))).toLocaleTimeString();
+        // Sort transactions by time desc
+        allTxData.sort((a, b) => b.timestamp - a.timestamp);
+        allRechargeData.sort((a, b) => b.totalVND - a.totalVND);
+
+        // Stats
+        const totalVND = allTxData.reduce((s, t) => s + t.giaTriVND, 0);
+        const totalLT = allTxData.reduce((s, t) => s + t.soLinhThach, 0);
+        document.getElementById('txTotalCount').innerText = allTxData.length.toLocaleString();
+        document.getElementById('txTotalVND').innerText = (totalVND/1000).toFixed(0) + 'K';
+        document.getElementById('txTotalLT').innerText = totalLT.toLocaleString();
+        document.getElementById('txUniqueUsers').innerText = allRechargeData.length;
+        document.getElementById('totalRecharged').innerText = allRechargeData.length;
+
+        renderRechargeUserTable();
+        renderTxTable(allTxData);
+    } catch(e) { showToast('Lỗi tải nạp: ' + e.message, 'error'); }
+    hideLoading();
+}
+
+function sortRecharge(field) {
+    rechargeSort.order = rechargeSort.field === field && rechargeSort.order === 'desc' ? 'asc' : 'desc';
+    rechargeSort.field = field;
+    renderRechargeUserTable();
+}
+
+function renderRechargeUserTable() {
+    const keyword = removeVietnameseTones(document.getElementById('rechargeSearch')?.value || '');
+    let data = [...allRechargeData].filter(r => keyword ? removeVietnameseTones(r.name).includes(keyword) || r.uid.includes(keyword) : true);
+    data.sort((a, b) => {
+        const va = a[rechargeSort.field], vb = b[rechargeSort.field];
+        if (va < vb) return rechargeSort.order === 'asc' ? -1 : 1;
+        if (va > vb) return rechargeSort.order === 'asc' ? 1 : -1;
+        return 0;
+    });
+    const html = data.map(r => `<tr>
+        <td><strong>${escapeHtml(r.name)}</strong></td>
+        <td style="color:#ffd700;">${r.totalVND.toLocaleString()}đ</td>
+        <td>${r.totalLT.toLocaleString()}</td>
+        <td>${r.txCount}</td>
+        <td style="font-size:9px;color:#888;">${r.uid.substring(0,12)}...</td>
+        <td><button class="btn btn-info btn-xs" onclick="filterTxByUser('${r.uid}')">📋 Xem</button></td>
+    </tr>`).join('') || '<tr><td colspan="6">Chưa có dữ liệu nạp</td></tr>';
+    document.getElementById('rechargeUserBody').innerHTML = html;
+}
+
+function filterRechargeTable() { renderRechargeUserTable(); }
+
+function filterTxByUser(uid) {
+    document.getElementById('txSearch').value = uid;
+    filterTxTable();
+    document.getElementById('txTable').scrollIntoView({ behavior: 'smooth' });
+}
+
+function filterTxTable() {
+    const keyword = removeVietnameseTones(document.getElementById('txSearch')?.value || '');
+    const product = document.getElementById('txProductFilter')?.value || '';
+    const verified = document.getElementById('txVerifiedFilter')?.value || '';
+    let filtered = allTxData.filter(tx => {
+        if (keyword && !removeVietnameseTones(tx.playerName).includes(keyword) && !tx.uid.includes(keyword) && !tx.transactionId.includes(keyword)) return false;
+        if (product && tx.productId !== product) return false;
+        if (verified === 'verified' && !tx.daXacThuc) return false;
+        if (verified === 'pending' && tx.daXacThuc) return false;
+        return true;
+    });
+    renderTxTable(filtered);
+}
+
+function renderTxTable(data) {
+    const PRODUCT_LABEL = {
+        'linhthach_1000': '1,000 LT (19K)',
+        'linhthach_5000': '5,000 LT (89K)',
+        'linhthach_10000': '10,000 LT (169K)',
+        'linhthach_100000': '100,000 LT',
+        'vip_package': 'VIP Package'
+    };
+    const html = data.map(tx => `<tr>
+        <td style="white-space:nowrap;font-size:10px;">${escapeHtml(tx.thoiGianNap)}</td>
+        <td><strong>${escapeHtml(tx.playerName)}</strong></td>
+        <td>${escapeHtml(PRODUCT_LABEL[tx.productId] || tx.productId)}</td>
+        <td style="color:#ffd700;">${(tx.soLinhThach||0).toLocaleString()}</td>
+        <td style="color:#28a745;">${tx.giaTriVND > 0 ? tx.giaTriVND.toLocaleString()+'đ' : (tx.giaTriVNDStr ? escapeHtml(tx.giaTriVNDStr)+'đ' : '-')}</td>
+        <td>${tx.daXacThuc ? '<span class="badge badge-ok">✅ OK</span>' : '<span class="badge badge-pending">⏳ Chờ</span>'}</td>
+        <td style="font-size:9px;color:#888;">${escapeHtml(tx.transactionId.substring(0,16))}...</td>
+    </tr>`).join('') || '<tr><td colspan="7">Không có giao dịch</td></tr>';
+    document.getElementById('txBody').innerHTML = html;
+    document.getElementById('txCount').innerText = `Hiển thị ${data.length} giao dịch`;
+}
+
+// ==================== LEADERBOARD ====================
+async function loadLeaderboard() {
+    try {
+        const tuVi = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
+        let list = [];
+        tuVi.forEach(c => list.push({ name: c.val().name, score: c.val().score }));
+        list.reverse();
+        let html = '', rank = 1;
+        list.forEach(e => {
+            const stage = Math.floor(e.score / 10000), tang = Math.floor((e.score % 10000) / 1000);
+            html += `<tr><td>${rank++}</td><td>${escapeHtml(e.name)}</td><td>${STAGES[stage]||'???'} tầng ${tang}</td><td>${e.score}</td></tr>`;
+        });
+        document.querySelector('#leaderboardTuVi tbody').innerHTML = html || '<tr><td colspan="4">Trống</td></tr>';
+
+        const lt = await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
+        let ltList = [];
+        lt.forEach(c => ltList.push({ name: c.val().name, score: c.val().score }));
+        ltList.reverse(); html = ''; rank = 1;
+        ltList.forEach(e => html += `<tr><td>${rank++}</td><td>${escapeHtml(e.name)}</td><td>${e.score.toLocaleString()}</td></tr>`);
+        document.querySelector('#leaderboardLinhThach tbody').innerHTML = html || '<tr><td colspan="3">Trống</td></tr>';
+        document.getElementById('totalLinhThach').innerText = ltList.reduce((s,e) => s+e.score, 0).toLocaleString();
+    } catch(e) { console.error(e); }
+}
+
+// ==================== SUSPICIOUS ====================
+async function loadSuspicious() {
+    try {
+        const users = (await db.ref('users').once('value')).val() || {};
+        const suspicious = [];
+        for (let uid in users) {
+            const d = users[uid]?.gameData;
+            if (d) {
+                let rs = [], lvl = 'normal';
+                if (d.linhThach > 1000000) { rs.push('LT > 1M'); lvl = 'high'; }
+                if (d.vang > 10000000) { rs.push('Vàng > 10M'); if(lvl==='normal') lvl='medium'; }
+                if (rs.length > 0) suspicious.push({ uid, name: d.tenNhanVat, lt: d.linhThach, rs, lvl });
             }
         }
-        function clearAllCache() { playersCache=null; localStorage.clear(); updateCacheUI(); }
-        async function forceRefreshAll() { showLoading(); playersCache=null; await afterLogin(); }
-        function testFirebase() { logToDebug("Testing connection..."); db.ref('.info/connected').once('value').then(s => logToDebug("Connected: " + s.val())); }
-        function checkAuth() { logToDebug("Auth check: " + (currentUser ? currentUser.email : "Null")); }
-    </script>
+        suspicious.sort((a,b) => b.lt - a.lt);
+        let html = suspicious.map(s => `<tr><td style="font-size:9px;">${s.uid.substring(0,10)}</td><td>${escapeHtml(s.name)}</td><td>${(s.lt||0).toLocaleString()}</td><td>${s.rs.join(', ')}</td><td>${s.lvl}</td></tr>`).join('');
+        document.querySelector('#suspiciousTable tbody').innerHTML = html || '<tr><td colspan="5">Không có nghi ngờ</td></tr>';
+    } catch(e) {}
+}
+
+// ==================== GIFTCODES ====================
+async function loadGiftcodes() {
+    try {
+        const codes = (await db.ref('giftcodes').once('value')).val() || {};
+        let html = Object.keys(codes).map(c => `<tr><td>${c}</td><td>${codes[c].gold}V + ${codes[c].linhThach}LT</td><td>${codes[c].used}/${codes[c].maxUses}</td>
+            <td><button class="btn btn-danger btn-sm" onclick="db.ref('giftcodes/${c}').remove().then(loadGiftcodes)">Xóa</button></td></tr>`).join('');
+        document.querySelector('#giftCodeList tbody').innerHTML = html || '<tr><td colspan="4">Trống</td></tr>';
+    } catch(e) {}
+}
+async function createGiftCode() {
+    const code = document.getElementById('giftCode').value.toUpperCase().trim();
+    if (!code) return;
+    await db.ref(`giftcodes/${code}`).set({
+        code, gold: parseInt(document.getElementById('giftGold').value) || 0,
+        linhThach: parseInt(document.getElementById('giftLinhThach').value) || 0,
+        items: document.getElementById('giftItem').value.split(',').map(s=>s.trim()).filter(s=>s),
+        maxUses: parseInt(document.getElementById('giftMaxUses').value) || 999, used: 0, createdAt: Date.now()
+    });
+    showToast('Tạo Code thành công!'); loadGiftcodes();
+}
+
+// ==================== EVENTS ====================
+async function loadEvent() {
+    const ev = (await db.ref('sukien/current').once('value')).val();
+    if (ev) {
+        document.getElementById('eventTitle').value = ev.tieuDe || '';
+        document.getElementById('eventContent').value = ev.noiDung || '';
+        document.getElementById('eventReward').value = ev.phanThuongLinhThach || 0;
+        document.getElementById('eventStatus').value = ev.dangHoatDong ? 'true' : 'false';
+        document.getElementById('currentEventInfo').innerHTML = `<p><b>${escapeHtml(ev.tieuDe)}</b>: ${escapeHtml(ev.noiDung)}</p>`;
+    } else {
+        document.getElementById('currentEventInfo').innerHTML = '<p style="color:#aaa;">Chưa có sự kiện</p>';
+    }
+}
+async function createEvent() {
+    await db.ref('sukien/current').set({
+        tieuDe: document.getElementById('eventTitle').value,
+        noiDung: document.getElementById('eventContent').value,
+        phanThuongLinhThach: parseInt(document.getElementById('eventReward').value) || 0,
+        dangHoatDong: document.getElementById('eventStatus').value === 'true', updatedAt: Date.now()
+    });
+    showToast('Lưu sự kiện thành công!'); loadEvent();
+}
+async function deleteEvent() { await db.ref('sukien/current').remove(); showToast('Đã xóa sự kiện'); loadEvent(); }
+
+// ==================== CACHE / DEBUG ====================
+function updateCacheUI() {
+    const c = localStorage.getItem('admin_players_v2');
+    if (c) {
+        document.getElementById('cachePlayersCount').innerHTML = JSON.parse(c).length;
+        document.getElementById('cacheSize').innerHTML = Math.round(c.length/1024);
+        document.getElementById('lastUpdate').innerHTML = new Date(parseInt(localStorage.getItem('admin_players_time'))).toLocaleTimeString();
+    }
+}
+function clearAllCache() { playersCache=null; localStorage.clear(); updateCacheUI(); showToast('Đã xóa cache', 'warning'); }
+async function forceRefreshAll() { showLoading(); playersCache=null; await afterLogin(); }
+function testFirebase() { logToDebug('Testing...'); db.ref('.info/connected').once('value').then(s => logToDebug('Connected: '+s.val())); }
+function checkAuth() { logToDebug('Auth: '+(currentUser ? currentUser.email : 'null')); }
+</script>
 </body>
 </html>
