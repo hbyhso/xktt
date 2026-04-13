@@ -1,1470 +1,1098 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Xuyên Không Tu Tiên</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - Tu Tiên</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;min-height:100vh}
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
+/* HEADER */
+.header{background:rgba(0,0,0,.9);padding:10px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ffd700;position:sticky;top:0;z-index:200;flex-wrap:wrap;gap:8px}
+.logo h1{font-size:16px;color:#ffd700}
+.user-info{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.login-form{display:flex;gap:6px;flex-wrap:wrap}
+.login-form input{padding:5px 8px;border-radius:5px;border:none;font-size:11px;background:#fff;color:#000}
+.btn-login{background:#ffd700;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:11px;color:#1a1a2e}
+.btn-logout{background:#dc3545;border:none;padding:5px 10px;border-radius:5px;color:#fff;cursor:pointer;font-size:11px}
 
-        /* Header */
-        .header {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #ffd700;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+/* SIDEBAR */
+.sidebar{background:rgba(0,0,0,.5);padding:10px;overflow-x:auto;white-space:nowrap}
+.sidebar-menu{list-style:none;display:flex;gap:6px}
+.sidebar-menu a{display:inline-block;padding:6px 14px;color:#ddd;text-decoration:none;border-radius:20px;font-size:12px;cursor:pointer;transition:.15s}
+.sidebar-menu a:hover,.sidebar-menu a.active{background:#ffd700;color:#1a1a2e;font-weight:bold}
 
-        .logo h1 {
-            font-size: 24px;
-            color: #ffd700;
-        }
+/* LAYOUT */
+.main-content{padding:15px}
+.tab-content{display:none}.tab-content.active{display:block}
+.card{background:rgba(255,255,255,.08);border-radius:12px;padding:12px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:600;margin-bottom:10px;color:#ffd700;border-left:3px solid #ffd700;padding-left:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 
-        .logo p {
-            font-size: 12px;
-            color: #aaa;
-        }
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+@media(min-width:640px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-card{background:rgba(0,0,0,.5);border-radius:8px;padding:10px;text-align:center}
+.stat-value{font-size:20px;font-weight:bold;color:#ffd700}
+.stat-label{font-size:9px;color:#aaa;margin-top:3px}
 
-        .user-info {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
+/* BUTTONS */
+.btn{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:.15s}
+.btn-primary{background:#ffd700;color:#1a1a2e}.btn-primary:hover{background:#e6c200}
+.btn-danger{background:#dc3545;color:#fff}.btn-danger:hover{background:#c82333}
+.btn-success{background:#28a745;color:#fff}.btn-success:hover{background:#218838}
+.btn-warning{background:#ffc107;color:#1a1a2e}
+.btn-info{background:#17a2b8;color:#fff}
+.btn-sm{padding:3px 8px;font-size:10px}
+.btn-xs{padding:2px 6px;font-size:9px;border-radius:4px}
+.refresh-btn{background:rgba(255,255,255,.1);border:1px solid #ffd700;border-radius:20px;padding:3px 10px;font-size:10px;color:#fff;cursor:pointer}
+.refresh-btn:hover{background:#ffd700;color:#1a1a2e}
 
-        .user-info span {
-            color: #ffd700;
-        }
+/* FORMS */
+.form-control{width:100%;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.5);border:1px solid #444;color:#fff;font-size:12px}
+.form-row{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:640px){.form-row{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
+.form-group{margin-bottom:8px}
+.form-group label{font-size:10px;display:block;margin-bottom:3px;color:#aaa}
 
-        .btn-logout {
-            background: #dc3545;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-        }
+/* TABLE */
+.table-wrap{overflow-x:auto}
+.table{width:100%;border-collapse:collapse;font-size:11px;min-width:400px}
+.table th,.table td{padding:6px 8px;text-align:left;border-bottom:1px solid #2a2a3e}
+.table th{color:#ffd700;background:rgba(255,215,0,.08);position:sticky;top:0;z-index:1}
+.table tr:hover td{background:rgba(255,215,0,.04)}
+.player-row{cursor:pointer}
+.player-row:hover td{background:rgba(255,215,0,.08)!important}
 
-        /* Container */
-        .container {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
+/* BADGES */
+.badge{display:inline-block;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:bold}
+.badge-vip{background:#ffd700;color:#1a1a2e}
+.badge-ban{background:#dc3545;color:#fff}
+.badge-ok{background:#28a745;color:#fff}
+.badge-pending{background:#ff9800;color:#fff}
 
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-right: 1px solid #333;
-        }
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:#28a745;color:#fff;padding:10px 16px;border-radius:8px;font-size:12px;z-index:9999;animation:fadeIn .2s}
+.toast.error{background:#dc3545}.toast.warning{background:#ff9800}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-        .sidebar-menu {
-            list-style: none;
-        }
+/* LOADING */
+.loading{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:9000}
+.spinner{width:36px;height:36px;border:3px solid #333;border-top-color:#ffd700;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        .sidebar-menu li {
-            margin-bottom: 10px;
-        }
+/* ============ DETAIL PANEL ============ */
+.detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;overflow-y:auto;padding:20px}
+.detail-box{background:#1a1a2e;border:1px solid #ffd700;border-radius:14px;max-width:960px;margin:0 auto;overflow:hidden}
+.detail-head{background:rgba(255,215,0,.12);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:1px solid #333}
+.detail-head h2{font-size:15px;color:#ffd700}
+.detail-head .uid-text{font-size:10px;color:#888;display:block;margin-top:2px}
 
-        .sidebar-menu a {
-            display: block;
-            padding: 12px 15px;
-            color: #ddd;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
+/* Fields table */
+.fields-table{width:100%;border-collapse:collapse;font-size:11px}
+.fields-table .sec-row td{background:rgba(255,215,0,.07);color:#ffd700;font-size:10px;font-weight:bold;padding:7px 12px;letter-spacing:.5px;text-transform:uppercase}
+.fields-table td{padding:5px 10px;border-bottom:1px solid #1e1e30;vertical-align:middle}
+.fields-table .lbl{color:#aaa;width:200px;font-size:10px}
+.fields-table .val{font-weight:600;color:#eee;max-width:200px;word-break:break-all}
+.fields-table .inp{width:220px}
+.fields-table .inp input,.fields-table .inp select,.fields-table .inp textarea{
+  width:100%;background:rgba(0,0,0,.5);border:1px solid #555;border-radius:5px;color:#fff;padding:4px 7px;font-size:11px}
+.fields-table .inp textarea{font-family:monospace;font-size:10px}
+.fields-table .act{width:56px;text-align:right}
+.save-btn{background:#28a745;border:none;color:#fff;border-radius:4px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:bold;white-space:nowrap}
+.save-btn:hover{background:#218838}
+.save-btn.saving{background:#888;cursor:wait}
 
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-        }
+/* Inventory sub-tables */
+.inv-table{width:100%;border-collapse:collapse;font-size:10px;margin-top:6px}
+.inv-table th,.inv-table td{padding:4px 6px;border-bottom:1px solid #2a2a3e;text-align:left}
+.inv-table th{color:#ffd700}
 
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
+/* Recharge */
+.tx-detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;overflow-y:auto;padding:20px}
+.tx-detail-box{background:#1a1a2e;border:1px solid #17a2b8;border-radius:14px;max-width:800px;margin:0 auto;padding:20px}
 
-        /* Tab Content */
-        .tab-content {
-            display: none;
-        }
+/* filter bar */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.filter-bar input,.filter-bar select{background:rgba(0,0,0,.5);border:1px solid #444;border-radius:6px;color:#fff;padding:5px 8px;font-size:11px}
 
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Cards */
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #ffd700;
-            border-left: 3px solid #ffd700;
-            padding-left: 10px;
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #ccc;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #ffd700;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: #ffd700;
-            color: #1a1a2e;
-        }
-
-        .btn-primary:hover {
-            background: #e6c300;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-warning {
-            background: #ffc107;
-            color: #1a1a2e;
-        }
-
-        /* Tables */
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table th,
-        .table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #333;
-        }
-
-        .table th {
-            color: #ffd700;
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffd700;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
-        /* Loading */
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #333;
-            border-top-color: #ffd700;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            animation: slideIn 0.3s ease;
-            z-index: 1000;
-        }
-
-        .toast.error {
-            background: #dc3545;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-    </style>
+/* debug */
+.debug-con{background:#000;border:1px solid #333;border-radius:6px;padding:8px;font-family:monospace;font-size:10px;max-height:160px;overflow-y:auto;margin-top:8px}
+.warning-text{color:#ff9800;font-size:10px}
+</style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
-            <h1>🏮 Xuyên Không Tu Tiên</h1>
-            <p>Admin Panel</p>
-        </div>
-        <div class="user-info">
-            <span id="userEmail">Chưa đăng nhập</span>
-            <button class="btn-logout" onclick="logout()">Đăng xuất</button>
-        </div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo"><h1>🏮 Admin Panel - Tu Tiên</h1></div>
+  <div class="user-info">
+    <div id="loginForm" class="login-form">
+      <input type="email" id="loginEmail" placeholder="Email" value="hoangnv.vnpt@gmail.com">
+      <input type="password" id="loginPassword" placeholder="Mật khẩu">
+      <button class="btn-login" onclick="loginWithEmail()">Đăng nhập</button>
+      <button class="btn-login" onclick="loginWithGoogle()" style="background:#4285f4;color:#fff">Google</button>
     </div>
+    <span id="userEmail" style="font-size:11px">Chưa đăng nhập</span>
+    <button class="btn-logout" onclick="logout()">Đăng xuất</button>
+  </div>
+</div>
 
-    <div class="container">
-        <div class="sidebar">
-            <ul class="sidebar-menu">
-                <li><a href="#" onclick="showTab('dashboard')" class="active" data-tab="dashboard">📊 Dashboard</a></li>
-                <li><a href="#" onclick="showTab('players')" data-tab="players">👤 Quản lý người chơi</a></li>
-                <li><a href="#" onclick="showTab('resources')" data-tab="resources">💰 Quản lý tài nguyên</a></li>
-                <li><a href="#" onclick="showTab('items')" data-tab="items">📦 Quản lý vật phẩm</a></li>
-                <li><a href="#" onclick="showTab('vip')" data-tab="vip">👑 Quản lý VIP</a></li>
-                <li><a href="#" onclick="showTab('quests')" data-tab="quests">📜 Quản lý nhiệm vụ</a></li>
-                <li><a href="#" onclick="showTab('events')" data-tab="events">🎉 Quản lý sự kiện</a></li>
-                <li><a href="#" onclick="showTab('giftcode')" data-tab="giftcode">🎁 Quản lý Giftcode</a></li>
-                <li><a href="#" onclick="showTab('database')" data-tab="database">🗄️ Cơ sở dữ liệu</a></li>
-                <li><a href="#" onclick="showTab('settings')" data-tab="settings">⚙️ Cài đặt</a></li>
-            </ul>
-        </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <ul class="sidebar-menu">
+    <li><a onclick="showTab('dashboard')" data-tab="dashboard" class="active">📊 Dashboard</a></li>
+    <li><a onclick="showTab('players')"   data-tab="players">🔍 Người chơi</a></li>
+    <li><a onclick="showTab('recharge')"  data-tab="recharge">💰 Nạp tiền</a></li>
+    <li><a onclick="showTab('suspicious')"data-tab="suspicious">⚠️ Nghi ngờ</a></li>
+    <li><a onclick="showTab('giftcode')"  data-tab="giftcode">🎁 Giftcode</a></li>
+    <li><a onclick="showTab('events')"    data-tab="events">🎉 Sự kiện</a></li>
+    <li><a onclick="showTab('cache')"     data-tab="cache">💾 Cache</a></li>
+    <li><a onclick="showTab('debug')"     data-tab="debug">🐛 Debug</a></li>
+  </ul>
+</div>
 
-        <div class="main-content">
-            <!-- Dashboard Tab -->
-            <div id="dashboard" class="tab-content active">
-                <div class="card">
-                    <div class="card-title">📊 Tổng quan hệ thống</div>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalPlayers">0</div>
-                            <div class="stat-label">Tổng số người chơi</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalVip">0</div>
-                            <div class="stat-label">Người chơi VIP</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalGold">0</div>
-                            <div class="stat-label">Tổng vàng</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalLinhThach">0</div>
-                            <div class="stat-label">Tổng linh thạch</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title">🏆 Bảng xếp hạng Tu Vi</div>
-                    <table class="table" id="leaderboardTuVi">
-                        <thead>
-                            <tr><th>Hạng</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="card">
-                    <div class="card-title">💰 Bảng xếp hạng Linh Thạch</div>
-                    <table class="table" id="leaderboardLinhThach">
-                        <thead>
-                            <tr><th>Hạng</th><th>Tên</th><th>Linh thạch</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
+<!-- MAIN -->
+<div class="main-content">
 
-            <!-- Players Tab -->
-            <div id="players" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🔍 Tìm kiếm người chơi</div>
-                    <div class="form-group">
-                        <label>User ID</label>
-                        <input type="text" id="searchUserId" class="form-control" placeholder="Nhập User ID">
-                    </div>
-                    <button class="btn btn-primary" onclick="searchPlayer()">Tìm kiếm</button>
-                    <button class="btn" onclick="clearSearch()">Xóa</button>
-                </div>
+<!-- DASHBOARD -->
+<div id="dashboard" class="tab-content active">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" id="totalPlayers">-</div><div class="stat-label">Người chơi</div></div>
+    <div class="stat-card"><div class="stat-value" id="totalVip">-</div><div class="stat-label">VIP</div></div>
+    <div class="stat-card"><div class="stat-value" id="totalRecharged">-</div><div class="stat-label">Đã nạp tiền</div></div>
+    <div class="stat-card"><div class="stat-value" id="totalRevenue">-</div><div class="stat-label">Tổng doanh thu</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🏆 Top 10 Tu Vi <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
+    <div class="table-wrap"><table class="table" id="lbTuVi"><thead><tr><th>#</th><th>Tên</th><th>Cảnh giới</th><th>Điểm</th></tr></thead><tbody><tr><td colspan="4">Đang tải......</td></tr></tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="card-title">💎 Top 10 Linh Thạch <button class="refresh-btn" onclick="loadLeaderboard()">🔄</button></div>
+    <div class="table-wrap"><table class="table" id="lbLT"><thead><tr><th>#</th><th>Tên</th><th>Linh thạch</th></tr></thead><tbody><tr><td colspan="3">Đang tải...</td></tr></tbody></table></div>
+  </div>
+</div>
 
-                <div id="playerInfo" style="display: none;">
-                    <div class="card">
-                        <div class="card-title">👤 Thông tin người chơi</div>
-                        <div class="form-group">
-                            <label>User ID</label>
-                            <input type="text" id="playerUserId" class="form-control" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Tên hiển thị</label>
-                            <input type="text" id="playerName" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Cảnh giới</label>
-                            <input type="number" id="playerStage" class="form-control" min="0" max="9">
-                        </div>
-                        <div class="form-group">
-                            <label>Tầng</label>
-                            <input type="number" id="playerTang" class="form-control" min="1" max="9">
-                        </div>
-                        <div class="form-group">
-                            <label>EXP</label>
-                            <input type="number" id="playerExp" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Vàng</label>
-                            <input type="number" id="playerVang" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Linh thạch</label>
-                            <input type="number" id="playerLinhThach" class="form-control">
-                        </div>
-                        <button class="btn btn-success" onclick="updatePlayer()">Cập nhật</button>
-                        <button class="btn btn-danger" onclick="banPlayer()">Cấm tài khoản</button>
-                        <button class="btn btn-warning" onclick="unbanPlayer()">Mở khóa</button>
-                        <button class="btn btn-danger" onclick="deletePlayer()" style="margin-left:8px;">Xóa tài khoản</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Resources Tab -->
-            <div id="resources" class="tab-content">
-                <div class="card">
-                    <div class="card-title">💰 Cài đặt tài nguyên cơ bản</div>
-                    <div class="form-group">
-                        <label>Vàng khởi tạo</label>
-                        <input type="number" id="defaultGold" class="form-control" value="500">
-                    </div>
-                    <div class="form-group">
-                        <label>Linh thạch khởi tạo</label>
-                        <input type="number" id="defaultLinhThach" class="form-control" value="20">
-                    </div>
-                    <div class="form-group">
-                        <label>EXP quái cơ bản</label>
-                        <input type="number" id="defaultExp" class="form-control" value="20">
-                    </div>
-                    <button class="btn btn-primary" onclick="saveResourceConfig()">Lưu cấu hình</button>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">💎 Tỷ lệ rơi đồ</div>
-                    <div class="form-group">
-                        <label>Tỷ lệ rơi trang bị (%)</label>
-                        <input type="number" id="dropRateItem" class="form-control" step="0.01" value="20">
-                    </div>
-                    <div class="form-group">
-                        <label>Tỷ lệ rơi linh thạch (%)</label>
-                        <input type="number" id="dropRateLinhThach" class="form-control" step="0.01" value="10">
-                    </div>
-                    <button class="btn btn-primary" onclick="saveDropConfig()">Lưu cấu hình</button>
-                </div>
-            </div>
-
-            <!-- Items Tab -->
-            <div id="items" class="tab-content">
-                <div class="card">
-                    <div class="card-title">📦 Thêm vật phẩm mới</div>
-                    <div class="form-group">
-                        <label>Loại vật phẩm</label>
-                        <select id="itemType" class="form-control">
-                            <option value="trangbi">Trang bị</option>
-                            <option value="dan">Đan dược</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tên vật phẩm</label>
-                        <input type="text" id="itemName" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Giá (linh thạch)</label>
-                        <input type="number" id="itemPrice" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Mô tả</label>
-                        <textarea id="itemDesc" class="form-control" rows="3"></textarea>
-                    </div>
-                    <button class="btn btn-primary" onclick="addItem()">Thêm vật phẩm</button>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">📋 Danh sách vật phẩm</div>
-                    <table class="table" id="itemList">
-                        <thead>
-                            <tr><th>ID</th><th>Tên</th><th>Loại</th><th>Giá</th><th>Thao tác</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- VIP Tab -->
-            <div id="vip" class="tab-content">
-                <div class="card">
-                    <div class="card-title">👑 Cấu hình VIP</div>
-                    <div class="form-group">
-                        <label>Giá VIP (VND)</label>
-                        <input type="number" id="vipPrice" class="form-control" value="39000">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="vipReward" class="form-control" value="2000">
-                    </div>
-                    <div class="form-group">
-                        <label>Thời hạn (ngày)</label>
-                        <input type="number" id="vipDuration" class="form-control" value="30">
-                    </div>
-                    <button class="btn btn-primary" onclick="saveVipConfig()">Lưu cấu hình</button>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">👥 Danh sách VIP</div>
-                    <table class="table" id="vipList">
-                        <thead>
-                            <tr><th>User ID</th><th>Tên</th><th>Ngày hết hạn</th><th>Thao tác</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Quests Tab -->
-            <div id="quests" class="tab-content">
-                <div class="card">
-                    <div class="card-title">📜 Thêm nhiệm vụ mới</div>
-                    <div class="form-group">
-                        <label>ID nhiệm vụ</label>
-                        <input type="text" id="questId" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Tên nhiệm vụ</label>
-                        <input type="text" id="questName" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Loại nhiệm vụ</label>
-                        <select id="questType" class="form-control">
-                            <option value="Kill">Tiêu diệt quái</option>
-                            <option value="Collect">Thu thập vật phẩm</option>
-                            <option value="ReachLevel">Đạt cấp độ</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Mục tiêu</label>
-                        <input type="text" id="questTarget" class="form-control" placeholder="Tên quái / vật phẩm">
-                    </div>
-                    <div class="form-group">
-                        <label>Số lượng yêu cầu</label>
-                        <input type="number" id="questAmount" class="form-control" value="10">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng EXP</label>
-                        <input type="number" id="questRewardExp" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng vàng</label>
-                        <input type="number" id="questRewardGold" class="form-control" value="500">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="questRewardLinhThach" class="form-control" value="50">
-                    </div>
-                    <button class="btn btn-primary" onclick="addQuest()">Thêm nhiệm vụ</button>
-                </div>
-            </div>
-
-            <!-- Events Tab -->
-            <div id="events" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🎉 Tạo sự kiện mới</div>
-                    <div class="form-group">
-                        <label>ID sự kiện</label>
-                        <input type="text" id="eventId" class="form-control" value="sukien_001">
-                    </div>
-                    <div class="form-group">
-                        <label>Tiêu đề</label>
-                        <input type="text" id="eventTitle" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Nội dung</label>
-                        <textarea id="eventContent" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Ngày bắt đầu</label>
-                        <input type="date" id="eventStartDate" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Ngày kết thúc</label>
-                        <input type="date" id="eventEndDate" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="eventRewardLinhThach" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng text</label>
-                        <input type="text" id="eventRewardText" class="form-control" placeholder="Ví dụ: U Lan Linh Giáp +8">
-                    </div>
-                    <div class="form-group">
-                        <label>Trạng thái</label>
-                        <select id="eventStatus" class="form-control">
-                            <option value="true">Đang hoạt động</option>
-                            <option value="false">Tạm dừng</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary" onclick="createEvent()">Tạo sự kiện</button>
-                    <button class="btn btn-danger" onclick="deleteEvent()">Xóa sự kiện</button>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">📋 Sự kiện hiện tại</div>
-                    <div id="currentEventInfo"></div>
-                </div>
-            </div>
-
-            <!-- Giftcode Tab -->
-            <div id="giftcode" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🎁 Tạo Giftcode mới</div>
-                    <div class="form-group">
-                        <label>Mã code</label>
-                        <input type="text" id="giftCode" class="form-control" placeholder="VD: XUYENKHONGVIP">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng vàng</label>
-                        <input type="number" id="giftGold" class="form-control" value="1000">
-                    </div>
-                    <div class="form-group">
-                        <label>Phần thưởng linh thạch</label>
-                        <input type="number" id="giftLinhThach" class="form-control" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Trang bị thưởng</label>
-                        <input type="text" id="giftItem" class="form-control" placeholder="Tên trang bị (cách nhau bằng dấu phẩy)">
-                    </div>
-                    <div class="form-group">
-                        <label>Số lần sử dụng tối đa</label>
-                        <input type="number" id="giftMaxUses" class="form-control" value="999">
-                    </div>
-                    <button class="btn btn-primary" onclick="createGiftCode()">Tạo Giftcode</button>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">📋 Danh sách Giftcode</div>
-                    <table class="table" id="giftCodeList">
-                        <thead>
-                            <tr><th>Mã code</th><th>Phần thưởng</th><th>Đã dùng</th><th>Thao tác</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Database Tab -->
-            <div id="database" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🗄️ Sao lưu & Phục hồi</div>
-                    <button class="btn btn-primary" onclick="backupDatabase()">📥 Sao lưu toàn bộ dữ liệu</button>
-                    <button class="btn btn-warning" onclick="restoreDatabase()">📤 Phục hồi dữ liệu</button>
-                    <button class="btn btn-danger" onclick="clearAllData()">⚠️ Xóa toàn bộ dữ liệu</button>
-                </div>
-                <div class="card">
-                    <div class="card-title">📊 Thống kê</div>
-                    <pre id="dbStats" style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; overflow: auto;"></pre>
-                </div>
-            </div>
-
-            <!-- Settings Tab -->
-            <div id="settings" class="tab-content">
-                <div class="card">
-                    <div class="card-title">⚙️ Cài đặt hệ thống</div>
-                    <div class="form-group">
-                        <label>Phiên bản game</label>
-                        <input type="text" id="gameVersion" class="form-control" value="4.0">
-                    </div>
-                    <div class="form-group">
-                        <label>Phiên bản code</label>
-                        <input type="number" id="versionCode" class="form-control" value="31">
-                    </div>
-                    <div class="form-group">
-                        <label>Force Update</label>
-                        <select id="forceUpdate" class="form-control">
-                            <option value="false">Không</option>
-                            <option value="true">Bắt buộc cập nhật</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ghi chú cập nhật</label>
-                        <textarea id="changelog" class="form-control" rows="3"></textarea>
-                    </div>
-                    <button class="btn btn-primary" onclick="saveSystemConfig()">Lưu cài đặt</button>
-                </div>
-            </div>
-        </div>
+<!-- PLAYERS -->
+<div id="players" class="tab-content">
+  <div class="card">
+    <div class="card-title">🔍 Tìm kiếm người chơi
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-success btn-sm" onclick="createNewPlayer()">+ Tạo mới</button>
+        <button class="refresh-btn" onclick="loadPlayers(true)">🔄 Reload</button>
+      </div>
     </div>
-
-    <div id="loading" class="loading" style="display: none;">
-        <div class="spinner"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+      <input type="text" id="searchInput" class="form-control" style="flex:1;min-width:200px" placeholder="🔍 Tên hoặc UID... (Enter để tìm)" onkeyup="if(event.key==='Enter')doSearch()">
+      <button class="btn btn-primary" onclick="doSearch()">Tìm</button>
+      <button class="btn btn-warning" onclick="clearSearch()">Xóa</button>
     </div>
+  </div>
+  <div id="playerListContainer">Đang tải dữ liệu...</div>
+</div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
-    <script>
-        // ==================== CẤU HÌNH FIREBASE ====================
-        // 🆕 THAY THÔNG TIN FIREBASE CỦA BẠN VÀO ĐÂY
-        const firebaseConfig = {
-            apiKey: "AIzaSyAJ6kiQEfXZA7wlTKTX3dsKBMQTHidYX3c",
-            authDomain: "custom-utility-490109-j1.firebaseapp.com",
-            databaseURL: "https://custom-utility-490109-j1-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            projectId: "custom-utility-490109-j1",
-            storageBucket: "custom-utility-490109-j1.appspot.com",
-            messagingSenderId: "626113784056",
-            appId: "1:626113784056:android:193990ae1ce494634f730d"
-        };
+<!-- RECHARGE -->
+<div id="recharge" class="tab-content">
+  <div class="card">
+    <div class="card-title">💰 Lịch sử Nạp Tiền (node: transactions)
+      <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value" id="rxTotal">-</div><div class="stat-label">Tổng giao dịch</div></div>
+      <div class="stat-card"><div class="stat-value" id="rxVND">-</div><div class="stat-label">Tổng VND</div></div>
+      <div class="stat-card"><div class="stat-value" id="rxLT">-</div><div class="stat-label">Tổng Linh Thạch</div></div>
+      <div class="stat-card"><div class="stat-value" id="rxUsers">-</div><div class="stat-label">Người đã nạp</div></div>
+    </div>
+  </div>
 
-        // Khởi tạo Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
+  <!-- Per-user summary -->
+  <div class="card">
+    <div class="card-title">👥 Tổng theo người chơi</div>
+    <div class="filter-bar">
+      <input type="text" id="rxSearch" placeholder="🔍 Tên / UID..." oninput="renderUserSummary()" style="flex:1;min-width:180px">
+    </div>
+    <div class="table-wrap">
+      <table class="table" id="rxUserTable">
+        <thead>——
+          <th onclick="sortRx('name')" style="cursor:pointer">Tên ⇅</th>
+          <th onclick="sortRx('totalVND')" style="cursor:pointer">Tổng VND ⇅</th>
+          <th onclick="sortRx('totalLT')" style="cursor:pointer">Tổng LT ⇅</th>
+          <th onclick="sortRx('count')" style="cursor:pointer">Số GD ⇅</th>
+          <th>Chi tiết</th>
+        </tr>
+        </thead>
+        <tbody id="rxUserBody"><tr><td colspan="5">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
 
-        // Biến toàn cục
-        let currentUser = null;
-        let currentPlayerId = null;
+  <!-- All transactions -->
+  <div class="card">
+    <div class="card-title">📋 Tất cả giao dịch</div>
+    <div class="filter-bar">
+      <input type="text" id="txSearchAll" placeholder="🔍 Tên / UID / TxID..." oninput="renderAllTx()" style="flex:1;min-width:180px">
+      <select id="txProdFilter" onchange="renderAllTx()">
+        <option value="">Tất cả sản phẩm</option>
+        <option value="linhthach_1000">1,000 LT</option>
+        <option value="linhthach_5000">5,000 LT</option>
+        <option value="linhthach_10000">10,000 LT</option>
+        <option value="linhthach_40000">40,000 LT</option>
+        <option value="linhthach_100000">100,000 LT</option>
+        <option value="vip_package">VIP</option>
+        <option value="manual_recharge">Nạp thủ công</option>
+      </select>
+      <select id="txVerFilter" onchange="renderAllTx()">
+        <option value="">Tất cả</option>
+        <option value="1">✅ Đã xác thực</option>
+        <option value="0">⏳ Chưa xác thực</option>
+      </select>
+    </div>
+    <div class="table-wrap" style="max-height:480px;overflow-y:auto">
+      <table class="table" id="txAllTable">
+        <thead><tr><th>Thời gian</th><th>Người chơi</th><th>Sản phẩm</th><th>LT nhận</th><th>Giá VND</th><th>Xác thực</th><th>Transaction ID</th></tr></thead>
+        <tbody id="txAllBody"><tr><td colspan="7">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+    <p id="txAllCount" style="font-size:10px;color:#888;margin-top:6px"></p>
+  </div>
+</div>
 
-        // ==================== AUTHENTICATION ====================
-        async function loginWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try {
-                const result = await auth.signInWithPopup(provider);
-                currentUser = result.user;
-                document.getElementById('userEmail').innerText = currentUser.email;
-                document.getElementById('loading').style.display = 'none';
-                loadDashboard();
-                showToast('Đăng nhập thành công!', 'success');
-            } catch (error) {
-                console.error(error);
-                showToast('Đăng nhập thất bại: ' + error.message, 'error');
-                document.getElementById('loading').style.display = 'none';
-            }
-        }
+<!-- SUSPICIOUS -->
+<div id="suspicious" class="tab-content">
+  <div class="card">
+    <div class="card-title">⚠️ Nghi ngờ Hack/Mod <button class="refresh-btn" onclick="loadSuspicious()">🔄</button></div>
+    <div class="table-wrap"><table class="table" id="suspTable"><thead><tr><th>UID</th><th>Tên</th><th>LT</th><th>Lý do</th><th>Mức</th><th>Xem</th></tr></thead><tbody><tr><td colspan="6">Đang phân tích...</td></tr></tbody></table></div>
+  </div>
+</div>
 
-        function logout() {
-            auth.signOut();
-            currentUser = null;
-            document.getElementById('userEmail').innerText = 'Chưa đăng nhập';
-            showToast('Đã đăng xuất', 'success');
-        }
+<!-- GIFTCODE -->
+<div id="giftcode" class="tab-content">
+  <div class="card">
+    <div class="card-title">🎁 Tạo Giftcode</div>
+    <div class="form-row">
+      <div class="form-group"><label>Mã</label><input type="text" id="giftCode" class="form-control"></div>
+      <div class="form-group"><label>Vàng</label><input type="number" id="giftGold" class="form-control" value="1000"></div>
+      <div class="form-group"><label>Linh thạch</label><input type="number" id="giftLinhThach" class="form-control" value="100"></div>
+      <div class="form-group"><label>Số lần dùng tối đa</label><input type="number" id="giftMaxUses" class="form-control" value="999"></div>
+    </div>
+    <div class="form-group"><label>Trang bị (cách nhau dấu phẩy)</label><input type="text" id="giftItem" class="form-control"></div>
+    <button class="btn btn-primary" onclick="createGiftCode()">✨ Tạo</button>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 Danh sách Giftcode <button class="refresh-btn" onclick="loadGiftcodes()">🔄</button></div>
+    <div class="table-wrap"><table class="table" id="gcTable"><thead><tr><th>Mã</th><th>Thưởng</th><th>Đã dùng</th><th></th></tr></thead><tbody><tr><td colspan="4">Đang tải...</td></tr></tbody></table></div>
+  </div>
+</div>
 
-        // ==================== HELPER FUNCTIONS ====================
-        function showLoading() {
-            document.getElementById('loading').style.display = 'flex';
-        }
+<!-- EVENTS -->
+<div id="events" class="tab-content">
+  <div class="card">
+    <div class="card-title">🎉 Sự kiện</div>
+    <div class="form-row">
+      <div class="form-group"><label>Tiêu đề</label><input type="text" id="evTitle" class="form-control"></div>
+      <div class="form-group"><label>Nội dung</label><input type="text" id="evContent" class="form-control"></div>
+      <div class="form-group"><label>Thưởng LT đăng nhập</label><input type="number" id="evReward" class="form-control" value="100"></div>
+      <div class="form-group"><label>Trạng thái</label><select id="evStatus" class="form-control"><option value="true">Đang diễn ra</option><option value="false">Tạm dừng</option></select></div>
+    </div>
+    <button class="btn btn-primary" onclick="saveEvent()">💾 Lưu</button>
+    <button class="btn btn-danger" onclick="deleteEvent()">🗑️ Xóa</button>
+    <div class="card" style="margin-top:10px"><div class="card-title">Hiện tại <button class="refresh-btn" onclick="loadEvent()">🔄</button></div><div id="evInfo" style="font-size:12px">...</div></div>
+  </div>
+</div>
 
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-        }
+<!-- CACHE -->
+<div id="cache" class="tab-content">
+  <div class="card">
+    <div class="card-title">💾 Cache</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value" id="cacheCount">0</div><div class="stat-label">Người chơi cache</div></div>
+      <div class="stat-card"><div class="stat-value" id="cacheSize">0</div><div class="stat-label">Kích thước (KB)</div></div>
+      <div class="stat-card"><div class="stat-value" id="cacheTime">-</div><div class="stat-label">Cập nhật lần cuối</div></div>
+    </div>
+    <button class="btn btn-warning" onclick="clearCache()">🗑️ Xóa Cache</button>
+    <button class="btn btn-primary" onclick="forceReload()">🔄 Reload DB</button>
+  </div>
+</div>
 
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerText = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
+<!-- DEBUG -->
+<div id="debug" class="tab-content">
+  <div class="card">
+    <div class="card-title">🐛 Debug</div>
+    <button class="btn btn-primary btn-sm" onclick="testFB()">Test Firebase</button>
+    <button class="btn btn-info btn-sm" onclick="checkAuth()">Check Auth</button>
+    <div class="debug-con" id="debugCon"></div>
+  </div>
+</div>
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.getElementById(tabId).classList.add('active');
-            
-            document.querySelectorAll('.sidebar-menu a').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            
-            if (tabId === 'dashboard') loadDashboard();
-            if (tabId === 'vip') loadVipList();
-            if (tabId === 'giftcode') loadGiftCodeList();
-            if (tabId === 'items') loadItemList();
-            if (tabId === 'events') loadCurrentEvent();
-        }
+</div><!-- /main-content -->
 
-        // ==================== DASHBOARD ====================
-        async function loadDashboard() {
-            showLoading();
-            try {
-                // Lấy tổng số người chơi
-                const usersSnapshot = await db.ref('users').once('value');
-                const users = usersSnapshot.val();
-                let totalPlayers = 0;
-                let totalVip = 0;
-                let totalGold = 0;
-                let totalLinhThach = 0;
-                
-                if (users) {
-                    totalPlayers = Object.keys(users).length;
-                    for (let uid in users) {
-                        const gameData = users[uid]?.gameData?.data;
-                        if (gameData) {
-                            try {
-                                const data = JSON.parse(gameData);
-                                if (data.daMuaVip) totalVip++;
-                                totalGold += data.vang || 0;
-                                totalLinhThach += data.linhThach || 0;
-                            } catch(e) {}
-                        }
-                    }
-                }
-                
-                document.getElementById('totalPlayers').innerText = totalPlayers;
-                document.getElementById('totalVip').innerText = totalVip;
-                document.getElementById('totalGold').innerText = totalGold.toLocaleString();
-                document.getElementById('totalLinhThach').innerText = totalLinhThach.toLocaleString();
-                
-                // Bảng xếp hạng Tu Vi
-                const tuViSnapshot = await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
-                const tuViBoard = document.querySelector('#leaderboardTuVi tbody');
-                tuViBoard.innerHTML = '';
-                let rank = 1;
-                const tuViList = [];
-                tuViSnapshot.forEach(child => {
-                    tuViList.push({ name: child.val().name, score: child.val().score });
-                });
-                tuViList.reverse().forEach(entry => {
-                    const stage = Math.floor(entry.score / 10000);
-                    const tang = Math.floor((entry.score % 10000) / 1000);
-                    const stageName = ['Luyện Khí', 'Trúc Cơ', 'Kim Đan', 'Nguyên Anh', 'Hóa Thần', 'Phàm Tiên', 'Địa Tiên', 'Thiên Tiên', 'Chân Tiên', 'Kim Tiên'][stage] || '???';
-                    tuViBoard.innerHTML += `<tr><td>${rank++}</td><td>${entry.name}</td><td>${stageName} tầng ${tang}</td><td>${entry.score}</td></tr>`;
-                });
-                
-                // Bảng xếp hạng Linh Thạch
-                const linhThachSnapshot = await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
-                const ltBoard = document.querySelector('#leaderboardLinhThach tbody');
-                ltBoard.innerHTML = '';
-                rank = 1;
-                const ltList = [];
-                linhThachSnapshot.forEach(child => {
-                    ltList.push({ name: child.val().name, score: child.val().score });
-                });
-                ltList.reverse().forEach(entry => {
-                    ltBoard.innerHTML += `<tr><td>${rank++}</td><td>${entry.name}</td><td>${entry.score.toLocaleString()}</td></tr>`;
-                });
-                
-            } catch (error) {
-                console.error(error);
-                showToast('Lỗi tải dashboard: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
+<!-- ============================================================
+     PLAYER DETAIL OVERLAY
+     ============================================================ -->
+<div class="detail-overlay" id="detailOverlay" onclick="handleOverlayClick(event)">
+<div class="detail-box" id="detailBox">
+  <div class="detail-head">
+    <div>
+      <h2 id="detailTitle">Chi tiết người chơi</h2>
+      <span class="uid-text" id="detailUid"></span>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-warning btn-sm" id="detailBanBtn">🚫 Ban</button>
+      <button class="btn btn-success btn-sm" id="detailUnbanBtn">🔓 Unban</button>
+      <button class="btn btn-danger btn-sm" id="detailDeleteBtn">🗑️ Xóa</button>
+      <button class="btn btn-sm" style="background:#555;color:#fff" onclick="closeDetail()">✕ Đóng</button>
+    </div>
+  </div>
+  <div style="padding:12px;max-height:80vh;overflow-y:auto" id="detailBody">
+    <div style="text-align:center;padding:30px">⏳ Đang tải...</div>
+  </div>
+</div>
+</div>
 
-        // ==================== PLAYER MANAGEMENT ====================
-        async function searchPlayer() {
-            const userId = document.getElementById('searchUserId').value.trim();
-            if (!userId) {
-                showToast('Vui lòng nhập User ID', 'error');
-                return;
-            }
-            
-            showLoading();
-            try {
-                const snapshot = await db.ref(`users/${userId}/gameData`).once('value');
-                if (!snapshot.exists()) {
-                    showToast('Không tìm thấy người chơi!', 'error');
-                    document.getElementById('playerInfo').style.display = 'none';
-                    hideLoading();
-                    return;
-                }
-                
-                let data = snapshot.val();
-                if (data.data) {
-                    data = JSON.parse(data.data);
-                }
-                
-                currentPlayerId = userId;
-                document.getElementById('playerUserId').value = userId;
-                document.getElementById('playerName').value = data.tenNhanVat || '';
-                document.getElementById('playerStage').value = data.chiSoCanhGio || 0;
-                document.getElementById('playerTang').value = data.tang || 1;
-                document.getElementById('playerExp').value = data.expHienTai || 0;
-                document.getElementById('playerVang').value = data.vang || 0;
-                document.getElementById('playerLinhThach').value = data.linhThach || 0;
-                
-                document.getElementById('playerInfo').style.display = 'block';
-            } catch (error) {
-                console.error(error);
-                showToast('Lỗi tìm kiếm: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        function clearSearch() {
-            document.getElementById('searchUserId').value = '';
-            document.getElementById('playerInfo').style.display = 'none';
-            currentPlayerId = null;
-        }
-        
-        async function updatePlayer() {
-            if (!currentPlayerId) {
-                showToast('Vui lòng tìm kiếm người chơi trước', 'error');
-                return;
-            }
-            
-            showLoading();
-            try {
-                const snapshot = await db.ref(`users/${currentPlayerId}/gameData`).once('value');
-                let data = snapshot.val();
-                if (data.data) {
-                    data = JSON.parse(data.data);
-                }
-                
-                data.tenNhanVat = document.getElementById('playerName').value;
-                data.chiSoCanhGio = parseInt(document.getElementById('playerStage').value);
-                data.tang = parseInt(document.getElementById('playerTang').value);
-                data.expHienTai = parseInt(document.getElementById('playerExp').value);
-                data.vang = parseInt(document.getElementById('playerVang').value);
-                data.linhThach = parseInt(document.getElementById('playerLinhThach').value);
-                
-                const json = JSON.stringify(data);
-                const signature = await generateSignature(json);
-                
-                await db.ref(`users/${currentPlayerId}/gameData`).set({
-                    data: json,
-                    signature: signature,
-                    timestamp: Date.now()
-                });
-                
-                showToast('Cập nhật thành công!', 'success');
-            } catch (error) {
-                console.error(error);
-                showToast('Lỗi cập nhật: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function removeFromLeaderboards(userId) {
-            const boards = ['tuvi', 'lucchien', 'linhthach', 'topspender'];
-            const promises = boards.map(b => db.ref(`leaderboard/${b}/${userId}`).remove());
-            await Promise.all(promises);
-        }
+<!-- TX USER DETAIL OVERLAY -->
+<div class="tx-detail-overlay" id="txDetailOverlay" onclick="if(event.target===this)this.style.display='none'">
+<div class="tx-detail-box">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 id="txDetailTitle" style="color:#17a2b8;font-size:14px">Giao dịch của...</h3>
+    <button class="btn btn-sm" style="background:#555;color:#fff" onclick="document.getElementById('txDetailOverlay').style.display='none'">✕</button>
+  </div>
+  <div class="table-wrap" style="max-height:70vh;overflow-y:auto">
+    <table class="table"><thead><tr><th>Thời gian</th><th>Sản phẩm</th><th>LT</th><th>VND</th><th>Xác thực</th><th>TxID</th></tr></thead>
+    <tbody id="txDetailBody"></tbody></table>
+  </div>
+</div>
+</div>
 
-        async function banPlayer() {
-            if (!currentPlayerId) return;
-            const reason = prompt('Lý do cấm tài khoản:');
-            if (!reason) return;
-            const daysInput = prompt('Số ngày khóa (0 = vĩnh viễn):', '0');
-            if (daysInput === null) return;
-            const durationDays = parseInt(daysInput) || 0;
-            
-            showLoading();
-            try {
-                const banData = {
-                    reason: reason,
-                    timestamp: Date.now(),
-                    bannedBy: currentUser?.email
-                };
-                if (durationDays > 0) {
-                    banData.durationDays = durationDays;
-                }
-                await db.ref(`banned/${currentPlayerId}`).set(banData);
-                await removeFromLeaderboards(currentPlayerId);
-                const msg = durationDays > 0 
-                    ? `Đã cấm tài khoản ${durationDays} ngày và xóa khỏi BXH!` 
-                    : 'Đã cấm tài khoản vĩnh viễn và xóa khỏi BXH!';
-                showToast(msg, 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function unbanPlayer() {
-            if (!currentPlayerId) return;
-            showLoading();
-            try {
-                await db.ref(`banned/${currentPlayerId}`).remove();
-                showToast('Đã mở khóa tài khoản!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
+<div class="loading" id="loading" style="display:none"><div class="spinner"></div></div>
 
-        async function deletePlayer() {
-            if (!currentPlayerId) return;
-            if (!confirm('Bạn có chắc chắn muốn xóa tài khoản này?')) return;
-            
-            showLoading();
-            try {
-                await Promise.all([
-                    db.ref(`users/${currentPlayerId}`).remove(),
-                    db.ref(`banned/${currentPlayerId}`).remove(),
-                    removeFromLeaderboards(currentPlayerId)
-                ]);
-                showToast('Đã xóa tài khoản và xóa khỏi BXH!', 'success');
-                document.getElementById('playerInfo').style.display = 'none';
-                currentPlayerId = null;
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== VIP MANAGEMENT ====================
-        async function saveVipConfig() {
-            const config = {
-                price: parseInt(document.getElementById('vipPrice').value),
-                reward: parseInt(document.getElementById('vipReward').value),
-                duration: parseInt(document.getElementById('vipDuration').value),
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('config/vip').set(config);
-                showToast('Đã lưu cấu hình VIP!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function loadVipList() {
-            showLoading();
-            try {
-                const snapshot = await db.ref('users').once('value');
-                const users = snapshot.val();
-                const tbody = document.querySelector('#vipList tbody');
-                tbody.innerHTML = '';
-                
-                if (users) {
-                    for (let uid in users) {
-                        const gameData = users[uid]?.gameData?.data;
-                        if (gameData) {
-                            try {
-                                const data = JSON.parse(gameData);
-                                if (data.daMuaVip) {
-                                    tbody.innerHTML += `
-                                        <tr>
-                                            <td>${uid}</td>
-                                            <td>${data.tenNhanVat || 'Không tên'}</td>
-                                            <td>${data.vipExpiry ? new Date(data.vipExpiry).toLocaleDateString() : 'Vĩnh viễn'}</td>
-                                            <td><button class="btn btn-danger btn-sm" onclick="removeVip('${uid}')">Xóa VIP</button></td>
-                                        </tr>
-                                    `;
-                                }
-                            } catch(e) {}
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-            }
-            hideLoading();
-        }
-        
-        async function removeVip(uid) {
-            if (!confirm('Xóa VIP cho người chơi này?')) return;
-            showLoading();
-            try {
-                const snapshot = await db.ref(`users/${uid}/gameData`).once('value');
-                let data = snapshot.val();
-                if (data.data) {
-                    data = JSON.parse(data.data);
-                }
-                data.daMuaVip = false;
-                const json = JSON.stringify(data);
-                const signature = await generateSignature(json);
-                await db.ref(`users/${uid}/gameData`).set({
-                    data: json,
-                    signature: signature,
-                    timestamp: Date.now()
-                });
-                showToast('Đã xóa VIP!', 'success');
-                loadVipList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== GIFTCODE MANAGEMENT ====================
-        async function createGiftCode() {
-            const code = document.getElementById('giftCode').value.toUpperCase().trim();
-            if (!code) {
-                showToast('Vui lòng nhập mã code', 'error');
-                return;
-            }
-            
-            const giftData = {
-                code: code,
-                gold: parseInt(document.getElementById('giftGold').value),
-                linhThach: parseInt(document.getElementById('giftLinhThach').value),
-                items: document.getElementById('giftItem').value.split(',').map(s => s.trim()).filter(s => s),
-                maxUses: parseInt(document.getElementById('giftMaxUses').value),
-                used: 0,
-                usedBy: [],
-                createdAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref(`giftcodes/${code}`).set(giftData);
-                showToast('Tạo giftcode thành công!', 'success');
-                document.getElementById('giftCode').value = '';
-                loadGiftCodeList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function loadGiftCodeList() {
-            showLoading();
-            try {
-                const snapshot = await db.ref('giftcodes').once('value');
-                const codes = snapshot.val();
-                const tbody = document.querySelector('#giftCodeList tbody');
-                tbody.innerHTML = '';
-                
-                if (codes) {
-                    for (let code in codes) {
-                        const data = codes[code];
-                        const reward = [];
-                        if (data.gold > 0) reward.push(`${data.gold} vàng`);
-                        if (data.linhThach > 0) reward.push(`${data.linhThach} linh thạch`);
-                        if (data.items?.length) reward.push(data.items.join(', '));
-                        
-                        tbody.innerHTML += `
-                            <tr>
-                                <td><strong>${code}</strong></td>
-                                <td>${reward.join(' + ')}</td>
-                                <td>${data.used}/${data.maxUses}</td>
-                                <td><button class="btn btn-danger btn-sm" onclick="deleteGiftCode('${code}')">Xóa</button></td>
-                            </tr>
-                        `;
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-            }
-            hideLoading();
-        }
-        
-        async function deleteGiftCode(code) {
-            if (!confirm(`Xóa giftcode ${code}?`)) return;
-            showLoading();
-            try {
-                await db.ref(`giftcodes/${code}`).remove();
-                showToast('Đã xóa!', 'success');
-                loadGiftCodeList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== EVENT MANAGEMENT ====================
-        async function createEvent() {
-            const eventData = {
-                id: document.getElementById('eventId').value,
-                tieuDe: document.getElementById('eventTitle').value,
-                noiDung: document.getElementById('eventContent').value,
-                thoiGianBatDau: document.getElementById('eventStartDate').value,
-                thoiGianKetThuc: document.getElementById('eventEndDate').value,
-                phanThuongLinhThach: parseInt(document.getElementById('eventRewardLinhThach').value),
-                phanThuongText: document.getElementById('eventRewardText').value,
-                dangHoatDong: document.getElementById('eventStatus').value === 'true',
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('sukien/current').set(eventData);
-                showToast('Tạo sự kiện thành công!', 'success');
-                loadCurrentEvent();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function deleteEvent() {
-            if (!confirm('Xóa sự kiện hiện tại?')) return;
-            showLoading();
-            try {
-                await db.ref('sukien/current').remove();
-                showToast('Đã xóa sự kiện!', 'success');
-                loadCurrentEvent();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function loadCurrentEvent() {
-            try {
-                const snapshot = await db.ref('sukien/current').once('value');
-                const event = snapshot.val();
-                const container = document.getElementById('currentEventInfo');
-                if (event) {
-                    container.innerHTML = `
-                        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                            <h3>🎉 ${event.tieuDe || 'Sự kiện'}</h3>
-                            <p>${event.noiDung || ''}</p>
-                            <p>📅 ${event.thoiGianBatDau || ''} - ${event.thoiGianKetThuc || ''}</p>
-                            <p>🎁 Phần thưởng: ${event.phanThuongLinhThach || 0} linh thạch | ${event.phanThuongText || ''}</p>
-                            <p>📌 Trạng thái: ${event.dangHoatDong ? 'Đang hoạt động' : 'Tạm dừng'}</p>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML = '<p>Không có sự kiện nào đang diễn ra</p>';
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        
-        // ==================== ITEM MANAGEMENT ====================
-        async function addItem() {
-            const itemData = {
-                name: document.getElementById('itemName').value,
-                type: document.getElementById('itemType').value,
-                price: parseInt(document.getElementById('itemPrice').value),
-                description: document.getElementById('itemDesc').value,
-                createdAt: Date.now()
-            };
-            
-            if (!itemData.name) {
-                showToast('Vui lòng nhập tên vật phẩm', 'error');
-                return;
-            }
-            
-            showLoading();
-            try {
-                const path = itemData.type === 'trangbi' ? 'items/trangbi' : 'items/dan';
-                await db.ref(`${path}/${itemData.name}`).set(itemData);
-                showToast('Thêm vật phẩm thành công!', 'success');
-                clearItemForm();
-                loadItemList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        function clearItemForm() {
-            document.getElementById('itemName').value = '';
-            document.getElementById('itemPrice').value = '100';
-            document.getElementById('itemDesc').value = '';
-        }
-        
-        async function loadItemList() {
-            showLoading();
-            try {
-                const trangBiSnapshot = await db.ref('items/trangbi').once('value');
-                const danSnapshot = await db.ref('items/dan').once('value');
-                const tbody = document.querySelector('#itemList tbody');
-                tbody.innerHTML = '';
-                
-                let index = 1;
-                if (trangBiSnapshot.val()) {
-                    for (let id in trangBiSnapshot.val()) {
-                        const item = trangBiSnapshot.val()[id];
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${index++}</td>
-                                <td>${id}</td>
-                                <td>Trang bị</td>
-                                <td>${item.price}</td>
-                                <td><button class="btn btn-danger btn-sm" onclick="deleteItem('trangbi', '${id}')">Xóa</button></td>
-                            </tr>
-                        `;
-                    }
-                }
-                if (danSnapshot.val()) {
-                    for (let id in danSnapshot.val()) {
-                        const item = danSnapshot.val()[id];
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${index++}</td>
-                                <td>${id}</td>
-                                <td>Đan dược</td>
-                                <td>${item.price}</td>
-                                <td><button class="btn btn-danger btn-sm" onclick="deleteItem('dan', '${id}')">Xóa</button></td>
-                            </tr>
-                        `;
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-            }
-            hideLoading();
-        }
-        
-        async function deleteItem(type, id) {
-            if (!confirm(`Xóa vật phẩm ${id}?`)) return;
-            showLoading();
-            try {
-                await db.ref(`items/${type}/${id}`).remove();
-                showToast('Đã xóa!', 'success');
-                loadItemList();
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== DATABASE ====================
-        async function backupDatabase() {
-            showLoading();
-            try {
-                const snapshot = await db.ref().once('value');
-                const data = snapshot.val();
-                const json = JSON.stringify(data, null, 2);
-                const blob = new Blob([json], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `backup_${new Date().toISOString()}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-                showToast('Đã tải file backup!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function restoreDatabase() {
-            alert('Chức năng phục hồi: Chọn file backup JSON');
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'application/json';
-            input.onchange = async (e) => {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    showLoading();
-                    try {
-                        const data = JSON.parse(event.target.result);
-                        await db.ref().set(data);
-                        showToast('Phục hồi dữ liệu thành công!', 'success');
-                    } catch (error) {
-                        showToast('Lỗi: ' + error.message, 'error');
-                    }
-                    hideLoading();
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        }
-        
-        async function clearAllData() {
-            if (!confirm('⚠️ Bạn có chắc chắn muốn xóa toàn bộ dữ liệu? Hành động này không thể hoàn tác!')) return;
-            
-            showLoading();
-            try {
-                await db.ref().set(null);
-                showToast('Đã xóa toàn bộ dữ liệu!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== SYSTEM CONFIG ====================
-        async function saveSystemConfig() {
-            const config = {
-                versionName: document.getElementById('gameVersion').value,
-                versionCode: parseInt(document.getElementById('versionCode').value),
-                forceUpdate: document.getElementById('forceUpdate').value === 'true',
-                changelog: document.getElementById('changelog').value,
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('version/android').set(config);
-                showToast('Đã lưu cấu hình hệ thống!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== RESOURCE CONFIG ====================
-        async function saveResourceConfig() {
-            const config = {
-                defaultGold: parseInt(document.getElementById('defaultGold').value),
-                defaultLinhThach: parseInt(document.getElementById('defaultLinhThach').value),
-                defaultExp: parseInt(document.getElementById('defaultExp').value),
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('config/resources').set(config);
-                showToast('Đã lưu cấu hình tài nguyên!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        async function saveDropConfig() {
-            const config = {
-                dropRateItem: parseFloat(document.getElementById('dropRateItem').value),
-                dropRateLinhThach: parseFloat(document.getElementById('dropRateLinhThach').value),
-                updatedAt: Date.now()
-            };
-            
-            showLoading();
-            try {
-                await db.ref('config/drop').set(config);
-                showToast('Đã lưu cấu hình tỷ lệ rơi!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== QUEST ====================
-        async function addQuest() {
-            const questData = {
-                questID: document.getElementById('questId').value,
-                questName: document.getElementById('questName').value,
-                questType: document.getElementById('questType').value,
-                targetID: document.getElementById('questTarget').value,
-                requiredAmount: parseInt(document.getElementById('questAmount').value),
-                rewardExp: parseInt(document.getElementById('questRewardExp').value),
-                rewardGold: parseInt(document.getElementById('questRewardGold').value),
-                rewardLinhThach: parseInt(document.getElementById('questRewardLinhThach').value),
-                requiredStage: 0,
-                description: `Hoàn thành nhiệm vụ ${document.getElementById('questName').value}`,
-                createdAt: Date.now()
-            };
-            
-            if (!questData.questID) {
-                showToast('Vui lòng nhập ID nhiệm vụ', 'error');
-                return;
-            }
-            
-            showLoading();
-            try {
-                await db.ref(`quests/${questData.questID}`).set(questData);
-                showToast('Thêm nhiệm vụ thành công!', 'success');
-            } catch (error) {
-                showToast('Lỗi: ' + error.message, 'error');
-            }
-            hideLoading();
-        }
-        
-        // ==================== SIGNATURE ====================
-        async function generateSignature(data) {
-            // Giả lập signature - Trong thực tế nên gọi API server
-            const encoder = new TextEncoder();
-            const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data + 'your-secret-key'));
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return btoa(String.fromCharCode(...hashArray));
-        }
-        
-        // ==================== KHỞI TẠO ====================
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('userEmail').innerText = user.email;
-                loadDashboard();
-            } else {
-                document.getElementById('loading').style.display = 'flex';
-                loginWithGoogle();
-            }
-        });
-    </script>
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+// ─── CONFIG ─────────────────────────────────────────────────────────────────
+firebase.initializeApp({
+  apiKey:"AIzaSyAJ6kiQEfXZA7wlTKTX3dsKBMQTHidYX3c",
+  authDomain:"custom-utility-490109-j1.firebaseapp.com",
+  databaseURL:"https://custom-utility-490109-j1-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId:"custom-utility-490109-j1",
+  storageBucket:"custom-utility-490109-j1.appspot.com",
+  messagingSenderId:"626113784056",
+  appId:"1:626113784056:android:193990ae1ce494634f730d"
+});
+const auth=firebase.auth(), db=firebase.database();
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentUser=null, playersCache=null;
+let detailUid=null, detailData=null;          // currently open detail
+let rxAllTx=[], rxUserMap={};                 // recharge data
+let rxSort={field:'totalVND',order:'desc'};
+
+const STAGES=['Luyện Khí','Trúc Cơ','Kim Đan','Nguyên Anh','Hóa Thần','Phàm Tiên','Địa Tiên','Thiên Tiên','Chân Tiên','Kim Tiên','Linh Thánh','Huyền Thánh','Cổ Thánh','Chuẩn Đế','Minh Đế','Thiên Đế','Đại Đế'];
+const PRICE_MAP={'linhthach_1000':19000,'linhthach_5000':89000,'linhthach_10000':169000,'linhthach_40000':300000,'linhthach_100000':900000,'vip_package':39000,'manual_recharge':0};
+const PROD_LABEL={'linhthach_1000':'1,000 LT (19K)','linhthach_5000':'5,000 LT (89K)','linhthach_10000':'10,000 LT (169K)','linhthach_40000':'40,000 LT (300K)','linhthach_100000':'100,000 LT (900K)','vip_package':'VIP Package','manual_recharge':'Nạp thủ công'};
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+const $=id=>document.getElementById(id);
+function esc(t){if(!t)return'';return String(t).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}
+function nv(s){if(!s)return'';return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,m=>m==='đ'?'d':'D').toLowerCase()}
+function ticks2str(t){if(!t||isNaN(t)||t===0)return'Chưa có';return new Date(t/10000 - 62135596800000).toLocaleString('vi-VN')}
+function showLoad(){$('loading').style.display='flex'}
+function hideLoad(){$('loading').style.display='none'}
+function toast(msg,type='success'){
+  const d=document.createElement('div');
+  d.className='toast '+(type==='success'?'':type);d.innerText=msg;
+  document.body.appendChild(d);setTimeout(()=>d.remove(),2500)
+}
+function log(msg){
+  const d=$('debugCon');
+  d.innerHTML+=`<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+  d.scrollTop=d.scrollHeight
+}
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  $(id).classList.add('active');
+  document.querySelectorAll('.sidebar-menu a').forEach(a=>a.classList.remove('active'));
+  const lnk=document.querySelector(`[data-tab="${id}"]`);if(lnk)lnk.classList.add('active');
+  if(id==='cache')updateCacheUI();
+  if(id==='debug'){testFB();checkAuth();}
+}
+
+// ─── FIREBASE HELPERS ────────────────────────────────────────────────────────
+async function readGameData(uid){return(await db.ref(`users/${uid}/gameData`).once('value')).val()}
+async function patchDB(uid,updates){
+  if(!Object.keys(updates).length)return false;
+  updates.timestamp=Date.now()*10000+62135596800000;
+  await db.ref(`users/${uid}/gameData`).update(updates);
+  log(`✅ Patch [${uid.substring(0,8)}]: ${Object.keys(updates).filter(k=>k!=='timestamp').join(', ')}`);
+  return true;
+}
+
+// ─── AUTH ────────────────────────────────────────────────────────────────────
+async function loginWithEmail(){
+  const e=$('loginEmail').value,p=$('loginPassword').value;
+  if(!e||!p){toast('Nhập email và mật khẩu','error');return}
+  showLoad();
+  try{const r=await auth.signInWithEmailAndPassword(e,p);currentUser=r.user;await afterLogin();}
+  catch(err){toast('Lỗi: '+err.message,'error');hideLoad()}
+}
+async function loginWithGoogle(){
+  showLoad();
+  try{const r=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());currentUser=r.user;await afterLogin();}
+  catch(err){toast('Lỗi: '+err.message,'error');hideLoad()}
+}
+async function afterLogin(){
+  $('userEmail').innerText=currentUser.email;
+  $('loginForm').style.display='none';
+  const a=await db.ref(`admins/${currentUser.uid}`).once('value');
+  if(!a.exists()){toast('Không có quyền Admin!','error');logout();return}
+  toast('Đăng nhập thành công!');
+  await Promise.all([loadPlayers(),loadLeaderboard(),loadRecharge(),loadSuspicious(),loadGiftcodes(),loadEvent()]);
+  hideLoad();
+}
+function logout(){auth.signOut();currentUser=null;$('userEmail').innerText='Chưa đăng nhập';$('loginForm').style.display='flex'}
+auth.onAuthStateChanged(async u=>{
+  if(u){currentUser=u;$('userEmail').innerText=u.email;$('loginForm').style.display='none';
+    const a=await db.ref(`admins/${u.uid}`).once('value');if(!a.exists()){logout();return}await afterLogin();}
+  else{$('loginForm').style.display='flex';$('userEmail').innerText='Chưa đăng nhập'}
+});
+
+// ─── LOAD PLAYERS ────────────────────────────────────────────────────────────
+async function loadPlayers(force=false){
+  if(!force&&playersCache){renderPlayerList(playersCache);updateStats();return}
+  showLoad();
+  try{
+    const usersSnap=await db.ref('users').once('value'),users=usersSnap.val()||{};
+    const bannedSnap=await db.ref('banned').once('value'),banned=bannedSnap.val()||{};
+    playersCache=Object.entries(users).map(([uid,u])=>{
+      const d=u?.gameData||{};
+      return{uid,name:d.tenNhanVat||'Không tên',stage:d.chiSoCanhGio||0,tang:d.tang||1,
+             gold:d.vang||0,lt:d.linhThach||0,isVip:!!d.daMuaVip,isBanned:!!banned[uid]}
+    });
+    renderPlayerList(playersCache);updateStats();updateSelects();
+    localStorage.setItem('adminCache',JSON.stringify(playersCache));
+    localStorage.setItem('adminCacheTime',Date.now());
+  }catch(err){toast('Lỗi tải: '+err.message,'error')}
+  hideLoad();
+}
+function doSearch(){renderPlayerList(playersCache||[])}
+function clearSearch(){$('searchInput').value='';renderPlayerList(playersCache||[])}
+function renderPlayerList(all){
+  if(!all||!all.length){$('playerListContainer').innerHTML='<div class="card"><p style="color:#888">Chưa có dữ liệu</p></div>';return}
+  const kw=nv($('searchInput')?.value||'');
+  const list=kw?all.filter(p=>nv(p.name).includes(kw)||p.uid.toLowerCase().includes(kw)):all;
+  if(!list.length){$('playerListContainer').innerHTML='<div class="card"><p>Không tìm thấy</p></div>';return}
+  let h=`<div class="card"><div class="table-wrap"><table class="table">
+    <thead><tr><th>Tên nhân vật</th><th>Cảnh giới</th><th>Vàng</th><th>Linh thạch</th><th>VIP</th><th>Ban</th></tr></thead><tbody>`;
+  list.slice(0,200).forEach(p=>{
+    h+=`<tr class="player-row" onclick="openDetail('${p.uid}')">
+       <td><strong>${esc(p.name)}</strong><br><span style="font-size:9px;color:#666">${p.uid.substring(0,14)}...</span></td>
+       <td>${STAGES[p.stage]||'?'} t${p.tang}</td>
+       <td>${(p.gold||0).toLocaleString()}</td>
+       <td>${(p.lt||0).toLocaleString()}</td>
+       <td>${p.isVip?'<span class="badge badge-vip">VIP</span>':'-'}</td>
+       <td>${p.isBanned?'<span class="badge badge-ban">BAN</span>':'-'}</td>
+     </tr>`;
+  });
+  h+=`</tbody></table></div><p style="font-size:10px;color:#666;margin-top:6px">
+    ${Math.min(list.length,200)}/${list.length} kết quả · Click vào hàng để xem và sửa chi tiết</p></div>`;
+  $('playerListContainer').innerHTML=h;
+}
+function updateStats(){
+  if(playersCache){$('totalPlayers').innerText=playersCache.length;$('totalVip').innerText=playersCache.filter(p=>p.isVip).length}
+}
+function updateSelects(){}
+
+// ─── DETAIL OVERLAY ───────────────────────────────────────────────────────────
+async function openDetail(uid){
+  detailUid=uid;
+  const ov=$('detailOverlay');ov.style.display='block';document.body.style.overflow='hidden';
+  $('detailTitle').innerText='⏳ Đang tải...';
+  $('detailUid').innerText=uid;
+  $('detailBody').innerHTML='<div style="text-align:center;padding:40px">⏳ Đang tải dữ liệu...</div>';
+  try{
+    detailData=await readGameData(uid);
+    if(!detailData){$('detailBody').innerHTML='<p style="color:#dc3545;padding:20px">Không có dữ liệu gameData</p>';return}
+    $('detailTitle').innerText='📋 '+esc(detailData.tenNhanVat||uid);
+    // wire buttons
+    $('detailBanBtn').onclick=()=>banPlayer(uid);
+    $('detailUnbanBtn').onclick=()=>unbanPlayer(uid);
+    $('detailDeleteBtn').onclick=()=>deletePlayer(uid);
+    $('detailBody').innerHTML=buildDetailHTML(uid,detailData);
+    loadUserTransactions(uid);
+  }catch(err){$('detailBody').innerHTML=`<p style="color:#dc3545;padding:20px">Lỗi: ${esc(err.message)}</p>`}
+}
+function closeDetail(){
+  $('detailOverlay').style.display='none';
+  document.body.style.overflow='';
+  detailUid=null;detailData=null;
+}
+function handleOverlayClick(e){if(e.target===$('detailOverlay'))closeDetail()}
+
+// Build the full detail HTML with per-field save
+function buildDetailHTML(uid,d){
+  const r=(label,key,type,value,extra='')=>{
+    if(type==='ro'){
+      return`<tr><td class="lbl">${label}</td><td class="val" colspan="2">${esc(String(value||''))}</td><td class="act"></td></tr>`;
+    }
+    let inp='';
+    const iid=`fi_${key.replace(/[^a-zA-Z0-9]/g,'_')}`;
+    if(type==='txt')inp=`<input type="text" id="${iid}" value="${esc(String(value??''))}" ${extra}>`;
+    else if(type==='num')inp=`<input type="number" id="${iid}" value="${value??0}" ${extra}>`;
+    else if(type==='flt')inp=`<input type="number" id="${iid}" value="${value??0}" step="0.001" ${extra}>`;
+    else if(type==='bool')inp=`<select id="${iid}"><option value="true" ${value===true?'selected':''}>✅ Có (true)</option><option value="false" ${value!==true?'selected':''}>❌ Không (false)</option></select>`;
+    else if(type==='json')inp=`<textarea id="${iid}" rows="3">${esc(JSON.stringify(value??null,null,1))}</textarea>`;
+    else if(type==='ticks')inp=`<input type="text" id="${iid}" value="${value??0}" ${extra}><br><span style="font-size:9px;color:#28a745">${ticks2str(value)}</span>`;
+    let dv=value===null||value===undefined?'<em style="color:#555">null</em>':esc(String(value));
+    if(type==='json'){const s=JSON.stringify(value);dv=s&&s.length>50?s.substring(0,50)+'…':esc(s||'null')}
+    if(type==='ticks')dv=esc(String(value||0));
+    return`<tr>
+      <td class="lbl">${label}</td>
+      <td class="val" id="dv_${iid}">${dv}</td>
+      <td class="inp">${inp}</td>
+      <td class="act"><button class="save-btn" onclick="saveField('${uid}','${key}','${type}','${iid}')">💾</button></td>
+     </tr>`;
+  };
+  const sec=(t)=>`<tr class="sec-row"><td colspan="4">${t}</td></tr>`;
+
+  // Skills
+  const skillKeys=Object.keys(d).filter(k=>k.startsWith('skill_')&&(k.endsWith('_daHoc')||k.endsWith('_capDo')));
+  const skillMap={};
+  skillKeys.forEach(k=>{const b=k.replace(/_daHoc$|_capDo$/,'');if(!skillMap[b])skillMap[b]={};if(k.endsWith('_daHoc'))skillMap[b].daHoc=d[k];if(k.endsWith('_capDo'))skillMap[b].capDo=d[k]});
+  let skillRows='';
+  for(const key in skillMap){
+    skillRows+=r(key,'_skill_'+key+'_daHoc','bool',skillMap[key].daHoc);
+    skillRows+=r('↳ Cấp độ','_skill_'+key+'_capDo','num',skillMap[key].capDo,'min="0" max="20"');
+  }
+
+  return`<div style="overflow-x:auto">
+  <table class="fields-table" style="width:100%">
+    <thead><tr><th class="lbl" style="color:#ffd700">Thông số</th><th class="val" style="color:#ffd700">Giá trị hiện tại</th><th class="inp" style="color:#ffd700">Sửa giá trị mới</th><th class="act" style="color:#ffd700">Lưu</th></tr></thead>
+    <tbody>
+    ${sec('📝 THÔNG TIN CƠ BẢN')}
+    ${r('Tên nhân vật','tenNhanVat','txt',d.tenNhanVat)}
+    ${r('User ID','_uid','ro',uid)}
+    ${r('Email','email','txt',d.email)}
+    ${r('Client Version','clientVersion','txt',d.clientVersion)}
+    ${r('Data Version','dataVersion','num',d.dataVersion)}
+    ${r('Đăng nhập cuối','_ll','ro',ticks2str(d.lastLoginTime))}
+    ${r('Đăng xuất cuối','_lo','ro',ticks2str(d.lastLogoutTime))}
+
+    ${sec('🧘 TU VI & CHỈ SỐ')}
+    ${r('Cảnh giới (chiSoCanhGio)','chiSoCanhGio','num',d.chiSoCanhGio,'min="0" max="16"')}
+    ${r('Tầng (tang)','tang','num',d.tang,'min="1" max="9"')}
+    ${r('EXP hiện tại','expHienTai','flt',d.expHienTai)}
+    ${r('Điểm thuộc tính chưa cộng','diemThuocTinhChuaCong','num',d.diemThuocTinhChuaCong)}
+    ${r('HP gốc','hpGoc','num',d.hpGoc)}
+    ${r('ATK gốc','atkGoc','num',d.atkGoc)}
+    ${r('DEF gốc','defGoc','num',d.defGoc)}
+    ${r('Luck gốc','luckGoc','num',d.luckGoc)}
+
+    ${sec('💰 TÀI NGUYÊN')}
+    ${r('Vàng (vang)','vang','num',d.vang)}
+    ${r('Linh thạch (linhThach)','linhThach','num',d.linhThach)}
+
+    ${sec('⚔️ VŨ KHÍ & GIÁP ĐANG MẶC')}
+    ${r('Tên vũ khí (vuKhiDangMac)','vuKhiDangMac','txt',d.vuKhiDangMac)}
+    ${r('Cấp vũ khí (vuKhiCapDo)','vuKhiCapDo','num',d.vuKhiCapDo,'min="0" max="8"')}
+    ${r('Tên giáp (giapDangMac)','giapDangMac','txt',d.giapDangMac)}
+    ${r('Cấp giáp (giapCapDo)','giapCapDo','num',d.giapCapDo,'min="0" max="8"')}
+
+    ${sec('🪬 PHÁP BẢO & THÚ CƯỠI')}
+    ${r('Pháp bảo đang mặc','phapBaoDangMac','txt',d.phapBaoDangMac)}
+    ${r('Thú cưỡi đang dùng','thuCuoiDangDung','txt',d.thuCuoiDangDung)}
+    ${r('Pháp bảo obj (JSON)','phapBaoDangMacObj','json',d.phapBaoDangMacObj)}
+
+    ${sec('🐾 THÚ CƯNG (PET)')}
+    ${r('Cảnh giới pet','petCanhGio','num',d.petCanhGio,'min="0" max="16"')}
+    ${r('Cấp độ pet','petCapDo','num',d.petCapDo)}
+    ${r('EXP pet','petExp','num',d.petExp)}
+
+    ${sec('👑 VIP')}
+    ${r('Đã mua VIP (daMuaVip)','daMuaVip','bool',d.daMuaVip)}
+    ${r('Số ngày VIP còn lại','vipSoNgayConLai','num',d.vipSoNgayConLai)}
+    ${r('VIP bắt đầu (Ticks)','vipStartTicks','ticks',d.vipStartTicks)}
+    ${r('VIP kết thúc (Ticks)','vipEndTicks','ticks',d.vipEndTicks)}
+
+    ${sec('✨ THIÊN PHÚ')}
+    ${r('Loại thiên phú','loaiThienPhu','txt',d.loaiThienPhu)}
+    ${r('Hệ số % (phanTramThienPhu)','phanTramThienPhu','flt',d.phanTramThienPhu)}
+
+    ${sec('🎯 KỸ NĂNG - SLOT')}
+    ${r('Slot 1 (skillSlot_0)','skillSlot_0','txt',d.skillSlot_0)}
+    ${r('Slot 2 (skillSlot_1)','skillSlot_1','txt',d.skillSlot_1)}
+    ${r('Slot 3 (skillSlot_2)','skillSlot_2','txt',d.skillSlot_2)}
+    ${r('Slot 4 (skillSlot_3)','skillSlot_3','txt',d.skillSlot_3)}
+
+    ${sec('📚 KỸ NĂNG - ĐÃ HỌC & CẤP ĐỘ')}
+    ${skillRows||'<tr><td colspan="4" style="color:#666;padding:8px">Không có kỹ năng</td></tr>'}
+
+    ${sec('📜 NHIỆM VỤ')}
+    ${r('Active Quest IDs (JSON)','activeQuestIDs','json',d.activeQuestIDs)}
+    ${r('Completed Quest IDs (JSON)','completedQuestIDs','json',d.completedQuestIDs)}
+    ${r('Quest Progress (JSON)','questProgress','json',d.questProgress)}
+
+    ${sec('📦 KHO TRANG BỊ (JSON)')}
+    ${r('danhSachTrangBi','danhSachTrangBi','json',d.danhSachTrangBi)}
+
+    ${sec('📿 DANH SÁCH PHÁP BẢO (JSON)')}
+    ${r('danhSachPhapBao','danhSachPhapBao','json',d.danhSachPhapBao)}
+
+    ${sec('🐉 DANH SÁCH THÚ CƯỠI (JSON)')}
+    ${r('danhSachThuCuoi','danhSachThuCuoi','json',d.danhSachThuCuoi)}
+
+    ${sec('💳 NẠP THỦ CÔNG (Admin)')}
+    <tr><td class="lbl" style="vertical-align:top">Nạp linh thạch thủ công</td>
+    <td colspan="3" style="padding:8px 10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+        <div><label style="font-size:10px;color:#aaa;display:block;margin-bottom:3px">Số Linh Thạch</label>
+        <input type="number" id="manualLT_${uid}" value="1000" min="1" style="width:120px;background:rgba(0,0,0,.5);border:1px solid #555;border-radius:5px;color:#fff;padding:5px 7px;font-size:12px"></div>
+        <div><label style="font-size:10px;color:#aaa;display:block;margin-bottom:3px">Giá VND</label>
+        <input type="text" id="manualVND_${uid}" value="0" style="width:120px;background:rgba(0,0,0,.5);border:1px solid #555;border-radius:5px;color:#fff;padding:5px 7px;font-size:12px"></div>
+        <div><label style="font-size:10px;color:#aaa;display:block;margin-bottom:3px">Ghi chú</label>
+        <input type="text" id="manualNote_${uid}" value="Admin nạp thủ công" style="width:180px;background:rgba(0,0,0,.5);border:1px solid #555;border-radius:5px;color:#fff;padding:5px 7px;font-size:12px"></div>
+        <button class="btn btn-success btn-sm" onclick="manualRecharge('${uid}')" style="height:32px">💰 Nạp thủ công</button>
+      </div>
+      <p style="font-size:9px;color:#888;margin-top:4px">⚠️ Sẽ cộng LT vào tài khoản, lưu giao dịch vào Firebase và cập nhật bảng xếp hạng nạp tiền</p>
+    </td></tr>
+
+    ${sec('💳 LỊCH SỬ GIAO DỊCH (từ node transactions)')}
+    <tr><td class="lbl" style="vertical-align:top">transactions</td>
+    <td colspan="3" style="padding:6px 10px">
+      <div id="txHistoryBox_${uid}" style="max-height:220px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:6px;padding:8px">
+        <p style="color:#666">⏳ Đang tải giao dịch...</p>
+      </div>
+      <button class="btn btn-info btn-xs" onclick="loadUserTransactions('${uid}')" style="margin-top:6px">🔄 Tải lại giao dịch</button>
+    </td></tr>
+
+    </tbody>
+   </table>
+  </div>
+  <div style="padding:10px;background:rgba(0,0,0,.3);font-size:10px;color:#666;border-top:1px solid #2a2a3e">
+    💡 Nhấn 💾 ở mỗi hàng để lưu riêng từng thông số lên Firebase. Trường JSON cần nhập đúng cú pháp.
+  </div>`;
+}
+
+// Save a single field
+async function saveField(uid, key, type, iid){
+  const el=document.getElementById(iid);
+  if(!el){toast('Không tìm thấy ô nhập','error');return}
+  const btn=el.closest('tr')?.querySelector('.save-btn');
+  if(btn){btn.classList.add('saving');btn.innerText='⏳'}
+
+  let value;
+  try{
+    if(type==='num')value=parseFloat(el.value)||0;
+    else if(type==='flt')value=parseFloat(el.value)||0;
+    else if(type==='bool')value=el.value==='true';
+    else if(type==='json'){value=JSON.parse(el.value);} // throws on bad JSON
+    else if(type==='ticks')value=parseFloat(el.value)||0;
+    else value=el.value; // txt
+  }catch(e){
+    toast('⚠️ JSON không hợp lệ! Kiểm tra lại.','error');
+    if(btn){btn.classList.remove('saving');btn.innerText='💾'}return;
+  }
+
+  // Handle skill sub-keys (key starts with _skill_)
+  let firebaseKey=key;
+  if(key.startsWith('_skill_')){firebaseKey=key.replace(/^_skill_/,'');}
+
+  try{
+    await patchDB(uid,{[firebaseKey]:value});
+
+    // Update display
+    const dvEl=document.getElementById('dv_'+iid);
+    if(dvEl){
+      let disp=value===null||value===undefined?'<em style="color:#555">null</em>':esc(String(value));
+      if(type==='json'){const s=JSON.stringify(value);disp=s&&s.length>50?esc(s.substring(0,50))+'…':esc(s||'null')}
+      if(type==='ticks')disp=esc(String(value));
+      dvEl.innerHTML=disp;
+    }
+
+    // Update leaderboard if needed
+    if(['chiSoCanhGio','tang','tenNhanVat','linhThach'].includes(firebaseKey)){
+      const fresh=await readGameData(uid);
+      if(fresh){
+        await db.ref(`leaderboard/tuvi/${uid}`).set({name:fresh.tenNhanVat,score:(fresh.chiSoCanhGio||0)*10000+(fresh.tang||1)*1000});
+        await db.ref(`leaderboard/linhthach/${uid}`).set({name:fresh.tenNhanVat,score:fresh.linhThach||0});
+      }
+    }
+    // Update local cache
+    if(playersCache){
+      const p=playersCache.find(x=>x.uid===uid);
+      if(p){
+        if(firebaseKey==='tenNhanVat')p.name=value;
+        if(firebaseKey==='chiSoCanhGio')p.stage=value;
+        if(firebaseKey==='tang')p.tang=value;
+        if(firebaseKey==='vang')p.gold=value;
+        if(firebaseKey==='linhThach')p.lt=value;
+        if(firebaseKey==='daMuaVip')p.isVip=value;
+      }
+    }
+    // Update local detailData
+    if(detailData&&uid===detailUid)detailData[firebaseKey]=value;
+
+    toast(`✅ Đã lưu [${firebaseKey}]`);
+  }catch(err){toast('Lỗi lưu: '+err.message,'error')}
+  if(btn){btn.classList.remove('saving');btn.innerText='💾'}
+}
+
+// Ban / Unban / Delete
+async function banPlayer(uid){
+  const reason=prompt('Lý do cấm (người chơi sẽ thấy):');if(!reason)return;
+  showLoad();
+  try{await db.ref(`banned/${uid}`).set({reason,timestamp:Date.now(),bannedBy:currentUser?.email});toast('Đã ban!');playersCache=null;await loadPlayers(true);}
+  catch(err){toast(err.message,'error')}hideLoad();
+}
+async function unbanPlayer(uid){
+  showLoad();
+  try{await db.ref(`banned/${uid}`).remove();toast('Đã mở khóa!');playersCache=null;await loadPlayers(true);}
+  catch(err){toast(err.message,'error')}hideLoad();
+}
+async function deletePlayer(uid){
+  const name=detailData?.tenNhanVat||uid;
+  const conf=prompt(`⚠️ NGUY HIỂM! Nhập đúng tên "${name}" để xóa vĩnh viễn:`);
+  if(conf!==name){toast('Sai tên, đã hủy','warning');return}
+  showLoad();
+  try{
+    await db.ref(`users/${uid}`).remove();
+    await db.ref(`leaderboard/tuvi/${uid}`).remove();
+    await db.ref(`leaderboard/linhthach/${uid}`).remove();
+    await db.ref(`banned/${uid}`).remove();
+    toast('Đã xóa!');closeDetail();playersCache=null;await loadPlayers(true);
+  }catch(err){toast(err.message,'error')}hideLoad();
+}
+
+async function createNewPlayer(){
+  const name=prompt('Tên nhân vật mới:');if(!name)return;
+  showLoad();
+  try{
+    const ref=db.ref('users').push();
+    await db.ref(`users/${ref.key}/gameData`).set({tenNhanVat:name,chiSoCanhGio:0,tang:1,vang:500,linhThach:20,hpGoc:100,atkGoc:20,defGoc:10,luckGoc:5,clientVersion:'8.2',dataVersion:2,timestamp:Date.now()*10000+62135596800000});
+    toast('Tạo thành công!');playersCache=null;await loadPlayers(true);openDetail(ref.key);
+  }catch(err){toast(err.message,'error')}hideLoad();
+}
+
+// ─── RECHARGE (Đọc từ users/{uid}/transactions/) ────────────────────────────
+async function loadRecharge(){
+  showLoad();
+  try{
+    rxAllTx = [];
+    rxUserMap = {};
+
+    const usersSnap = await db.ref('users').once('value');
+    const users = usersSnap.val() || {};
+
+    for(const uid in users){
+      const d = users[uid]?.gameData || {};
+      const name = d.tenNhanVat || 'Không tên';
+
+      // Đọc từ node transactions riêng (không phải gameData.transactionHistory)
+      const txData = users[uid]?.transactions || {};
+      for(const txKey in txData){
+        const tx = txData[txKey];
+        if (!tx || !tx.productId) continue;
+        pushTx(tx.transactionId || txKey, tx, uid, name);
+      }
+    }
+
+    rxAllTx.sort((a,b) => b.timestamp - a.timestamp);
+
+    const totalVND = rxAllTx.reduce((s,t) => s + t.vnd, 0);
+    const totalLT = rxAllTx.reduce((s,t) => s + t.lt, 0);
+
+    $('rxTotal').innerText = rxAllTx.length.toLocaleString();
+    $('rxVND').innerText = (totalVND / 1000000).toFixed(1) + 'M';
+    $('rxLT').innerText = totalLT.toLocaleString();
+    $('rxUsers').innerText = Object.keys(rxUserMap).length;
+    $('totalRecharged').innerText = Object.keys(rxUserMap).length;
+    $('totalRevenue').innerText = (totalVND / 1000000).toFixed(1) + 'M';
+
+    renderUserSummary();
+    renderAllTx();
+  } catch(err){
+    toast('Lỗi tải nạp: ' + err.message, 'error');
+    log('Recharge err: ' + err.message);
+  }
+  hideLoad();
+}
+
+// Hàm đẩy dữ liệu vào mảng tổng và gom nhóm theo User
+function pushTx(txId, tx, uid, name){
+  const vnd = PRICE_MAP[tx.productId] || 0;
+  const lt = tx.soLinhThach || tx.soTien || 0;
+  const ts = tx.timestamp || 0;
+  
+  let timeStr = tx.thoiGianNap || '';
+  if (!timeStr && ts > 0) {
+      timeStr = new Date(ts / 10000 - 62135596800000).toLocaleString('vi-VN');
+  }
+
+  rxAllTx.push({
+    txId: String(txId),
+    uid: uid,
+    name: name,
+    productId: tx.productId || '',
+    lt: lt,
+    vnd: vnd,
+    vndStr: tx.giaTriVND || vnd.toLocaleString(), 
+    time: timeStr,
+    verified: tx.daXacThuc !== false,
+    timestamp: ts
+  });
+
+  if(!rxUserMap[uid]) {
+      rxUserMap[uid] = {uid, name, totalVND: 0, totalLT: 0, count: 0};
+  }
+  rxUserMap[uid].totalVND += vnd;
+  rxUserMap[uid].totalLT += lt;
+  rxUserMap[uid].count++;
+}
+
+// === CÁC HÀM RENDER CHO NẠP TIỀN ===
+function renderUserSummary() {
+  let usersList = Object.values(rxUserMap);
+  const keyword = $('rxSearch').value.trim().toLowerCase();
+  if (keyword) {
+    usersList = usersList.filter(u => u.uid.toLowerCase().includes(keyword) || u.name.toLowerCase().includes(keyword));
+  }
+  // sắp xếp
+  usersList.sort((a,b) => {
+    let av = a[rxSort.field], bv = b[rxSort.field];
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (rxSort.order === 'asc') return av > bv ? 1 : -1;
+    else return av < bv ? 1 : -1;
+  });
+  const tbody = $('rxUserBody');
+  if (!usersList.length) { tbody.innerHTML = '<tr><td colspan="5">Không có dữ liệu</td></tr>'; return; }
+  tbody.innerHTML = usersList.map(u => `
+    <tr>
+      <td>${esc(u.name)}<br><span style="font-size:9px;color:#888">${u.uid.substring(0,14)}...</span></td>
+      <td>${(u.totalVND).toLocaleString()}₫</td>
+      <td>${(u.totalLT).toLocaleString()}</td>
+      <td>${u.count}</td>
+      <td><button class="btn btn-info btn-xs" onclick="showUserTx('${u.uid}','${esc(u.name)}')">Chi tiết</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderAllTx() {
+  let filtered = [...rxAllTx];
+  const keyword = $('txSearchAll').value.trim().toLowerCase();
+  const prodFilter = $('txProdFilter').value;
+  const verFilter = $('txVerFilter').value;
+  if (keyword) {
+    filtered = filtered.filter(tx => tx.uid.toLowerCase().includes(keyword) || tx.name.toLowerCase().includes(keyword) || tx.txId.toLowerCase().includes(keyword));
+  }
+  if (prodFilter) filtered = filtered.filter(tx => tx.productId === prodFilter);
+  if (verFilter !== '') filtered = filtered.filter(tx => tx.verified === (verFilter === '1'));
+  const tbody = $('txAllBody');
+  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7">Không có giao dịch</td></tr>'; $('txAllCount').innerText = ''; return; }
+  tbody.innerHTML = filtered.map(tx => `
+    <tr>
+      <td style="font-size:10px">${esc(tx.time || '')}</td>
+      <td>${esc(tx.name)}<br><span style="font-size:9px;color:#888">${tx.uid.substring(0,10)}</span></td>
+      <td>${PROD_LABEL[tx.productId] || tx.productId}</td>
+      <td>${tx.lt.toLocaleString()}</td>
+      <td>${tx.vnd.toLocaleString()}₫</td>
+      <td><span class="badge ${tx.verified ? 'badge-ok' : 'badge-pending'}">${tx.verified ? '✅ Đã xác thực' : '⏳ Chưa xác thực'}</span></td>
+      <td style="font-size:9px;word-break:break-all">${esc(tx.txId)}</td>
+    </tr>
+  `).join('');
+  $('txAllCount').innerText = `Hiển thị ${filtered.length} / ${rxAllTx.length} giao dịch`;
+}
+
+function sortRx(field) {
+  if (rxSort.field === field) rxSort.order = rxSort.order === 'asc' ? 'desc' : 'asc';
+  else { rxSort.field = field; rxSort.order = 'desc'; }
+  renderUserSummary();
+}
+
+function showUserTx(uid, name) {
+  const userTxs = rxAllTx.filter(tx => tx.uid === uid);
+  const tbody = $('#txDetailBody');
+  if (!userTxs.length) { tbody.innerHTML = '<tr><td colspan="6">Không có giao dịch</td></tr>'; }
+  else {
+    tbody.innerHTML = userTxs.map(tx => `
+      <tr>
+        <td>${esc(tx.time || '')}</td>
+        <td>${PROD_LABEL[tx.productId] || tx.productId}</td>
+        <td>${tx.lt.toLocaleString()}</td>
+        <td>${tx.vnd.toLocaleString()}₫</td>
+        <td><span class="badge ${tx.verified ? 'badge-ok' : 'badge-pending'}">${tx.verified ? '✅' : '⏳'}</span></td>
+        <td style="font-size:9px">${esc(tx.txId)}</td>
+      </tr>
+    `).join('');
+  }
+  $('#txDetailTitle').innerHTML = `📜 Giao dịch của ${esc(name)}`;
+  $('#txDetailOverlay').style.display = 'block';
+}
+
+// ─── MANUAL RECHARGE & TRANSACTION HISTORY ───────────────────────────────────
+async function manualRecharge(uid){
+  const ltEl=document.getElementById('manualLT_'+uid);
+  const vndEl=document.getElementById('manualVND_'+uid);
+  const noteEl=document.getElementById('manualNote_'+uid);
+  if(!ltEl)return;
+  const soLinhThach=parseInt(ltEl.value)||0;
+  const giaVND=vndEl?vndEl.value:'0';
+  const ghiChu=noteEl?noteEl.value:'Admin nạp thủ công';
+  if(soLinhThach<=0){toast('Số linh thạch phải > 0','error');return}
+  if(!confirm(`Nạp ${soLinhThach.toLocaleString()} LT (${giaVND} VND) cho ${uid.substring(0,14)}...?`))return;
+  showLoad();
+  try{
+    const txId='admin_'+Date.now()+'_'+Math.random().toString(36).substring(2,8);
+    const now=new Date();
+    const timestamp=now.getTime()*10000+621355968000000000;
+    const txData={
+      productId:'manual_recharge',
+      transactionId:txId,
+      soLinhThach:soLinhThach,
+      loaiGiaoDich:'linhthach',
+      giaTriVND:giaVND,
+      timestamp:timestamp,
+      thoiGianNap:now.toLocaleString('vi-VN'),
+      daXacThuc:true,
+      ngayNap:now.toISOString().substring(0,10),
+      gioNap:now.toTimeString().substring(0,8),
+      ghiChu:ghiChu,
+      napBoi:currentUser?.email||'admin'
+    };
+    await db.ref(`users/${uid}/transactions/${txId}`).set(txData);
+    const gdSnap=await db.ref(`users/${uid}/gameData/linhThach`).once('value');
+    const ltHienTai=gdSnap.val()||0;
+    const ltMoi=ltHienTai+soLinhThach;
+    await db.ref(`users/${uid}/gameData/linhThach`).set(ltMoi);
+    const nameSnap=await db.ref(`users/${uid}/gameData/tenNhanVat`).once('value');
+    const tenNV=nameSnap.val()||'Đạo Hữu';
+    const allTxSnap=await db.ref(`users/${uid}/transactions`).once('value');
+    const allTx=allTxSnap.val()||{};
+    let tongNap=0;
+    for(const k in allTx){
+      if(allTx[k].loaiGiaoDich==='linhthach'&&allTx[k].daXacThuc)tongNap+=allTx[k].soLinhThach||0;
+    }
+    await db.ref(`leaderboard/topspender/${uid}`).set({name:tenNV,score:tongNap,lastUpdate:Date.now()*10000+621355968000000000});
+    await db.ref(`leaderboard/linhthach/${uid}`).set({name:tenNV,score:ltMoi});
+    if(playersCache){
+      const p=playersCache.find(x=>x.uid===uid);
+      if(p)p.lt=ltMoi;
+    }
+    if(detailData&&detailUid===uid)detailData.linhThach=ltMoi;
+    toast(`✅ Đã nạp ${soLinhThach.toLocaleString()} LT cho ${tenNV}. LT mới: ${ltMoi.toLocaleString()}`);
+    loadUserTransactions(uid);
+    log(`💰 Admin nạp thủ công: ${soLinhThach} LT cho ${uid} (${tenNV}), VND=${giaVND}`);
+  }catch(err){toast('Lỗi nạp: '+err.message,'error');log('Manual recharge err: '+err.message)}
+  hideLoad();
+}
+
+async function loadUserTransactions(uid){
+  const box=document.getElementById('txHistoryBox_'+uid);
+  if(!box)return;
+  box.innerHTML='<p style="color:#888">⏳ Đang tải...</p>';
+  try{
+    const snap=await db.ref(`users/${uid}/transactions`).once('value');
+    const txData=snap.val()||{};
+    const txList=Object.entries(txData).map(([k,tx])=>({key:k,...tx})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    if(!txList.length){box.innerHTML='<p style="color:#666">Không có giao dịch</p>';return}
+    box.innerHTML=txList.map(tx=>`
+      <div style="border-bottom:1px solid #2a2a3e;padding:5px 0;font-size:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+        <span style="color:#aaa;min-width:130px">${esc(tx.thoiGianNap||'')}</span>
+        <strong style="color:#ffd700">${esc(PROD_LABEL[tx.productId]||tx.productId||'?')}</strong>
+        <span style="color:#28a745">${(tx.soLinhThach||0).toLocaleString()} LT</span>
+        ${tx.giaTriVND?`<span style="color:#ff9800">${esc(tx.giaTriVND)} VND</span>`:''}
+        <span class="badge ${tx.daXacThuc?'badge-ok':'badge-pending'}">${tx.daXacThuc?'✅':'⏳'}</span>
+        ${tx.napBoi?`<span style="color:#17a2b8;font-size:9px">bởi ${esc(tx.napBoi)}</span>`:''}
+        ${tx.ghiChu?`<span style="color:#888;font-size:9px">(${esc(tx.ghiChu)})</span>`:''}
+      </div>`).join('');
+  }catch(err){box.innerHTML=`<p style="color:#dc3545">Lỗi: ${esc(err.message)}</p>`}
+}
+
+// ─── LEADERBOARD ─────────────────────────────────────────────────────────────
+async function loadLeaderboard(){
+  try{
+    const tvSnap=await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
+    let list=[];tvSnap.forEach(c=>list.push({name:c.val().name,score:c.val().score}));list.reverse();
+    $('lbTuVi').querySelector('tbody').innerHTML=list.map((e,i)=>{
+      const s=Math.floor(e.score/10000),t=Math.floor((e.score%10000)/1000);
+      return`<tr><td>${i+1}</td><td>${esc(e.name)}</td><td>${STAGES[s]||'?'} tầng ${t}</td><td>${e.score}</td></tr>`;
+    }).join('')||'<tr><td colspan="4">Trống</td></tr>';
+
+    const ltSnap=await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
+    let ltList=[];ltSnap.forEach(c=>ltList.push({name:c.val().name,score:c.val().score}));ltList.reverse();
+    $('lbLT').querySelector('tbody').innerHTML=ltList.map((e,i)=>`<tr><td>${i+1}</td><td>${esc(e.name)}</td><td>${(e.score||0).toLocaleString()}</td></tr>`).join('')||'<tr><td colspan="3">Trống</td></tr>';
+  }catch(err){log('LB err: '+err.message)}
+}
+
+// ─── SUSPICIOUS ──────────────────────────────────────────────────────────────
+async function loadSuspicious(){
+  try{
+    const users=(await db.ref('users').once('value')).val()||{};
+    const susp=[];
+    for(const uid in users){
+      const d=users[uid]?.gameData;
+      if(!d)continue;
+      const rs=[];
+      if(d.linhThach>1000000)rs.push('LT>1M');
+      if(d.vang>10000000)rs.push('Vàng>10M');
+      if(rs.length)susp.push({uid,name:d.tenNhanVat,lt:d.linhThach,rs});
+    }
+    susp.sort((a,b)=>b.lt-a.lt);
+    $('suspTable').querySelector('tbody').innerHTML=susp.map(s=>`<tr>
+      <td style="font-size:9px">${s.uid.substring(0,10)}</td>
+      <td>${esc(s.name)}</td>
+      <td>${(s.lt||0).toLocaleString()}</td>
+      <td>${s.rs.join(', ')}</td>
+      <td>⚠️ high</td>
+      <td><button class="btn btn-info btn-xs" onclick="openDetail('${s.uid}')">Xem</button></td>
+    </tr>`).join('')||'<tr><td colspan="6" style="color:#666">Không có</td></tr>';
+  }catch(err){}
+}
+
+// ─── GIFTCODES ───────────────────────────────────────────────────────────────
+async function loadGiftcodes(){
+  try{
+    const codes=(await db.ref('giftcodes').once('value')).val()||{};
+    $('gcTable').querySelector('tbody').innerHTML=Object.keys(codes).map(c=>`<tr>
+      <td><strong>${c}</strong></td>
+      <td>${codes[c].gold||0}V + ${codes[c].linhThach||0}LT</td>
+      <td>${codes[c].used||0}/${codes[c].maxUses||999}</td>
+      <td><button class="btn btn-danger btn-xs" onclick="db.ref('giftcodes/${c}').remove().then(loadGiftcodes)">Xóa</button></td>
+    </tr>`).join('')||'<tr><td colspan="4" style="color:#666">Trống</td></tr>';
+  }catch(err){}
+}
+async function createGiftCode(){
+  const code=$('giftCode').value.toUpperCase().trim();if(!code)return;
+  await db.ref(`giftcodes/${code}`).set({code,gold:parseInt($('giftGold').value)||0,linhThach:parseInt($('giftLinhThach').value)||0,
+    items:$('giftItem').value.split(',').map(s=>s.trim()).filter(Boolean),maxUses:parseInt($('giftMaxUses').value)||999,used:0,createdAt:Date.now()});
+  toast('Tạo Code thành công!');loadGiftcodes();
+}
+
+// ─── EVENTS ──────────────────────────────────────────────────────────────────
+async function loadEvent(){
+  const ev=(await db.ref('sukien/current').once('value')).val();
+  if(ev){
+    $('evTitle').value=ev.tieuDe||'';$('evContent').value=ev.noiDung||'';
+    $('evReward').value=ev.phanThuongLinhThach||0;$('evStatus').value=ev.dangHoatDong?'true':'false';
+    $('evInfo').innerHTML=`<strong>${esc(ev.tieuDe)}</strong>: ${esc(ev.noiDung)}`;
+  }else{$('evInfo').innerHTML='<span style="color:#666">Chưa có sự kiện</span>'}
+}
+async function saveEvent(){
+  await db.ref('sukien/current').set({tieuDe:$('evTitle').value,noiDung:$('evContent').value,
+    phanThuongLinhThach:parseInt($('evReward').value)||0,dangHoatDong:$('evStatus').value==='true',updatedAt:Date.now()});
+  toast('Lưu sự kiện thành công!');loadEvent();
+}
+async function deleteEvent(){await db.ref('sukien/current').remove();toast('Đã xóa sự kiện');loadEvent();}
+
+// ─── CACHE / DEBUG ───────────────────────────────────────────────────────────
+function updateCacheUI(){
+  const c=localStorage.getItem('adminCache');
+  if(c){$('cacheCount').innerText=JSON.parse(c).length;$('cacheSize').innerText=Math.round(c.length/1024);$('cacheTime').innerText=new Date(parseInt(localStorage.getItem('adminCacheTime')||0)).toLocaleTimeString()}
+}
+function clearCache(){playersCache=null;localStorage.clear();updateCacheUI();toast('Đã xóa cache','warning')}
+async function forceReload(){showLoad();playersCache=null;await afterLogin();}
+function testFB(){log('Testing...');db.ref('.info/connected').once('value').then(s=>log('Connected: '+s.val()))}
+function checkAuth(){log('Auth: '+(currentUser?currentUser.email:'null'))}
+</script>
 </body>
 </html>
