@@ -236,10 +236,8 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear
         <option value="linhthach_1000">1,000 LT</option>
         <option value="linhthach_5000">5,000 LT</option>
         <option value="linhthach_10000">10,000 LT</option>
-        <option value="linhthach_40000">40,000 LT</option>
         <option value="linhthach_100000">100,000 LT</option>
         <option value="vip_package">VIP</option>
-        <option value="manual_recharge">Nạp thủ công</option>
       </select>
       <select id="txVerFilter" onchange="renderAllTx()">
         <option value="">Tất cả</option>
@@ -388,9 +386,9 @@ let detailUid=null, detailData=null;          // currently open detail
 let rxAllTx=[], rxUserMap={};                 // recharge data
 let rxSort={field:'totalVND',order:'desc'};
 
-const STAGES=['Luyện Khí','Trúc Cơ','Kim Đan','Nguyên Anh','Hóa Thần','Phàm Tiên','Địa Tiên','Thiên Tiên','Chân Tiên','Kim Tiên','Linh Thánh','Huyền Thánh','Cổ Thánh','Chuẩn Đế','Minh Đế','Thiên Đế','Đại Đế'];
-const PRICE_MAP={'linhthach_1000':19000,'linhthach_5000':89000,'linhthach_10000':169000,'linhthach_40000':300000,'linhthach_100000':900000,'vip_package':39000,'manual_recharge':0};
-const PROD_LABEL={'linhthach_1000':'1,000 LT (19K)','linhthach_5000':'5,000 LT (89K)','linhthach_10000':'10,000 LT (169K)','linhthach_40000':'40,000 LT (300K)','linhthach_100000':'100,000 LT (900K)','vip_package':'VIP Package','manual_recharge':'Nạp thủ công'};
+const STAGES=['Luyện Khí','Trúc Cơ','Kim Đan','Nguyên Anh','Hóa Thần','Phàm Tiên','Địa Tiên','Thiên Tiên','Chân Tiên','Kim Tiên'];
+const PRICE_MAP={'linhthach_1000':19000,'linhthach_5000':89000,'linhthach_10000':169000,'linhthach_100000':900000,'vip_package':39000};
+const PROD_LABEL={'linhthach_1000':'1,000 LT (19K)','linhthach_5000':'5,000 LT (89K)','linhthach_10000':'10,000 LT (169K)','linhthach_100000':'100,000 LT (900K)','vip_package':'VIP Package'};
 
 // ─── UTILS ───────────────────────────────────────────────────────────────────
 const $=id=>document.getElementById(id);
@@ -519,7 +517,6 @@ async function openDetail(uid){
     $('detailUnbanBtn').onclick=()=>unbanPlayer(uid);
     $('detailDeleteBtn').onclick=()=>deletePlayer(uid);
     $('detailBody').innerHTML=buildDetailHTML(uid,detailData);
-    loadUserTransactions(uid);
   }catch(err){$('detailBody').innerHTML=`<p style="color:#dc3545;padding:20px">Lỗi: ${esc(err.message)}</p>`}
 }
 function closeDetail(){
@@ -579,7 +576,7 @@ function buildDetailHTML(uid,d){
     ${r('Đăng xuất cuối','_lo','ro',ticks2str(d.lastLogoutTime))}
 
     ${sec('🧘 TU VI & CHỈ SỐ')}
-    ${r('Cảnh giới (chiSoCanhGio)','chiSoCanhGio','num',d.chiSoCanhGio,'min="0" max="16"')}
+    ${r('Cảnh giới (chiSoCanhGio)','chiSoCanhGio','num',d.chiSoCanhGio,'min="0" max="9"')}
     ${r('Tầng (tang)','tang','num',d.tang,'min="1" max="9"')}
     ${r('EXP hiện tại','expHienTai','flt',d.expHienTai)}
     ${r('Điểm thuộc tính chưa cộng','diemThuocTinhChuaCong','num',d.diemThuocTinhChuaCong)}
@@ -604,7 +601,7 @@ function buildDetailHTML(uid,d){
     ${r('Pháp bảo obj (JSON)','phapBaoDangMacObj','json',d.phapBaoDangMacObj)}
 
     ${sec('🐾 THÚ CƯNG (PET)')}
-    ${r('Cảnh giới pet','petCanhGio','num',d.petCanhGio,'min="0" max="16"')}
+    ${r('Cảnh giới pet','petCanhGio','num',d.petCanhGio,'min="0" max="9"')}
     ${r('Cấp độ pet','petCapDo','num',d.petCapDo)}
     ${r('EXP pet','petExp','num',d.petExp)}
 
@@ -641,28 +638,18 @@ function buildDetailHTML(uid,d){
     ${sec('🐉 DANH SÁCH THÚ CƯỠI (JSON)')}
     ${r('danhSachThuCuoi','danhSachThuCuoi','json',d.danhSachThuCuoi)}
 
-    ${sec('💳 NẠP THỦ CÔNG (Admin)')}
-    <tr><td class="lbl" style="vertical-align:top">Nạp linh thạch thủ công</td>
-    <td colspan="3" style="padding:8px 10px">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
-        <div><label style="font-size:10px;color:#aaa;display:block;margin-bottom:3px">Số Linh Thạch</label>
-        <input type="number" id="manualLT_${uid}" value="1000" min="1" style="width:120px;background:rgba(0,0,0,.5);border:1px solid #555;border-radius:5px;color:#fff;padding:5px 7px;font-size:12px"></div>
-        <div><label style="font-size:10px;color:#aaa;display:block;margin-bottom:3px">Giá VND</label>
-        <input type="text" id="manualVND_${uid}" value="0" style="width:120px;background:rgba(0,0,0,.5);border:1px solid #555;border-radius:5px;color:#fff;padding:5px 7px;font-size:12px"></div>
-        <div><label style="font-size:10px;color:#aaa;display:block;margin-bottom:3px">Ghi chú</label>
-        <input type="text" id="manualNote_${uid}" value="Admin nạp thủ công" style="width:180px;background:rgba(0,0,0,.5);border:1px solid #555;border-radius:5px;color:#fff;padding:5px 7px;font-size:12px"></div>
-        <button class="btn btn-success btn-sm" onclick="manualRecharge('${uid}')" style="height:32px">💰 Nạp thủ công</button>
-      </div>
-      <p style="font-size:9px;color:#888;margin-top:4px">⚠️ Sẽ cộng LT vào tài khoản, lưu giao dịch vào Firebase và cập nhật bảng xếp hạng nạp tiền</p>
-    </td></tr>
-
-    ${sec('💳 LỊCH SỬ GIAO DỊCH (từ node transactions)')}
-    <tr><td class="lbl" style="vertical-align:top">transactions</td>
+    ${sec('💳 LỊCH SỬ GIAO DỊCH (JSON - chỉ đọc)')}
+    <tr><td class="lbl" style="vertical-align:top">transactionHistory</td>
     <td colspan="3" style="padding:6px 10px">
-      <div id="txHistoryBox_${uid}" style="max-height:220px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:6px;padding:8px">
-        <p style="color:#666">⏳ Đang tải giao dịch...</p>
+      <div style="max-height:180px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:6px;padding:8px">
+      ${(d.transactionHistory||[]).map(tx=>`
+        <div style="border-bottom:1px solid #2a2a3e;padding:4px 0;font-size:10px">
+          <span style="color:#aaa">${esc(tx.thoiGianNap||'')}</span>
+          <strong style="color:#ffd700;margin-left:8px">${esc(PROD_LABEL[tx.productId]||tx.productId)}</strong>
+          <span style="color:#28a745;margin-left:8px">${(tx.soLinhThach||0).toLocaleString()} LT</span>
+          <span class="badge ${tx.daXacThuc?'badge-ok':'badge-pending'}" style="margin-left:6px">${tx.daXacThuc?'✅':'⏳'}</span>
+        </div>`).join('')||'<p style="color:#666">Không có giao dịch</p>'}
       </div>
-      <button class="btn btn-info btn-xs" onclick="loadUserTransactions('${uid}')" style="margin-top:6px">🔄 Tải lại giao dịch</button>
     </td></tr>
 
     </tbody>
@@ -773,34 +760,39 @@ async function createNewPlayer(){
   }catch(err){toast(err.message,'error')}hideLoad();
 }
 
-// ─── RECHARGE (Đọc từ users/{uid}/transactions/) ────────────────────────────
+// ─── RECHARGE (Tự động gom từ transactionHistory của User) ───────────────────
 async function loadRecharge(){
   showLoad();
   try{
     rxAllTx = [];
     rxUserMap = {};
 
+    // 1. Đọc node /users
     const usersSnap = await db.ref('users').once('value');
     const users = usersSnap.val() || {};
 
+    // 2. Lặp qua tất cả user để lấy lịch sử nạp tiền
     for(const uid in users){
       const d = users[uid]?.gameData || {};
       const name = d.tenNhanVat || 'Không tên';
+      const history = d.transactionHistory || [];
 
-      // Đọc từ node transactions riêng (không phải gameData.transactionHistory)
-      const txData = users[uid]?.transactions || {};
-      for(const txKey in txData){
-        const tx = txData[txKey];
-        if (!tx || !tx.productId) continue;
-        pushTx(tx.transactionId || txKey, tx, uid, name);
-      }
+      // Duyệt qua từng giao dịch của user
+      history.forEach(tx => {
+        if (!tx.productId) return; 
+        const txId = tx.transactionId || Math.random().toString(36).substring(2, 10);
+        pushTx(txId, tx, uid, name);
+      });
     }
 
+    // 3. Sắp xếp tất cả giao dịch theo thời gian mới nhất
     rxAllTx.sort((a,b) => b.timestamp - a.timestamp);
 
+    // 4. Tính toán thống kê tổng
     const totalVND = rxAllTx.reduce((s,t) => s + t.vnd, 0);
     const totalLT = rxAllTx.reduce((s,t) => s + t.lt, 0);
 
+    // 5. Cập nhật các ô số liệu
     $('rxTotal').innerText = rxAllTx.length.toLocaleString();
     $('rxVND').innerText = (totalVND / 1000000).toFixed(1) + 'M';
     $('rxLT').innerText = totalLT.toLocaleString();
@@ -808,6 +800,7 @@ async function loadRecharge(){
     $('totalRecharged').innerText = Object.keys(rxUserMap).length;
     $('totalRevenue').innerText = (totalVND / 1000000).toFixed(1) + 'M';
 
+    // 6. Hiển thị bảng dữ liệu
     renderUserSummary();
     renderAllTx();
   } catch(err){
@@ -927,85 +920,6 @@ function showUserTx(uid, name) {
   }
   $('#txDetailTitle').innerHTML = `📜 Giao dịch của ${esc(name)}`;
   $('#txDetailOverlay').style.display = 'block';
-}
-
-// ─── MANUAL RECHARGE & TRANSACTION HISTORY ───────────────────────────────────
-async function manualRecharge(uid){
-  const ltEl=document.getElementById('manualLT_'+uid);
-  const vndEl=document.getElementById('manualVND_'+uid);
-  const noteEl=document.getElementById('manualNote_'+uid);
-  if(!ltEl)return;
-  const soLinhThach=parseInt(ltEl.value)||0;
-  const giaVND=vndEl?vndEl.value:'0';
-  const ghiChu=noteEl?noteEl.value:'Admin nạp thủ công';
-  if(soLinhThach<=0){toast('Số linh thạch phải > 0','error');return}
-  if(!confirm(`Nạp ${soLinhThach.toLocaleString()} LT (${giaVND} VND) cho ${uid.substring(0,14)}...?`))return;
-  showLoad();
-  try{
-    const txId='admin_'+Date.now()+'_'+Math.random().toString(36).substring(2,8);
-    const now=new Date();
-    const timestamp=now.getTime()*10000+621355968000000000;
-    const txData={
-      productId:'manual_recharge',
-      transactionId:txId,
-      soLinhThach:soLinhThach,
-      loaiGiaoDich:'linhthach',
-      giaTriVND:giaVND,
-      timestamp:timestamp,
-      thoiGianNap:now.toLocaleString('vi-VN'),
-      daXacThuc:true,
-      ngayNap:now.toISOString().substring(0,10),
-      gioNap:now.toTimeString().substring(0,8),
-      ghiChu:ghiChu,
-      napBoi:currentUser?.email||'admin'
-    };
-    await db.ref(`users/${uid}/transactions/${txId}`).set(txData);
-    const gdSnap=await db.ref(`users/${uid}/gameData/linhThach`).once('value');
-    const ltHienTai=gdSnap.val()||0;
-    const ltMoi=ltHienTai+soLinhThach;
-    await db.ref(`users/${uid}/gameData/linhThach`).set(ltMoi);
-    const nameSnap=await db.ref(`users/${uid}/gameData/tenNhanVat`).once('value');
-    const tenNV=nameSnap.val()||'Đạo Hữu';
-    const allTxSnap=await db.ref(`users/${uid}/transactions`).once('value');
-    const allTx=allTxSnap.val()||{};
-    let tongNap=0;
-    for(const k in allTx){
-      if(allTx[k].loaiGiaoDich==='linhthach'&&allTx[k].daXacThuc)tongNap+=allTx[k].soLinhThach||0;
-    }
-    await db.ref(`leaderboard/topspender/${uid}`).set({name:tenNV,score:tongNap,lastUpdate:Date.now()*10000+621355968000000000});
-    await db.ref(`leaderboard/linhthach/${uid}`).set({name:tenNV,score:ltMoi});
-    if(playersCache){
-      const p=playersCache.find(x=>x.uid===uid);
-      if(p)p.lt=ltMoi;
-    }
-    if(detailData&&detailUid===uid)detailData.linhThach=ltMoi;
-    toast(`✅ Đã nạp ${soLinhThach.toLocaleString()} LT cho ${tenNV}. LT mới: ${ltMoi.toLocaleString()}`);
-    loadUserTransactions(uid);
-    log(`💰 Admin nạp thủ công: ${soLinhThach} LT cho ${uid} (${tenNV}), VND=${giaVND}`);
-  }catch(err){toast('Lỗi nạp: '+err.message,'error');log('Manual recharge err: '+err.message)}
-  hideLoad();
-}
-
-async function loadUserTransactions(uid){
-  const box=document.getElementById('txHistoryBox_'+uid);
-  if(!box)return;
-  box.innerHTML='<p style="color:#888">⏳ Đang tải...</p>';
-  try{
-    const snap=await db.ref(`users/${uid}/transactions`).once('value');
-    const txData=snap.val()||{};
-    const txList=Object.entries(txData).map(([k,tx])=>({key:k,...tx})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-    if(!txList.length){box.innerHTML='<p style="color:#666">Không có giao dịch</p>';return}
-    box.innerHTML=txList.map(tx=>`
-      <div style="border-bottom:1px solid #2a2a3e;padding:5px 0;font-size:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-        <span style="color:#aaa;min-width:130px">${esc(tx.thoiGianNap||'')}</span>
-        <strong style="color:#ffd700">${esc(PROD_LABEL[tx.productId]||tx.productId||'?')}</strong>
-        <span style="color:#28a745">${(tx.soLinhThach||0).toLocaleString()} LT</span>
-        ${tx.giaTriVND?`<span style="color:#ff9800">${esc(tx.giaTriVND)} VND</span>`:''}
-        <span class="badge ${tx.daXacThuc?'badge-ok':'badge-pending'}">${tx.daXacThuc?'✅':'⏳'}</span>
-        ${tx.napBoi?`<span style="color:#17a2b8;font-size:9px">bởi ${esc(tx.napBoi)}</span>`:''}
-        ${tx.ghiChu?`<span style="color:#888;font-size:9px">(${esc(tx.ghiChu)})</span>`:''}
-      </div>`).join('');
-  }catch(err){box.innerHTML=`<p style="color:#dc3545">Lỗi: ${esc(err.message)}</p>`}
 }
 
 // ─── LEADERBOARD ─────────────────────────────────────────────────────────────
