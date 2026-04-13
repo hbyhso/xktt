@@ -737,12 +737,31 @@ async function saveField(uid, key, type, iid){
   if(btn){btn.classList.remove('saving');btn.innerText='💾'}
 }
 
+// Helper xóa khỏi tất cả bảng xếp hạng
+async function removeFromLeaderboards(uid){
+  await Promise.all([
+    db.ref(`leaderboard/tuvi/${uid}`).remove(),
+    db.ref(`leaderboard/lucchien/${uid}`).remove(),
+    db.ref(`leaderboard/linhthach/${uid}`).remove(),
+    db.ref(`leaderboard/topspender/${uid}`).remove()
+  ]);
+}
+
 // Ban / Unban / Delete
 async function banPlayer(uid){
   const reason=prompt('Lý do cấm (người chơi sẽ thấy):');if(!reason)return;
+  const daysInput=prompt('Số ngày khóa (0 = vĩnh viễn):','0');
+  if(daysInput===null)return;
+  const durationDays=parseInt(daysInput)||0;
   showLoad();
-  try{await db.ref(`banned/${uid}`).set({reason,timestamp:Date.now(),bannedBy:currentUser?.email});toast('Đã ban!');playersCache=null;await loadPlayers(true);}
-  catch(err){toast(err.message,'error')}hideLoad();
+  try{
+    const banData={reason,timestamp:Date.now(),bannedBy:currentUser?.email};
+    if(durationDays>0)banData.durationDays=durationDays;
+    await db.ref(`banned/${uid}`).set(banData);
+    await removeFromLeaderboards(uid);
+    const msg=durationDays>0?`Đã ban ${durationDays} ngày và xóa khỏi BXH!`:'Đã ban vĩnh viễn và xóa khỏi BXH!';
+    toast(msg);playersCache=null;await loadPlayers(true);
+  }catch(err){toast(err.message,'error')}hideLoad();
 }
 async function unbanPlayer(uid){
   showLoad();
@@ -750,16 +769,15 @@ async function unbanPlayer(uid){
   catch(err){toast(err.message,'error')}hideLoad();
 }
 async function deletePlayer(uid){
-  const name=detailData?.tenNhanVat||uid;
-  const conf=prompt(`⚠️ NGUY HIỂM! Nhập đúng tên "${name}" để xóa vĩnh viễn:`);
-  if(conf!==name){toast('Sai tên, đã hủy','warning');return}
+  if(!confirm('Bạn có chắc chắn muốn xóa tài khoản này?'))return;
   showLoad();
   try{
-    await db.ref(`users/${uid}`).remove();
-    await db.ref(`leaderboard/tuvi/${uid}`).remove();
-    await db.ref(`leaderboard/linhthach/${uid}`).remove();
-    await db.ref(`banned/${uid}`).remove();
-    toast('Đã xóa!');closeDetail();playersCache=null;await loadPlayers(true);
+    await Promise.all([
+      db.ref(`users/${uid}`).remove(),
+      db.ref(`banned/${uid}`).remove(),
+      removeFromLeaderboards(uid)
+    ]);
+    toast('Đã xóa tài khoản và xóa khỏi BXH!');closeDetail();playersCache=null;await loadPlayers(true);
   }catch(err){toast(err.message,'error')}hideLoad();
 }
 
