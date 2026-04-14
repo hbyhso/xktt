@@ -213,14 +213,13 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear
     </div>
     <div class="table-wrap">
       <table class="table" id="rxUserTable">
-        <thead>——
+        <thead><tr>
           <th onclick="sortRx('name')" style="cursor:pointer">Tên ⇅</th>
           <th onclick="sortRx('totalVND')" style="cursor:pointer">Tổng VND ⇅</th>
           <th onclick="sortRx('totalLT')" style="cursor:pointer">Tổng LT ⇅</th>
           <th onclick="sortRx('count')" style="cursor:pointer">Số GD ⇅</th>
           <th>Chi tiết</th>
-        </tr>
-        </thead>
+        </tr></thead>
         <tbody id="rxUserBody"><tr><td colspan="5">Đang tải...</td></tr></tbody>
       </table>
     </div>
@@ -513,12 +512,14 @@ async function openDetail(uid){
   try{
     detailData=await readGameData(uid);
     if(!detailData){$('detailBody').innerHTML='<p style="color:#dc3545;padding:20px">Không có dữ liệu gameData</p>';return}
+    const banSnap=await db.ref(`banned/${uid}`).once('value');
+    const banInfo=banSnap.exists()?banSnap.val():null;
     $('detailTitle').innerText='📋 '+esc(detailData.tenNhanVat||uid);
     // wire buttons
     $('detailBanBtn').onclick=()=>banPlayer(uid);
     $('detailUnbanBtn').onclick=()=>unbanPlayer(uid);
     $('detailDeleteBtn').onclick=()=>deletePlayer(uid);
-    $('detailBody').innerHTML=buildDetailHTML(uid,detailData);
+    $('detailBody').innerHTML=buildDetailHTML(uid,detailData,banInfo);
     loadUserTransactions(uid);
   }catch(err){$('detailBody').innerHTML=`<p style="color:#dc3545;padding:20px">Lỗi: ${esc(err.message)}</p>`}
 }
@@ -529,8 +530,8 @@ function closeDetail(){
 }
 function handleOverlayClick(e){if(e.target===$('detailOverlay'))closeDetail()}
 
-// Build the full detail HTML with per-field save
-function buildDetailHTML(uid,d){
+// Build the full detail HTML with per-field save (banInfo = object từ banned/{uid} hoặc null)
+function buildDetailHTML(uid,d,banInfo){
   const r=(label,key,type,value,extra='')=>{
     if(type==='ro'){
       return`<tr><td class="lbl">${label}</td><td class="val" colspan="2">${esc(String(value||''))}</td><td class="act"></td></tr>`;
@@ -565,11 +566,17 @@ function buildDetailHTML(uid,d){
     skillRows+=r('↳ Cấp độ','_skill_'+key+'_capDo','num',skillMap[key].capDo,'min="0" max="20"');
   }
 
-  return`<div style="overflow-x:auto">
+  const banBanner=banInfo?`<div style="background:#dc3545;color:#fff;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:12px">
+    <strong>🚫 Đang BAN</strong>${banInfo.reason?` — Lý do: ${esc(String(banInfo.reason))}`:''}${banInfo.durationDays?` — Thời hạn: ${banInfo.durationDays} ngày`:' — Thời hạn: vĩnh viễn'}
+    ${banInfo.bannedBy?`<br><span style="font-size:10px;opacity:.9">Bởi: ${esc(String(banInfo.bannedBy))}</span>`:''}
+  </div>`:'';
+
+  return`${banBanner}<div style="overflow-x:auto">
   <table class="fields-table" style="width:100%">
     <thead><tr><th class="lbl" style="color:#ffd700">Thông số</th><th class="val" style="color:#ffd700">Giá trị hiện tại</th><th class="inp" style="color:#ffd700">Sửa giá trị mới</th><th class="act" style="color:#ffd700">Lưu</th></tr></thead>
     <tbody>
     ${sec('📝 THÔNG TIN CƠ BẢN')}
+    ${r('Trạng thái tài khoản','_ban','ro',banInfo?'🚫 Đang BAN (không tính nạp tiền trong thống kê admin)':'✅ Bình thường')}
     ${r('Tên nhân vật','tenNhanVat','txt',d.tenNhanVat)}
     ${r('User ID','_uid','ro',uid)}
     ${r('Email','email','txt',d.email)}
@@ -800,8 +807,11 @@ async function loadRecharge(){
 
     const usersSnap = await db.ref('users').once('value');
     const users = usersSnap.val() || {};
+    const bannedSnap = await db.ref('banned').once('value');
+    const banned = bannedSnap.val() || {};
 
     for(const uid in users){
+      if (banned[uid]) continue; // acc đang ban: không đưa vào thống kê / bảng nạp tiền
       const d = users[uid]?.gameData || {};
       const name = d.tenNhanVat || 'Không tên';
 
@@ -929,7 +939,8 @@ function sortRx(field) {
 
 function showUserTx(uid, name) {
   const userTxs = rxAllTx.filter(tx => tx.uid === uid);
-  const tbody = $('#txDetailBody');
+  const tbody = $('txDetailBody');
+  if (!tbody) { toast('Lỗi: không tìm thấy bảng chi tiết', 'error'); return; }
   if (!userTxs.length) { tbody.innerHTML = '<tr><td colspan="6">Không có giao dịch</td></tr>'; }
   else {
     tbody.innerHTML = userTxs.map(tx => `
@@ -943,8 +954,8 @@ function showUserTx(uid, name) {
       </tr>
     `).join('');
   }
-  $('#txDetailTitle').innerHTML = `📜 Giao dịch của ${esc(name)}`;
-  $('#txDetailOverlay').style.display = 'block';
+  $('txDetailTitle').innerHTML = `📜 Giao dịch của ${esc(name)}`;
+  $('txDetailOverlay').style.display = 'block';
 }
 
 // ─── MANUAL RECHARGE & TRANSACTION HISTORY ───────────────────────────────────
