@@ -896,7 +896,7 @@ function renderUserSummary() {
   if (!usersList.length) { tbody.innerHTML = '<tr><td colspan="5">Không có dữ liệu</td></tr>'; return; }
   tbody.innerHTML = usersList.map(u => `
     <tr>
-      <td>${esc(u.name)}<br><span style="font-size:9px;color:#888">${u.uid.substring(0,14)}...</span></td>
+      <td><strong style="color:#ffd700;cursor:pointer;text-decoration:underline" onclick="openDetail('${u.uid}')" title="Mở chi tiết người chơi — chỉnh thông số">${esc(u.name)}</strong><br><span style="font-size:9px;color:#888;cursor:pointer;text-decoration:underline" onclick="openDetail('${u.uid}')" title="Mở chi tiết">${u.uid.substring(0,14)}...</span></td>
       <td>${(u.totalVND).toLocaleString()}₫</td>
       <td>${(u.totalLT).toLocaleString()}</td>
       <td>${u.count}</td>
@@ -920,7 +920,7 @@ function renderAllTx() {
   tbody.innerHTML = filtered.map(tx => `
     <tr>
       <td style="font-size:10px">${esc(tx.time || '')}</td>
-      <td>${esc(tx.name)}<br><span style="font-size:9px;color:#888">${tx.uid.substring(0,10)}</span></td>
+      <td><strong style="color:#ffd700;cursor:pointer;text-decoration:underline" onclick="openDetail('${tx.uid}')" title="Mở chi tiết người chơi">${esc(tx.name)}</strong><br><span style="font-size:9px;color:#888;cursor:pointer;text-decoration:underline" onclick="openDetail('${tx.uid}')" title="Mở chi tiết">${tx.uid.substring(0,10)}</span></td>
       <td>${PROD_LABEL[tx.productId] || tx.productId}</td>
       <td>${tx.lt.toLocaleString()}</td>
       <td>${tx.vnd.toLocaleString()}₫</td>
