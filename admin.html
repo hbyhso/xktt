@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel - Tu Tiên</title>
+<title>Admin Panel - Tu Tiên (VPS)</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;min-height:100vh}
@@ -128,10 +128,9 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear
   <div class="logo"><h1>🏮 Admin Panel - Tu Tiên</h1></div>
   <div class="user-info">
     <div id="loginForm" class="login-form">
-      <input type="email" id="loginEmail" placeholder="Email" value="hoangnv.vnpt@gmail.com">
-      <input type="password" id="loginPassword" placeholder="Mật khẩu">
-      <button class="btn-login" onclick="loginWithEmail()">Đăng nhập</button>
-      <button class="btn-login" onclick="loginWithGoogle()" style="background:#4285f4;color:#fff">Google</button>
+      <input type="text" id="apiBase" placeholder="VPS URL" style="min-width:160px" title="VD: http://103.95.159.45:5000">
+      <input type="password" id="adminKey" placeholder="Admin API Key (X-Admin-Key)">
+      <button class="btn-login" onclick="adminLogin()">Kết nối VPS</button>
     </div>
     <span id="userEmail" style="font-size:11px">Chưa đăng nhập</span>
     <button class="btn-logout" onclick="logout()">Đăng xuất</button>
@@ -194,7 +193,7 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear
 <!-- RECHARGE -->
 <div id="recharge" class="tab-content">
   <div class="card">
-    <div class="card-title">💰 Lịch sử Nạp Tiền (node: transactions)
+    <div class="card-title">💰 Lịch sử Nạp Tiền (gameData._transactions trên VPS)
       <button class="refresh-btn" onclick="loadRecharge()">🔄 Refresh</button>
     </div>
     <div class="stats-grid">
@@ -364,27 +363,22 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:linear
 
 <div class="loading" id="loading" style="display:none"><div class="spinner"></div></div>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-// ─── CONFIG ─────────────────────────────────────────────────────────────────
-firebase.initializeApp({
-  apiKey:"AIzaSyAJ6kiQEfXZA7wlTKTX3dsKBMQTHidYX3c",
-  authDomain:"custom-utility-490109-j1.firebaseapp.com",
-  databaseURL:"https://custom-utility-490109-j1-default-rtdb.asia-southeast1.firebasedatabase.app/",
-  projectId:"custom-utility-490109-j1",
-  storageBucket:"custom-utility-490109-j1.appspot.com",
-  messagingSenderId:"626113784056",
-  appId:"1:626113784056:android:193990ae1ce494634f730d"
-});
-const auth=firebase.auth(), db=firebase.database();
+// ─── VPS ADMIN API ───────────────────────────────────────────────────────────
+const VPS_DEFAULT='http://103.95.159.45:5000';
+function apiBase(){return (localStorage.getItem('adminApiBase')||$('apiBase')?.value||VPS_DEFAULT).replace(/\/$/,'')}
+function adminKey(){return localStorage.getItem('adminApiKey')||$('adminKey')?.value||''}
+async function api(method,path,body){
+  const r=await fetch(apiBase()+path,{method,headers:{'Content-Type':'application/json','X-Admin-Key':adminKey()},body:body?JSON.stringify(body):undefined});
+  let j={};try{j=await r.json()}catch(e){}
+  if(!r.ok)throw new Error(j.detail||(Array.isArray(j.detail)?j.detail[0]?.msg:j.detail)||j.message||r.statusText);
+  return j;
+}
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
-let currentUser=null, playersCache=null;
-let detailUid=null, detailData=null;          // currently open detail
-let rxAllTx=[], rxUserMap={};                 // recharge data
+let loggedIn=false, playersCache=null;
+let detailUid=null, detailData=null, detailDauTruong=null, detailBan=null;
+let rxAllTx=[], rxUserMap={};
 let rxSort={field:'totalVND',order:'desc'};
 
 const STAGES=['Luyện Khí','Trúc Cơ','Kim Đan','Nguyên Anh','Hóa Thần','Phàm Tiên','Địa Tiên','Thiên Tiên','Chân Tiên','Kim Tiên','Linh Thánh','Huyền Thánh','Cổ Thánh','Chuẩn Đế','Minh Đế','Thiên Đế','Đại Đế'];
@@ -414,61 +408,60 @@ function showTab(id){
   document.querySelectorAll('.sidebar-menu a').forEach(a=>a.classList.remove('active'));
   const lnk=document.querySelector(`[data-tab="${id}"]`);if(lnk)lnk.classList.add('active');
   if(id==='cache')updateCacheUI();
-  if(id==='debug'){testFB();checkAuth();}
+  if(id==='debug'){testVps();checkAuth();}
 }
 
-// ─── FIREBASE HELPERS ────────────────────────────────────────────────────────
-async function readGameData(uid){return(await db.ref(`users/${uid}/gameData`).once('value')).val()}
-async function patchDB(uid,updates){
-  if(!Object.keys(updates).length)return false;
-  updates.timestamp=Date.now()*10000+62135596800000;
-  await db.ref(`users/${uid}/gameData`).update(updates);
-  log(`✅ Patch [${uid.substring(0,8)}]: ${Object.keys(updates).filter(k=>k!=='timestamp').join(', ')}`);
-  return true;
-}
+async function readGameData(uid){const r=await api('GET',`/admin/players/${encodeURIComponent(uid)}`);return r.gameData||{}}
 
-// ─── AUTH ────────────────────────────────────────────────────────────────────
-async function loginWithEmail(){
-  const e=$('loginEmail').value,p=$('loginPassword').value;
-  if(!e||!p){toast('Nhập email và mật khẩu','error');return}
+// ─── AUTH (VPS Admin Key) ────────────────────────────────────────────────────
+async function adminLogin(){
+  const base=$('apiBase').value.trim()||VPS_DEFAULT;
+  const key=$('adminKey').value.trim();
+  if(!key){toast('Nhập Admin API Key','error');return}
+  localStorage.setItem('adminApiBase',base);
+  localStorage.setItem('adminApiKey',key);
+  $('apiBase').value=base;
   showLoad();
-  try{const r=await auth.signInWithEmailAndPassword(e,p);currentUser=r.user;await afterLogin();}
-  catch(err){toast('Lỗi: '+err.message,'error');hideLoad()}
-}
-async function loginWithGoogle(){
-  showLoad();
-  try{const r=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());currentUser=r.user;await afterLogin();}
-  catch(err){toast('Lỗi: '+err.message,'error');hideLoad()}
+  try{
+    await api('GET','/admin/ping');
+    loggedIn=true;
+    await afterLogin();
+  }catch(err){toast('Lỗi: '+err.message,'error');loggedIn=false}
+  hideLoad();
 }
 async function afterLogin(){
-  $('userEmail').innerText=currentUser.email;
+  $('userEmail').innerText='VPS: '+apiBase();
   $('loginForm').style.display='none';
-  const a=await db.ref(`admins/${currentUser.uid}`).once('value');
-  if(!a.exists()){toast('Không có quyền Admin!','error');logout();return}
-  toast('Đăng nhập thành công!');
+  toast('Kết nối VPS thành công!');
   await Promise.all([loadPlayers(),loadLeaderboard(),loadRecharge(),loadSuspicious(),loadGiftcodes(),loadEvent()]);
   hideLoad();
 }
-function logout(){auth.signOut();currentUser=null;$('userEmail').innerText='Chưa đăng nhập';$('loginForm').style.display='flex'}
-auth.onAuthStateChanged(async u=>{
-  if(u){currentUser=u;$('userEmail').innerText=u.email;$('loginForm').style.display='none';
-    const a=await db.ref(`admins/${u.uid}`).once('value');if(!a.exists()){logout();return}await afterLogin();}
-  else{$('loginForm').style.display='flex';$('userEmail').innerText='Chưa đăng nhập'}
-});
+function logout(){
+  loggedIn=false;
+  playersCache=null;
+  $('userEmail').innerText='Chưa đăng nhập';
+  $('loginForm').style.display='flex';
+}
+(function initAdminUi(){
+  const b=localStorage.getItem('adminApiBase')||VPS_DEFAULT;
+  const k=localStorage.getItem('adminApiKey')||'';
+  if($('apiBase'))$('apiBase').value=b;
+  if($('adminKey'))$('adminKey').value=k;
+  if(k)adminLogin();
+})();
 
 // ─── LOAD PLAYERS ────────────────────────────────────────────────────────────
 async function loadPlayers(force=false){
+  if(!loggedIn)return;
   if(!force&&playersCache){renderPlayerList(playersCache);updateStats();return}
   showLoad();
   try{
-    const usersSnap=await db.ref('users').once('value'),users=usersSnap.val()||{};
-    const bannedSnap=await db.ref('banned').once('value'),banned=bannedSnap.val()||{};
-    playersCache=Object.entries(users).map(([uid,u])=>{
-      const d=u?.gameData||{};
-      return{uid,name:d.tenNhanVat||'Không tên',stage:d.chiSoCanhGio||0,tang:d.tang||1,
-             gold:d.vang||0,lt:d.linhThach||0,isVip:!!d.daMuaVip,isBanned:!!banned[uid]}
-    });
-    renderPlayerList(playersCache);updateStats();updateSelects();
+    const r=await api('GET','/admin/players?limit=2000');
+    playersCache=(r.players||[]).map(p=>({
+      uid:p.uid,name:p.name||'Không tên',stage:p.stage||0,tang:p.tang||1,
+      gold:p.gold||0,lt:p.lt||0,isVip:!!p.isVip,isBanned:!!p.isBanned
+    }));
+    renderPlayerList(playersCache);updateStats();
     localStorage.setItem('adminCache',JSON.stringify(playersCache));
     localStorage.setItem('adminCacheTime',Date.now());
   }catch(err){toast('Lỗi tải: '+err.message,'error')}
@@ -510,17 +503,17 @@ async function openDetail(uid){
   $('detailUid').innerText=uid;
   $('detailBody').innerHTML='<div style="text-align:center;padding:40px">⏳ Đang tải dữ liệu...</div>';
   try{
-    detailData=await readGameData(uid);
-    if(!detailData){$('detailBody').innerHTML='<p style="color:#dc3545;padding:20px">Không có dữ liệu gameData</p>';return}
-    const banSnap=await db.ref(`banned/${uid}`).once('value');
-    const banInfo=banSnap.exists()?banSnap.val():null;
+    const r=await api('GET',`/admin/players/${encodeURIComponent(uid)}`);
+    detailData=r.gameData||{};
+    detailDauTruong=r.dautruong||{};
+    detailBan=r.ban||null;
+    if(!detailData||!Object.keys(detailData).length){$('detailBody').innerHTML='<p style="color:#dc3545;padding:20px">Không có dữ liệu gameData</p>';return}
     $('detailTitle').innerText='📋 '+esc(detailData.tenNhanVat||uid);
-    // wire buttons
     $('detailBanBtn').onclick=()=>banPlayer(uid);
     $('detailUnbanBtn').onclick=()=>unbanPlayer(uid);
     $('detailDeleteBtn').onclick=()=>deletePlayer(uid);
-    $('detailBody').innerHTML=buildDetailHTML(uid,detailData,banInfo);
-    loadUserTransactions(uid);
+    $('detailBody').innerHTML=buildDetailHTML(uid,detailData,detailBan,detailDauTruong);
+    loadUserTransactions(uid,r.transactions||{});
   }catch(err){$('detailBody').innerHTML=`<p style="color:#dc3545;padding:20px">Lỗi: ${esc(err.message)}</p>`}
 }
 function closeDetail(){
@@ -531,7 +524,8 @@ function closeDetail(){
 function handleOverlayClick(e){if(e.target===$('detailOverlay'))closeDetail()}
 
 // Build the full detail HTML with per-field save (banInfo = object từ banned/{uid} hoặc null)
-function buildDetailHTML(uid,d,banInfo){
+function buildDetailHTML(uid,d,banInfo,dt){
+  dt=dt||{};
   const r=(label,key,type,value,extra='')=>{
     if(type==='ro'){
       return`<tr><td class="lbl">${label}</td><td class="val" colspan="2">${esc(String(value||''))}</td><td class="act"></td></tr>`;
@@ -663,7 +657,15 @@ function buildDetailHTML(uid,d,banInfo){
       <p style="font-size:9px;color:#888;margin-top:4px">⚠️ Sẽ cộng LT vào tài khoản, lưu giao dịch vào Firebase và cập nhật bảng xếp hạng nạp tiền</p>
     </td></tr>
 
-    ${sec('💳 LỊCH SỬ GIAO DỊCH (từ node transactions)')}
+    ${sec('⚔️ ĐẤU TRƯỜNG (VPS user_dautruong)')}
+    ${r('Điểm đấu trường','diem','num',dt.diem,'min="0"')}
+    ${r('Chuỗi thắng','chuoiThang','num',dt.chuoiThang)}
+    ${r('Lượt chiến còn','luotChienCon','num',dt.luotChienCon)}
+    ${r('Lượt làm mới còn','luotLamMoiCon','num',dt.luotLamMoiCon)}
+    ${r('Season ID','seasonId','num',dt.seasonId)}
+    ${r('Biệt danh đấu trường','bietDanhDauTruong','txt',dt.bietDanhDauTruong)}
+
+    ${sec('💳 LỊCH SỬ GIAO DỊCH (_transactions)')}
     <tr><td class="lbl" style="vertical-align:top">transactions</td>
     <td colspan="3" style="padding:6px 10px">
       <div id="txHistoryBox_${uid}" style="max-height:220px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:6px;padding:8px">
@@ -676,7 +678,7 @@ function buildDetailHTML(uid,d,banInfo){
    </table>
   </div>
   <div style="padding:10px;background:rgba(0,0,0,.3);font-size:10px;color:#666;border-top:1px solid #2a2a3e">
-    💡 Nhấn 💾 ở mỗi hàng để lưu riêng từng thông số lên Firebase. Trường JSON cần nhập đúng cú pháp.
+    💡 Nhấn 💾 để lưu lên VPS. Trường đấu trường (diem, chuoiThang, …) ghi vào bảng user_dautruong; còn lại vào game_data.
   </div>`;
 }
 
@@ -700,14 +702,19 @@ async function saveField(uid, key, type, iid){
     if(btn){btn.classList.remove('saving');btn.innerText='💾'}return;
   }
 
-  // Handle skill sub-keys (key starts with _skill_)
-  let firebaseKey=key;
-  if(key.startsWith('_skill_')){firebaseKey=key.replace(/^_skill_/,'');}
+  let fieldKey=key;
+  if(key.startsWith('_skill_'))fieldKey=key.replace(/^_skill_/,'');
+  const dtFields=['diem','chuoiThang','luotChienCon','luotLamMoiCon','seasonId','seasonDaNhanThuong','bietDanhDauTruong','lastDailyUtc','doiThuTraThuUserId','diemMatLanTraThu'];
 
   try{
-    await patchDB(uid,{[firebaseKey]:value});
+    if(dtFields.includes(fieldKey)){
+      await api('PATCH',`/admin/players/${encodeURIComponent(uid)}/dautruong`,{[fieldKey]:value});
+      if(detailDauTruong)detailDauTruong[fieldKey]=value;
+    }else if(!fieldKey.startsWith('_')){
+      await api('PATCH',`/admin/players/${encodeURIComponent(uid)}/gameData`,{[fieldKey]:value});
+      if(detailData)detailData[fieldKey]=value;
+    }
 
-    // Update display
     const dvEl=document.getElementById('dv_'+iid);
     if(dvEl){
       let disp=value===null||value===undefined?'<em style="color:#555">null</em>':esc(String(value));
@@ -715,43 +722,21 @@ async function saveField(uid, key, type, iid){
       if(type==='ticks')disp=esc(String(value));
       dvEl.innerHTML=disp;
     }
-
-    // Update leaderboard if needed
-    if(['chiSoCanhGio','tang','tenNhanVat','linhThach'].includes(firebaseKey)){
-      const fresh=await readGameData(uid);
-      if(fresh){
-        await db.ref(`leaderboard/tuvi/${uid}`).set({name:fresh.tenNhanVat,score:(fresh.chiSoCanhGio||0)*10000+(fresh.tang||1)*1000});
-        await db.ref(`leaderboard/linhthach/${uid}`).set({name:fresh.tenNhanVat,score:fresh.linhThach||0});
-      }
-    }
-    // Update local cache
     if(playersCache){
       const p=playersCache.find(x=>x.uid===uid);
       if(p){
-        if(firebaseKey==='tenNhanVat')p.name=value;
-        if(firebaseKey==='chiSoCanhGio')p.stage=value;
-        if(firebaseKey==='tang')p.tang=value;
-        if(firebaseKey==='vang')p.gold=value;
-        if(firebaseKey==='linhThach')p.lt=value;
-        if(firebaseKey==='daMuaVip')p.isVip=value;
+        if(fieldKey==='tenNhanVat')p.name=value;
+        if(fieldKey==='chiSoCanhGio')p.stage=value;
+        if(fieldKey==='tang')p.tang=value;
+        if(fieldKey==='vang')p.gold=value;
+        if(fieldKey==='linhThach')p.lt=value;
+        if(fieldKey==='daMuaVip')p.isVip=value;
       }
     }
-    // Update local detailData
-    if(detailData&&uid===detailUid)detailData[firebaseKey]=value;
-
-    toast(`✅ Đã lưu [${firebaseKey}]`);
+    toast(`✅ Đã lưu [${fieldKey}]`);
+    log(`Patch ${fieldKey} uid=${uid.substring(0,8)}`);
   }catch(err){toast('Lỗi lưu: '+err.message,'error')}
   if(btn){btn.classList.remove('saving');btn.innerText='💾'}
-}
-
-// Helper xóa khỏi tất cả bảng xếp hạng
-async function removeFromLeaderboards(uid){
-  await Promise.all([
-    db.ref(`leaderboard/tuvi/${uid}`).remove(),
-    db.ref(`leaderboard/lucchien/${uid}`).remove(),
-    db.ref(`leaderboard/linhthach/${uid}`).remove(),
-    db.ref(`leaderboard/topspender/${uid}`).remove()
-  ]);
 }
 
 // Ban / Unban / Delete
@@ -762,29 +747,22 @@ async function banPlayer(uid){
   const durationDays=parseInt(daysInput)||0;
   showLoad();
   try{
-    const banData={reason,timestamp:Date.now(),bannedBy:currentUser?.email};
-    if(durationDays>0)banData.durationDays=durationDays;
-    await db.ref(`banned/${uid}`).set(banData);
-    await removeFromLeaderboards(uid);
-    const msg=durationDays>0?`Đã ban ${durationDays} ngày và xóa khỏi BXH!`:'Đã ban vĩnh viễn và xóa khỏi BXH!';
-    toast(msg);playersCache=null;await loadPlayers(true);
+    await api('POST',`/admin/players/${encodeURIComponent(uid)}/ban`,{reason,durationDays,bannedBy:'admin-panel'});
+    toast(durationDays>0?`Đã ban ${durationDays} ngày!`:'Đã ban vĩnh viễn!');
+    playersCache=null;await loadPlayers(true);
   }catch(err){toast(err.message,'error')}hideLoad();
 }
 async function unbanPlayer(uid){
   showLoad();
-  try{await db.ref(`banned/${uid}`).remove();toast('Đã mở khóa!');playersCache=null;await loadPlayers(true);}
+  try{await api('DELETE',`/admin/players/${encodeURIComponent(uid)}/ban`);toast('Đã mở khóa!');playersCache=null;await loadPlayers(true);}
   catch(err){toast(err.message,'error')}hideLoad();
 }
 async function deletePlayer(uid){
   if(!confirm('Bạn có chắc chắn muốn xóa tài khoản này?'))return;
   showLoad();
   try{
-    await Promise.all([
-      db.ref(`users/${uid}`).remove(),
-      db.ref(`banned/${uid}`).remove(),
-      removeFromLeaderboards(uid)
-    ]);
-    toast('Đã xóa tài khoản và xóa khỏi BXH!');closeDetail();playersCache=null;await loadPlayers(true);
+    await api('DELETE',`/admin/players/${encodeURIComponent(uid)}`);
+    toast('Đã xóa tài khoản!');closeDetail();playersCache=null;await loadPlayers(true);
   }catch(err){toast(err.message,'error')}hideLoad();
 }
 
@@ -792,9 +770,8 @@ async function createNewPlayer(){
   const name=prompt('Tên nhân vật mới:');if(!name)return;
   showLoad();
   try{
-    const ref=db.ref('users').push();
-    await db.ref(`users/${ref.key}/gameData`).set({tenNhanVat:name,chiSoCanhGio:0,tang:1,vang:500,linhThach:20,hpGoc:100,atkGoc:20,defGoc:10,luckGoc:5,clientVersion:'8.2',dataVersion:2,timestamp:Date.now()*10000+62135596800000});
-    toast('Tạo thành công!');playersCache=null;await loadPlayers(true);openDetail(ref.key);
+    const r=await api('POST','/admin/players',{tenNhanVat:name});
+    toast('Tạo thành công!');playersCache=null;await loadPlayers(true);openDetail(r.uid);
   }catch(err){toast(err.message,'error')}hideLoad();
 }
 
@@ -802,46 +779,20 @@ async function createNewPlayer(){
 async function loadRecharge(){
   showLoad();
   try{
-    rxAllTx = [];
-    rxUserMap = {};
-
-    const usersSnap = await db.ref('users').once('value');
-    const users = usersSnap.val() || {};
-    const bannedSnap = await db.ref('banned').once('value');
-    const banned = bannedSnap.val() || {};
-
-    for(const uid in users){
-      if (banned[uid]) continue; // acc đang ban: không đưa vào thống kê / bảng nạp tiền
-      const d = users[uid]?.gameData || {};
-      const name = d.tenNhanVat || 'Không tên';
-
-      // Đọc từ node transactions riêng (không phải gameData.transactionHistory)
-      const txData = users[uid]?.transactions || {};
-      for(const txKey in txData){
-        const tx = txData[txKey];
-        if (!tx || !tx.productId) continue;
-        pushTx(tx.transactionId || txKey, tx, uid, name);
-      }
-    }
-
-    rxAllTx.sort((a,b) => b.timestamp - a.timestamp);
-
-    const totalVND = rxAllTx.reduce((s,t) => s + t.vnd, 0);
-    const totalLT = rxAllTx.reduce((s,t) => s + t.lt, 0);
-
-    $('rxTotal').innerText = rxAllTx.length.toLocaleString();
-    $('rxVND').innerText = (totalVND / 1000000).toFixed(1) + 'M';
-    $('rxLT').innerText = totalLT.toLocaleString();
-    $('rxUsers').innerText = Object.keys(rxUserMap).length;
-    $('totalRecharged').innerText = Object.keys(rxUserMap).length;
-    $('totalRevenue').innerText = (totalVND / 1000000).toFixed(1) + 'M';
-
-    renderUserSummary();
-    renderAllTx();
-  } catch(err){
-    toast('Lỗi tải nạp: ' + err.message, 'error');
-    log('Recharge err: ' + err.message);
-  }
+    const r=await api('GET','/admin/recharge');
+    rxAllTx=r.transactions||[];
+    rxUserMap={};
+    (r.users||[]).forEach(u=>{rxUserMap[u.uid]=u});
+    const totalVND=rxAllTx.reduce((s,t)=>s+t.vnd,0);
+    const totalLT=rxAllTx.reduce((s,t)=>s+t.lt,0);
+    $('rxTotal').innerText=rxAllTx.length.toLocaleString();
+    $('rxVND').innerText=(totalVND/1000000).toFixed(1)+'M';
+    $('rxLT').innerText=totalLT.toLocaleString();
+    $('rxUsers').innerText=Object.keys(rxUserMap).length;
+    $('totalRecharged').innerText=Object.keys(rxUserMap).length;
+    $('totalRevenue').innerText=(totalVND/1000000).toFixed(1)+'M';
+    renderUserSummary();renderAllTx();
+  }catch(err){toast('Lỗi tải nạp: '+err.message,'error');log('Recharge err: '+err.message)}
   hideLoad();
 }
 
@@ -971,57 +922,30 @@ async function manualRecharge(uid){
   if(!confirm(`Nạp ${soLinhThach.toLocaleString()} LT (${giaVND} VND) cho ${uid.substring(0,14)}...?`))return;
   showLoad();
   try{
-    const txId='admin_'+Date.now()+'_'+Math.random().toString(36).substring(2,8);
-    const now=new Date();
-    const timestamp=now.getTime()*10000+621355968000000000;
-    const txData={
-      productId:'manual_recharge',
-      transactionId:txId,
-      soLinhThach:soLinhThach,
-      loaiGiaoDich:'linhthach',
-      giaTriVND:giaVND,
-      timestamp:timestamp,
-      thoiGianNap:now.toLocaleString('vi-VN'),
-      daXacThuc:true,
-      ngayNap:now.toISOString().substring(0,10),
-      gioNap:now.toTimeString().substring(0,8),
-      ghiChu:ghiChu,
-      napBoi:currentUser?.email||'admin'
-    };
-    await db.ref(`users/${uid}/transactions/${txId}`).set(txData);
-    const gdSnap=await db.ref(`users/${uid}/gameData/linhThach`).once('value');
-    const ltHienTai=gdSnap.val()||0;
-    const ltMoi=ltHienTai+soLinhThach;
-    await db.ref(`users/${uid}/gameData/linhThach`).set(ltMoi);
-    const nameSnap=await db.ref(`users/${uid}/gameData/tenNhanVat`).once('value');
-    const tenNV=nameSnap.val()||'Đạo Hữu';
-    const allTxSnap=await db.ref(`users/${uid}/transactions`).once('value');
-    const allTx=allTxSnap.val()||{};
-    let tongNap=0;
-    for(const k in allTx){
-      if(allTx[k].loaiGiaoDich==='linhthach'&&allTx[k].daXacThuc)tongNap+=allTx[k].soLinhThach||0;
-    }
-    await db.ref(`leaderboard/topspender/${uid}`).set({name:tenNV,score:tongNap,lastUpdate:Date.now()*10000+621355968000000000});
-    await db.ref(`leaderboard/linhthach/${uid}`).set({name:tenNV,score:ltMoi});
-    if(playersCache){
-      const p=playersCache.find(x=>x.uid===uid);
-      if(p)p.lt=ltMoi;
-    }
+    const r=await api('POST',`/admin/players/${encodeURIComponent(uid)}/manual-recharge`,{
+      soLinhThach,giaTriVND:giaVND,ghiChu,napBoi:'admin-panel'
+    });
+    const ltMoi=r.linhThach||0;
+    if(playersCache){const p=playersCache.find(x=>x.uid===uid);if(p)p.lt=ltMoi}
     if(detailData&&detailUid===uid)detailData.linhThach=ltMoi;
-    toast(`✅ Đã nạp ${soLinhThach.toLocaleString()} LT cho ${tenNV}. LT mới: ${ltMoi.toLocaleString()}`);
-    loadUserTransactions(uid);
-    log(`💰 Admin nạp thủ công: ${soLinhThach} LT cho ${uid} (${tenNV}), VND=${giaVND}`);
-  }catch(err){toast('Lỗi nạp: '+err.message,'error');log('Manual recharge err: '+err.message)}
+    toast(`✅ Đã nạp ${soLinhThach.toLocaleString()} LT. LT mới: ${ltMoi.toLocaleString()}`);
+    const pr=await api('GET',`/admin/players/${encodeURIComponent(uid)}`);
+    loadUserTransactions(uid,pr.transactions||{});
+    log(`💰 Nạp thủ công ${soLinhThach} LT uid=${uid}`);
+  }catch(err){toast('Lỗi nạp: '+err.message,'error')}
   hideLoad();
 }
 
-async function loadUserTransactions(uid){
+async function loadUserTransactions(uid,txDataIn){
   const box=document.getElementById('txHistoryBox_'+uid);
   if(!box)return;
   box.innerHTML='<p style="color:#888">⏳ Đang tải...</p>';
   try{
-    const snap=await db.ref(`users/${uid}/transactions`).once('value');
-    const txData=snap.val()||{};
+    let txData=txDataIn;
+    if(!txData){
+      const pr=await api('GET',`/admin/players/${encodeURIComponent(uid)}`);
+      txData=pr.transactions||{};
+    }
     const txList=Object.entries(txData).map(([k,tx])=>({key:k,...tx})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
     if(!txList.length){box.innerHTML='<p style="color:#666">Không có giao dịch</p>';return}
     box.innerHTML=txList.map(tx=>`
@@ -1040,38 +964,33 @@ async function loadUserTransactions(uid){
 // ─── LEADERBOARD ─────────────────────────────────────────────────────────────
 async function loadLeaderboard(){
   try{
-    const tvSnap=await db.ref('leaderboard/tuvi').orderByChild('score').limitToLast(10).once('value');
-    let list=[];tvSnap.forEach(c=>list.push({name:c.val().name,score:c.val().score}));list.reverse();
+    const tv=await api('GET','/admin/leaderboards/tuvi?top=10');
+    const list=tv.entries||[];
     $('lbTuVi').querySelector('tbody').innerHTML=list.map((e,i)=>{
       const s=Math.floor(e.score/10000),t=Math.floor((e.score%10000)/1000);
       return`<tr><td>${i+1}</td><td>${esc(e.name)}</td><td>${STAGES[s]||'?'} tầng ${t}</td><td>${e.score}</td></tr>`;
     }).join('')||'<tr><td colspan="4">Trống</td></tr>';
-
-    const ltSnap=await db.ref('leaderboard/linhthach').orderByChild('score').limitToLast(10).once('value');
-    let ltList=[];ltSnap.forEach(c=>ltList.push({name:c.val().name,score:c.val().score}));ltList.reverse();
+    const lt=await api('GET','/admin/leaderboards/linhthach?top=10');
+    const ltList=lt.entries||[];
     $('lbLT').querySelector('tbody').innerHTML=ltList.map((e,i)=>`<tr><td>${i+1}</td><td>${esc(e.name)}</td><td>${(e.score||0).toLocaleString()}</td></tr>`).join('')||'<tr><td colspan="3">Trống</td></tr>';
+    const dash=await api('GET','/admin/dashboard');
+    $('totalPlayers').innerText=dash.totalPlayers??'-';
+    $('totalVip').innerText=dash.totalVip??'-';
+    $('totalRecharged').innerText=dash.totalRecharged??'-';
+    $('totalRevenue').innerText=((dash.totalRevenue||0)/1000000).toFixed(1)+'M';
   }catch(err){log('LB err: '+err.message)}
 }
 
 // ─── SUSPICIOUS ──────────────────────────────────────────────────────────────
 async function loadSuspicious(){
   try{
-    const users=(await db.ref('users').once('value')).val()||{};
-    const susp=[];
-    for(const uid in users){
-      const d=users[uid]?.gameData;
-      if(!d)continue;
-      const rs=[];
-      if(d.linhThach>1000000)rs.push('LT>1M');
-      if(d.vang>10000000)rs.push('Vàng>10M');
-      if(rs.length)susp.push({uid,name:d.tenNhanVat,lt:d.linhThach,rs});
-    }
-    susp.sort((a,b)=>b.lt-a.lt);
+    const r=await api('GET','/admin/suspicious');
+    const susp=r.items||[];
     $('suspTable').querySelector('tbody').innerHTML=susp.map(s=>`<tr>
       <td style="font-size:9px">${s.uid.substring(0,10)}</td>
       <td>${esc(s.name)}</td>
       <td>${(s.lt||0).toLocaleString()}</td>
-      <td>${s.rs.join(', ')}</td>
+      <td>${(s.reasons||[]).join(', ')}</td>
       <td>⚠️ high</td>
       <td><button class="btn btn-info btn-xs" onclick="openDetail('${s.uid}')">Xem</button></td>
     </tr>`).join('')||'<tr><td colspan="6" style="color:#666">Không có</td></tr>';
@@ -1081,37 +1000,49 @@ async function loadSuspicious(){
 // ─── GIFTCODES ───────────────────────────────────────────────────────────────
 async function loadGiftcodes(){
   try{
-    const codes=(await db.ref('giftcodes').once('value')).val()||{};
+    const r=await api('GET','/admin/giftcodes');
+    const codes=r.giftcodes||{};
     $('gcTable').querySelector('tbody').innerHTML=Object.keys(codes).map(c=>`<tr>
       <td><strong>${c}</strong></td>
       <td>${codes[c].gold||0}V + ${codes[c].linhThach||0}LT</td>
       <td>${codes[c].used||0}/${codes[c].maxUses||999}</td>
-      <td><button class="btn btn-danger btn-xs" onclick="db.ref('giftcodes/${c}').remove().then(loadGiftcodes)">Xóa</button></td>
+      <td><button class="btn btn-danger btn-xs" onclick="deleteGiftcode('${c}')">Xóa</button></td>
     </tr>`).join('')||'<tr><td colspan="4" style="color:#666">Trống</td></tr>';
   }catch(err){}
 }
+async function deleteGiftcode(code){
+  await api('DELETE',`/admin/giftcodes/${encodeURIComponent(code)}`);
+  toast('Đã xóa');loadGiftcodes();
+}
 async function createGiftCode(){
   const code=$('giftCode').value.toUpperCase().trim();if(!code)return;
-  await db.ref(`giftcodes/${code}`).set({code,gold:parseInt($('giftGold').value)||0,linhThach:parseInt($('giftLinhThach').value)||0,
-    items:$('giftItem').value.split(',').map(s=>s.trim()).filter(Boolean),maxUses:parseInt($('giftMaxUses').value)||999,used:0,createdAt:Date.now()});
+  await api('PUT',`/admin/giftcodes/${encodeURIComponent(code)}`,{
+    code,gold:parseInt($('giftGold').value)||0,linhThach:parseInt($('giftLinhThach').value)||0,
+    items:$('giftItem').value.split(',').map(s=>s.trim()).filter(Boolean),
+    maxUses:parseInt($('giftMaxUses').value)||999,used:0,createdAt:Date.now()
+  });
   toast('Tạo Code thành công!');loadGiftcodes();
 }
 
 // ─── EVENTS ──────────────────────────────────────────────────────────────────
 async function loadEvent(){
-  const ev=(await db.ref('sukien/current').once('value')).val();
-  if(ev){
+  const r=await api('GET','/admin/sukien/current');
+  const ev=r.current||{};
+  if(ev&&Object.keys(ev).length){
     $('evTitle').value=ev.tieuDe||'';$('evContent').value=ev.noiDung||'';
     $('evReward').value=ev.phanThuongLinhThach||0;$('evStatus').value=ev.dangHoatDong?'true':'false';
     $('evInfo').innerHTML=`<strong>${esc(ev.tieuDe)}</strong>: ${esc(ev.noiDung)}`;
   }else{$('evInfo').innerHTML='<span style="color:#666">Chưa có sự kiện</span>'}
 }
 async function saveEvent(){
-  await db.ref('sukien/current').set({tieuDe:$('evTitle').value,noiDung:$('evContent').value,
-    phanThuongLinhThach:parseInt($('evReward').value)||0,dangHoatDong:$('evStatus').value==='true',updatedAt:Date.now()});
+  await api('PUT','/admin/sukien/current',{
+    tieuDe:$('evTitle').value,noiDung:$('evContent').value,
+    phanThuongLinhThach:parseInt($('evReward').value)||0,
+    dangHoatDong:$('evStatus').value==='true',updatedAt:Date.now()
+  });
   toast('Lưu sự kiện thành công!');loadEvent();
 }
-async function deleteEvent(){await db.ref('sukien/current').remove();toast('Đã xóa sự kiện');loadEvent();}
+async function deleteEvent(){await api('DELETE','/admin/sukien/current');toast('Đã xóa sự kiện');loadEvent();}
 
 // ─── CACHE / DEBUG ───────────────────────────────────────────────────────────
 function updateCacheUI(){
@@ -1120,8 +1051,12 @@ function updateCacheUI(){
 }
 function clearCache(){playersCache=null;localStorage.clear();updateCacheUI();toast('Đã xóa cache','warning')}
 async function forceReload(){showLoad();playersCache=null;await afterLogin();}
-function testFB(){log('Testing...');db.ref('.info/connected').once('value').then(s=>log('Connected: '+s.val()))}
-function checkAuth(){log('Auth: '+(currentUser?currentUser.email:'null'))}
+async function testVps(){
+  log('Testing VPS '+apiBase()+'...');
+  try{const r=await api('GET','/admin/ping');log('Ping: '+JSON.stringify(r))}
+  catch(e){log('Ping FAIL: '+e.message)}
+}
+function checkAuth(){log('Logged in: '+loggedIn+' | API: '+apiBase())}
 </script>
 </body>
 </html>
